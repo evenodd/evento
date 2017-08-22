@@ -7,8 +7,7 @@ $(document).ready(
 		else  {
 			list = JSON.stringify(data, null, 2);
 		}
-		$('.bookingList')
-			.empty()
-			.append(list);
+		$("#loadingPrompt").addClass("hidden");
+		$("#bookingList").empty().append(list);
 	})
 );
