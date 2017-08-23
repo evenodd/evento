@@ -12,7 +12,7 @@ class BookingsTableSeeder extends Seeder
     public function run()
     {
         DB::table('bookings')->insert([
-        	'owners' => '1',
+        	'preferences' => json_encode("{ 'select' : { 'field' : 'Accept Invitation', 'options' : ['Yes', 'No'] } }"),
         	'title' => 'Cold one with the boyz',
         	'description' => 'What a dank event fuk yea',
         	'start_time' => '2017-08-25 10:00:00',

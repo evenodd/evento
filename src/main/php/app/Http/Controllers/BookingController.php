@@ -17,6 +17,7 @@ class BookingController extends Controller
     public function index()
     {
         return DB::table('bookings_owners')
+            ->select('title', 'description', 'start_time', 'end_time', 'venue')
             ->where('user', Auth::user()->id)
             ->join('bookings', 'bookings_owners.booking', '=', 'bookings.id')
             ->get();
@@ -29,7 +30,7 @@ class BookingController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -38,9 +39,22 @@ class BookingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
-        //
+        if($req->has('newVenue')
+            VenueController::store($req);
+
+        DB::table('bookings')->insert([
+            'preferences' => json_encode($req->input('preferences')),
+            'title' => $req->input('title'),
+            'description' => $req->input('description'),
+            'start_time' => $req->input('start_time'),
+            'end_time' => $req->input('end_time'),
+            'rsvp_time' => $req->input('rsvp_time'),
+            'max_guests' => $req->input('max_guests'),
+            'private' => $req->input('private'),
+            'venue' => $req->input('venue'),
+        ]);
     }
 
     /**

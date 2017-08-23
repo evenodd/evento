@@ -40,14 +40,10 @@
       </div>
       
       <div class="modal-body">
-        </br>
-        </br>
-        </br>
-        </br>
+        <form>
         <p>Add the form here :P</p>
-        </br>
-        </br>
-        </br>
+        <label>Title</label><input id="titleInput" type="text"></br>
+        </form>
       </div>
       
       <div class="modal-footer">

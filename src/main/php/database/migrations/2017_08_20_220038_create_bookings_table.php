@@ -16,7 +16,7 @@ class CreateBookingsTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->increments('id');
             //is string as we may want multi owners in a list e.g."1342,1314,1415"
-            $table->string('owners');
+            $table->json('preferences');
             $table->string('title');
             $table->longtext('description');
             $table->integer('venue');
