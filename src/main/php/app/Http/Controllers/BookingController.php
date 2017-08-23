@@ -41,7 +41,7 @@ class BookingController extends Controller
      */
     public function store(Request $req)
     {
-        if($req->has('newVenue')
+        if($req->has('newVenue'))
             VenueController::store($req);
 
         DB::table('bookings')->insert([
