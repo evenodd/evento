@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('script')
-<script src="{{ asset('js/home/home.js') }}"></script>
+<script src="{{ asset('js/event/details.js') }}"></script>
 @endsection
 
 @section('content')
@@ -11,11 +11,10 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <b>Your Events</b>
+                    <b>{{event->title}}</b>
                 </div>
                 <div class="panel-body">
-                    <div id="loadingPrompt" class = "text-center">Loading Events...</div>
-                    <div id = "eventoList"></div>
+                    <div id = ""></div>
                 </div>
             </div>
         </div>
@@ -24,13 +23,13 @@
 
 <div class="container">
     <div class="col-md-8 col-md-offset-2">
-        <a href="#" data-toggle="modal" data-target="#addeventoModal" id="addevento" class="btn btn-lg btn-success center-block">
+        <a href="#" data-toggle="modal" data-target="#addBookingModal" id="addBooking" class="btn btn-lg btn-success center-block">
             Add Event
         </a>
     </div>
 </div>
 
-<div id="addeventoModal" class="modal fade" role="dialog">
+<div id="addBookingModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       

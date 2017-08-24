@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class BookingsTableSeeder extends Seeder
+class EventosTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +11,7 @@ class BookingsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('bookings')->insert([
+        DB::table('eventos')->insert([
         	'preferences' => json_encode("{ 'select' : { 'field' : 'Accept Invitation', 'options' : ['Yes', 'No'] } }"),
         	'title' => 'Cold one with the boyz',
         	'description' => 'What a dank event fuk yea',

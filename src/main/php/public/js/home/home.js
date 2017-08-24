@@ -1,5 +1,5 @@
 $(document).ready(
-	$.get('/bookings', function (data) {
+	$.get('/eventos', function (data) {
 		console.log(data);
 		if (data.length == 0) {
 			list = "You have no events :("
@@ -8,6 +8,6 @@ $(document).ready(
 			list = JSON.stringify(data, null, 2);
 		}
 		$("#loadingPrompt").addClass("hidden");
-		$("#bookingList").empty().append(list);
+		$("#eventoList").empty().append(list);
 	})
 );
