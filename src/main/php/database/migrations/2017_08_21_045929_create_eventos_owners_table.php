@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBookingsOwnersTable extends Migration
+class CreateEventosOwnersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateBookingsOwnersTable extends Migration
      */
     public function up()
     {
-        Schema::create('bookings_owners', function (Blueprint $table) {
+        Schema::create('eventos_owners', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user');
-            $table->integer('booking');
+            $table->integer('evento');
             $table->string('permissions');
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ class CreateBookingsOwnersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bookings_owners');
+        Schema::dropIfExists('eventos_owners');
     }
 }

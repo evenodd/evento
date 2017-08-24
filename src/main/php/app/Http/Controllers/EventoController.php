@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Booking;
+use App\Evento;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
 
-class BookingController extends Controller
+class EventoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +16,10 @@ class BookingController extends Controller
      */
     public function index()
     {
-        return DB::table('bookings_owners')
+        return DB::table('eventos_owners')
             ->select('title', 'description', 'start_time', 'end_time', 'venue')
             ->where('user', Auth::user()->id)
-            ->join('bookings', 'bookings_owners.booking', '=', 'bookings.id')
+            ->join('eventos', 'eventos_owners.Evento', '=', 'eventos.id')
             ->get();
     }
 
@@ -44,7 +44,7 @@ class BookingController extends Controller
         if($req->has('newVenue'))
             VenueController::store($req);
 
-        DB::table('bookings')->insert([
+        DB::table('eventos')->insert([
             'preferences' => json_encode($req->input('preferences')),
             'title' => $req->input('title'),
             'description' => $req->input('description'),
@@ -60,10 +60,10 @@ class BookingController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Booking  $booking
+     * @param  \App\Evento  $Evento
      * @return \Illuminate\Http\Response
      */
-    public function show(Booking $booking)
+    public function show(Evento $evento)
     {
         //
     }
@@ -71,10 +71,10 @@ class BookingController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Booking  $booking
+     * @param  \App\Evento  $Evento
      * @return \Illuminate\Http\Response
      */
-    public function edit(Booking $booking)
+    public function edit(Evento $evento)
     {
         //
     }
@@ -83,10 +83,10 @@ class BookingController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Booking  $booking
+     * @param  \App\Evento  $Evento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Booking $booking)
+    public function update(Request $request, Evento $evento)
     {
         //
     }
@@ -94,10 +94,10 @@ class BookingController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Booking  $booking
+     * @param  \App\Evento  $Evento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Booking $booking)
+    public function destroy(Evento $evento)
     {
         //
     }
