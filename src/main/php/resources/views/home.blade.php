@@ -24,13 +24,13 @@
 
 <div class="container">
     <div class="col-md-8 col-md-offset-2">
-        <a href="#" data-toggle="modal" data-target="#addeventoModal" id="addevento" class="btn btn-lg btn-success center-block">
+        <a href="#" data-toggle="modal" data-target="#addEventoModal" id="addEvento" class="btn btn-lg btn-success center-block">
             Add Event
         </a>
     </div>
 </div>
 
-<div id="addeventoModal" class="modal fade" role="dialog">
+<div id="addEventoModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       

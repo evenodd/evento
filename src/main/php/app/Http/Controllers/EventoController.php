@@ -10,16 +10,35 @@ use Illuminate\Http\Request;
 class EventoController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
+        
+        /**
+         * Use this if middleware is shitty
+         */
+
+        // if(!Auth::check())
+        //     return response('Permission Denied', '403');
+
         return DB::table('eventos_owners')
             ->select('title', 'description', 'start_time', 'end_time', 'venue')
             ->where('user', Auth::user()->id)
-            ->join('eventos', 'eventos_owners.Evento', '=', 'eventos.id')
+            ->join('eventos', 'eventos_owners.evento', '=', 'eventos.id')
             ->get();
     }
 

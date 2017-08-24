@@ -10,42 +10,17 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-/*
-Route::get('/', function () {
-    return view('welcome');
-});
-
-*/
-
-Route::get('/create_event', function () {
-    return view('create_event');
-});
-
-Route::get('/create_venue', function () {
-    return view('create_venue');
-});
-
-Route::get('/event_manager_view', function () {
-    return view('event_manager_view');
-});
-
-Route::get('/view_all_events', function () {
-    return view('view_all_events');
-});
-
-Route::get('/rsvp', function () {
-    return view('rsvp');
-});
-
-Route::get('/view_an_event', function () {
-    return view('view_an_event');
-});
-
+//DEMO VIEWS
+Route::get('/event/create', function () { return view('event.create'); })->middleware('auth');
+Route::get('/venue/create', function () { return view('venue.create'); })->middleware('auth');
+Route::get('/event/manager', function () { return view('event.manager'); })->middleware('auth');
+Route::get('/rsvp', function () { return view('rsvp'); })->middleware('auth');
+Route::get('/event/list', function () { return view('event.list'); })->middleware('auth');
+Route::get('/event/details', function () { return view('event.details'); })->middleware('auth');
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 Route::resource('eventos', 'EventoController');

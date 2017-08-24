@@ -1,11 +1,3 @@
-@extends('layouts.app')
-
-@section('script')
-<script src="{{ asset('js/home/home.js') }}"></script>
-@endsection
-
-@section('content')
-
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -47,18 +39,3 @@
         </div>
     </div>
 </div>
-
-<div class="container">
-    <div class="col-md-8 col-md-offset-2">
-        <a href="#" data-toggle="modal" data-target="#addBookingModal" id="addBooking" class="btn btn-π btn-success center-block">
-            Add Event
-        </a>
-
-    </div>
-</div>
-
-
-  </div>
-</div>
-
-@endsection
