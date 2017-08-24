@@ -16,5 +16,5 @@ class VenueTableSeeder extends Seeder
         	'address' => '12 Something Rd, Place',
     	]);
     }
-    }
+    
 }
