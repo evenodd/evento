@@ -17,7 +17,7 @@
                    <ul class="nav nav-pills nav-stacked">
                       <li role="presentation">28/04/2017 4.00<a href="#"> Birthday Party at UTS </a> </li>
                       <li role="presentation">29/05/2017 4.00<a href="#"> Serious Business Meetup 203 </a>  </li>
-                      <li role="presentation">30/06/2017 4.00<a href="#"> Wedding at Stephanoes </a></li>
+                      <li role="presentation">30/06/2017 4.00<a href="#"> Wedding at Stephanos </a></li>
                     </ul>
                 </div>
             </div>

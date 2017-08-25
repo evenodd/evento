@@ -21,11 +21,11 @@
                       <p> Description : <b> just another fun birthday party for myself </b></p>
                       <p> Attending Guests 5/30: </p>
                       <ul class="list-group">
-                        <li class="list-group-item">James<a> Click Here for Diatary Requirements </a></li>
-                        <li class="list-group-item">Jim<a> Click Here for Diatary Requirements </a></li>
-                        <li class="list-group-item">John<a> Click Here for Diatary Requirements </a></li>
-                        <li class="list-group-item">Joe<a> Click Here for Diatary Requirements </a></li>
-                        <li class="list-group-item">Jacob<a> Click Here for Diatary Requirements </a></li>
+                        <li class="list-group-item">Arthur Curry<a> Click Here for Dietary Requirements </a></li>
+                        <li class="list-group-item">Barry Allen<a> Click Here for Dietary Requirements </a></li>
+                        <li class="list-group-item">Diana Prince<a> Click Here for Dietary Requirements </a></li>
+                        <li class="list-group-item">Clark Kent<a> Click Here for Dietary Requirements </a></li>
+                        <li class="list-group-item">Bruce Wayne<a> Click Here for Dietary Requirements </a></li>
                       </ul>
                     </ul>
                 </div>

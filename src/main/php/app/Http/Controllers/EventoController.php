@@ -16,6 +16,8 @@ class EventoController extends Controller
      */
     public function index()
     {
+        if(!Auth::check())
+            return response('Permission Denied', '403');
         return DB::table('eventos_owners')
             ->select('title', 'description', 'start_time', 'end_time', 'venue')
             ->where('user', Auth::user()->id)
@@ -30,7 +32,7 @@ class EventoController extends Controller
      */
     public function create()
     {
-
+        //
     }
 
     /**

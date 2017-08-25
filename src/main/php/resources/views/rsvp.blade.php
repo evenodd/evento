@@ -14,9 +14,9 @@
                     <b>RSVP</b>
                 </div>
                 <div class="panel-body">
-                   <p> I, <b>Shayne</b> would like to RSVP to the event <b> Wedding at Stephanoes </b> </p>
+                   <p> I, <b>Shayne</b> would like to RSVP to the event <b> Wedding at Stephanos </b> </p>
 
-                   <label for="basic-url">Diatary Requirements</label>
+                   <label for="basic-url">Dietary Requirements</label>
                     <div class="input-group">
                       <span class="input-group-addon" id="basic-addon1"></span>
                       <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1">
