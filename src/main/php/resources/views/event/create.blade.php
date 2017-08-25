@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('script')
-<script src="{{ asset('js/home/home.js') }}"></script>
+<script src="{{ asset('js/evento/create.js') }}"></script>
 @endsection
 
 @section('content')

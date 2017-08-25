@@ -60,7 +60,14 @@
                             </div>
                         </div>
 
+                        @include('guests.subviews.create')
 
+                        <div class="form-group{{ $errors->has('price-input') ? ' has-error' : '' }}">
+                            <label for="max-guests-input" class="col-md-4 control-label">Ticket Price</label>
+                            <div class="col-md-6">
+                                <input id="price-input" type="text" min="0" class="form-control" style="outline: none;" name="price-input" placeholder="00.00">
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <div class="text-right col-md-6 col-md-offset-4">
@@ -70,13 +77,6 @@
                             </div>
                         </div>
                     </form>
-
-
-                     <label for="basic-url">Ticket Price</label>
-                    <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon1"></span>
-                      <input type="text" class="form-control" placeholder="Price" aria-describedby="basic-addon1">
-                    </div>
                 </div>
             </div>
         </div>
