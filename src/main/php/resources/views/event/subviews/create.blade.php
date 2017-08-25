@@ -56,7 +56,7 @@
                         <div class="form-group{{ $errors->has('max-guests-input') ? ' has-error' : '' }}">
                             <label for="max-guests-input" class="col-md-4 control-label">Max Guests</label>
                             <div class="col-md-6">
-                                <input id="max-guests-input" type="number" class="form-control" name="max-guests-input" required>
+                                <input id="max-guests-input" type="number" min="0" class="form-control" name="max-guests-input" required>
                             </div>
                         </div>
 
