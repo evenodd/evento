@@ -11,7 +11,7 @@
                     <a href="#">
                       <div class=" col-xs-4 "> Birthday Party at UTS</div>
                       <div class="col-xs-8 text-right">28th Sep 04:00 am
-                        <span class="ml-1"><button class="sl-2 btn btn-primary btn-xs">Guests {{rand(0,100)}}</button></span>
+                        <span class="ml-1"><button class="sl-2 btn btn-primary btn-xs">Guests <span class="badge" name="event-guest-nb">{{rand(0,100)}}</span></button></span>
                       </div>
                     </a> 
                   </div>
@@ -24,7 +24,7 @@
                     <a href="#">
                       <div class=" col-xs-4 "> Post Assignment Party</div>
                       <div class="col-xs-8 text-right">30th Aug 08:55 am
-                        <span class="ml-1"><button class="sl-2 btn btn-primary btn-xs">Guests {{rand(0,100)}}</button></span>
+                        <span class="ml-1"><button class="sl-2 btn btn-primary btn-xs">Guests <span class="badge" name="event-guest-nb">{{rand(0,100)}}</span></button></span>
                       </div>
                     </a> 
                   </div>
@@ -37,7 +37,7 @@
                     <a href="#">
                       <div class=" col-xs-4 "> Serious Business Meetup 203</div>
                       <div class="col-xs-8 text-right">28th Oct 3:00 pm
-                        <span class="ml-1"><button class="sl-2 btn btn-primary btn-xs">Guests {{rand(0,100)}}</button></span>
+                        <span class="ml-1"><button class="sl-2 btn btn-primary btn-xs">Guests <span class="badge" name="event-guest-nb">{{rand(0,100)}}</span></button></span>
                       </div>
                     </a> 
                   </div>
@@ -50,7 +50,7 @@
                     <a href="#">
                       <div class=" col-xs-4 "> Wedding at Stephanoes</div>
                       <div class="col-xs-8 text-right">02nd Nov 12:00 pm
-                        <span class="ml-1"><button class="sl-2 btn btn-primary btn-xs">Guests {{rand(0,100)}}</button></span>
+                        <span class="ml-1"><button class="sl-2 btn btn-primary btn-xs">Guests <span class="badge" name="event-guest-nb">{{rand(0,100)}}</span></button></span>
                       </div>
                     </a> 
                   </div>
@@ -71,7 +71,7 @@
       <a href="#">
         <div name="evento-title" class=" col-xs-4 "></div>
         <div name="evento-date-time" class="col-xs-8 text-right"></div>
-        <span class="ml-1"><button class="sl-2 btn btn-primary btn-xs">Guests <span name="event-guest-nb"></span>></button></span>
+        <span class="ml-1"><button class="sl-2 btn btn-primary btn-xs">Guests <span class="badge" name="event-guest-nb"></span></a></span>
       </a> 
     </div>
   </li>
