@@ -17,7 +17,6 @@
                 </div>
                 <div class="panel-body">
                    <ul class="nav nav-pills nav-stacked">
-                      <li role="presentation"><a href="#"> View My Events</a></li>
                       <li role="presentation"><a href="#"> Create A New Event </a></li>
                       <li role="presentation"><a href="#"> Invite A Guest </a></li>
                       <li role="presentation"><a href="#"> Add A Supplier To My Event </a></li>

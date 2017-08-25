@@ -6,56 +6,72 @@
                     <b>Create (or update) Venue</b>
                 </div>
                 <div class="panel-body">
-                    <label for="basic-url">Venue Details</label>
-                    <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon1"></span>
-                      <input type="text" class="form-control" placeholder="Venue Name" aria-describedby="basic-addon1">
-                    </div>
-                    <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon1"></span>
-                      <input type="text" class="form-control" placeholder="Venue Description" aria-describedby="basic-addon1">
-                    </div>
-                    <label for="basic-url">Venue Location</label>
-                    <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon1"> </span>
-                      <input type="text" class="form-control" placeholder="Street Number" aria-describedby="basic-addon1">
-                    </div>
-                    <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon1"></span>
-                      <input type="text" class="form-control" placeholder="Address Line 1" aria-describedby="basic-addon1">
-                    </div>
-                    <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon1"></span>
-                      <input type="text" class="form-control" placeholder="Address Line 2" aria-describedby="basic-addon1">
-                    </div>
-                    <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon1"></span>
-                      <input type="text" class="form-control" placeholder="City" aria-describedby="basic-addon1">
-                    </div>
-                    <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon1"></span>
-                      <input type="text" class="form-control" placeholder="State" aria-describedby="basic-addon1">
-                    </div>
-                   <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon1"></span>
-                      <input type="text" class="form-control" placeholder="Post Code" aria-describedby="basic-addon1">
-                    </div>
-                    
-                    <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon1"></span>
-                      <input type="text" class="form-control" placeholder="Number of Guests" aria-describedby="basic-addon1">
-                    </div>
+                    <form class="form-horizontal" method="POST" >
+                        {{ csrf_field() }}
+
+                        <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
+                            <label for="title-input" class="col-md-4 control-label">Venue Name</label>
+                            <div class="col-md-6">
+                                <input id="title-input" type="text" class="form-control" name="title-input"  placeholder="New Venue Name" required autofocus>
+                            </div>
+                        </div>
+
+                        <div class="form-group ">
+                            <label for="description-input" class="col-md-4 control-label">Description</label>
+                            <div class="col-md-6">
+                                <textarea id="description-input" type="text" class="form-control" name="description-input" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address-input" class="col-md-4 control-label">Address</label>
+                            <div class="col-md-2">
+                                <input id="number-input" type="int" class="form-control" name="address-number" required placeholder="#">
+                            </div>
+                            <div class="col-md-4">
+                                <input id="address-input" type="text" class="form-control" name="start-date-time" required placeholder="Street Name">
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('end-date-time') ? ' has-error' : '' }}">
+                            <label class="col-md-4 control-label"></label>
+                            <div class="col-md-3">
+                                <input id="number-input" type="text" class="form-control" name="address-number" required placeholder="City">
+                            </div>
+                            <div class="col-md-3">
+                                <input id="number-input" type="text" class="form-control" name="address-number" required placeholder="State">
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('end-date-time') ? ' has-error' : '' }}">
+                            <label class="col-md-4 control-label"></label>
+                            <div class="col-md-2">
+                                <input id="number-input" type="text" class="form-control" name="address-number" required placeholder="Postcode">
+                            </div>
+                            <div class="col-md-4">
+                                <input id="number-input" type="text" class="form-control" name="address-number" required placeholder="Country">
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('max-capacity-input') ? ' has-error' : '' }}">
+                            <label for="max-capacity-input" class="col-md-4 control-label">Max Capacity</label>
+                            <div class="col-md-6">
+                                <input id="max-capacity-input" type="number" class="form-control" name="max-capacity-input" required>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <div class="text-right col-md-6 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="col-md-8 col-md-offset-2">
-        <a href="#" data-toggle="modal" data-target="#addBookingModal" id="addBooking" class="btn btn-π btn-success center-block">
-            Add Venue
-        </a>
-
     </div>
 </div>

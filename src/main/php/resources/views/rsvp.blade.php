@@ -14,13 +14,19 @@
                     <b>RSVP</b>
                 </div>
                 <div class="panel-body">
-                   <p> I, <b>Shayne</b> would like to RSVP to the event <b> Wedding at Stephanos </b> </p>
+                   
+                   <form class="form-horizontal" method="POST" >
 
-                   <label for="basic-url">Dietary Requirements</label>
-                    <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon1"></span>
-                      <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1">
-                    </div>
+                        {{ csrf_field() }}
+
+                      <p> I, <b>Shayne</b> would like to RSVP to the event <b> Wedding at Stephanos </b> </p>
+                      <div class="form-group ">
+                        <label for="dietary-input" class="col-md-4 control-label">Dietary Requirements</label>
+                          <div class="col-md-6">
+                            <textarea id="dietary-input" type="text" class="form-control" name="dietary-input" required></textarea>
+                          </div>
+                      </div>
+                    </form>
                 </div>
             </div>
         </div>
