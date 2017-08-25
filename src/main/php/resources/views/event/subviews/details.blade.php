@@ -21,6 +21,12 @@
                         </span>
                         <span class="list-group-item">
                           <div class="row">
+                            <span class="col-xs-5">Barry Allen</span>
+                            <a class="col-xs-7 text-right">Click Here for Dietary Requirements</a>
+                          </div>
+                        </span>
+                        <span class="list-group-item">
+                          <div class="row">
                             <span class="col-xs-5">Diana Prince</span>
                             <a class="col-xs-7 text-right">Click Here for Dietary Requirements</a>
                           </div>
