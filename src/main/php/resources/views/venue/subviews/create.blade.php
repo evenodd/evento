@@ -6,6 +6,7 @@
                     <b>Create (or update) Venue</b>
                 </div>
                 <div class="panel-body">
+                <!-- TODO: form errors -->
                     <form class="form-horizontal" method="POST" >
                         {{ csrf_field() }}
 
@@ -26,34 +27,34 @@
                         <div class="form-group">
                             <label for="address-input" class="col-md-4 control-label">Address</label>
                             <div class="col-md-2">
-                                <input id="number-input" type="int" class="form-control" name="address-number" required placeholder="#">
+                                <input id="address-number" type="int" class="form-control" name="address-number" required placeholder="#">
                             </div>
                             <div class="col-md-4">
-                                <input id="address-input" type="text" class="form-control" name="start-date-time" required placeholder="Street Name">
+                                <input id="street-name" type="text" class="form-control" name="street-name" required placeholder="Street Name">
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('end-date-time') ? ' has-error' : '' }}">
+                        <div class="form-group">
                             <label class="col-md-4 control-label"></label>
                             <div class="col-md-3">
-                                <input id="number-input" type="text" class="form-control" name="address-number" required placeholder="City">
+                                <input id="city-input" type="text" class="form-control" name="city-input" required placeholder="City">
                             </div>
                             <div class="col-md-3">
-                                <input id="number-input" type="text" class="form-control" name="address-number" required placeholder="State">
+                                <input id="state-input" type="text" class="form-control" name="state-input" required placeholder="State">
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('end-date-time') ? ' has-error' : '' }}">
+                        <div class="form-group">
                             <label class="col-md-4 control-label"></label>
                             <div class="col-md-2">
-                                <input id="number-input" type="text" class="form-control" name="address-number" required placeholder="Postcode">
+                                <input id="postcode-input" type="text" class="form-control" name="postcode-number" required placeholder="Postcode">
                             </div>
                             <div class="col-md-4">
-                                <input id="number-input" type="text" class="form-control" name="address-number" required placeholder="Country">
+                                <input id="country-input" type="text" class="form-control" name="country-number" required placeholder="Country">
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('max-capacity-input') ? ' has-error' : '' }}">
+                        <div class="form-group">
                             <label for="max-capacity-input" class="col-md-4 control-label">Max Capacity</label>
                             <div class="col-md-6">
                                 <input id="max-capacity-input" type="number" class="form-control" name="max-capacity-input" required>
