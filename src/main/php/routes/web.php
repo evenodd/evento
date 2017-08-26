@@ -20,7 +20,9 @@ Route::get('/event/details', function () { return view('event.details'); })->mid
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
+// Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
+// Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
+Route::get('/', 'ManagerController@index')->name('manager')->middleware('auth');
+Route::get('/manager', 'ManagerController@index')->name('manager')->middleware('auth');
 
-Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 Route::resource('eventos', 'EventoController');
