@@ -24,6 +24,28 @@
                             </div>
                         </div>
 
+                        <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
+                            <label for="name" class="col-md-4 control-label">Account  type</label>
+                            <div class="col-md-6">
+                                <input id="type" list="type-list" class="form-control" name="type" value="{{ old('name') }}"  autofocus placeholder="Select an account type..">
+                                <datalist id="type-list">
+                                    <option value="Event Planner">
+                                    <option value="Caterer">
+                                    <option value="Florist">
+                                    <option value="Entertainer">
+                                    <option value="Decorator">
+                                    <option value="Sponsor">
+                                    <option value="Other">
+                                </datalist>
+                                @if ($errors->has('name'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-md-4 control-label">E-Mail Address</label>
 
