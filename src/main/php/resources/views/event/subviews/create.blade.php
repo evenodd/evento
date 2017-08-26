@@ -38,34 +38,73 @@
                             </div>
                         </div>
 
+                        @include('guests.subviews.create')
+
+                        <div class="form-group{{ $errors->has('rsvp-datetime-input') ? ' has-error' : '' }}">
+                            <label for="rsvp-datetime-input" class="col-md-4 control-label">RSVP</label>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <input id="rsvp-datetime-checkbox" type="checkbox" aria-label="Enable RSVP">
+                                    </span>
+                                    <input id="rsvp-datetime-input" type="datetime-local" class="form-control" name="rsvp-datetime-input" required placeholder="Ending at" disabled="true">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('venue-input') ? ' has-error' : '' }}">
                             <label for="venue-input" class="col-md-4 control-label">Venue</label>
                             <div class="col-md-6">
-                                <input id="venue-input" list="venues-list" class="form-control" name="venue-input" required placeholder="Venue">
-                                <datalist id="venues-list">
-                                    <option value="Costi's">
-                                    <option value="Uluru">
-                                    <option value="Cat Cafe?">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <input id="venue-checkbox" type="checkbox" aria-label="Enable Venue">
+                                    </span>
+                                    <input id="venue-input" list="venues-list" class="form-control" name="venue-input" required placeholder="Venue" disabled="true">
+                                    <datalist id="venues-list">
+                                        <option value="Costi's">
+                                        <option value="Uluru">
+                                        <option value="Cat Cafe?">
 
-                                    <option value="Home, 21 nowhere st">
-                                    <option value="UTS, 21 somewhere st Australia">
-                                </datalist>
+                                        <option value="Home, 21 nowhere st">
+                                        <option value="UTS, 21 somewhere st Australia">
+                                    </datalist>
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('max-guests-input') ? ' has-error' : '' }}">
                             <label for="max-guests-input" class="col-md-4 control-label">Max Guests</label>
                             <div class="col-md-6">
-                                <input id="max-guests-input" type="number" min="0" class="form-control" name="max-guests-input" required>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <input id="max-guests-checkbox" type="checkbox" aria-label="Enable Max Guests">
+                                      </span>
+                                    <input id="max-guests-input" type="number" min="0" class="form-control" name="max-guests-input" required disabled="true">
+                                </div>
                             </div>
                         </div>
-
-                        @include('guests.subviews.create')
 
                         <div class="form-group{{ $errors->has('price-input') ? ' has-error' : '' }}">
                             <label for="max-guests-input" class="col-md-4 control-label">Ticket Price</label>
                             <div class="col-md-6">
-                                <input id="price-input" type="text" min="0" class="form-control" style="outline: none;" name="price-input" placeholder="00.00">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <input id="price-checkbox" type="checkbox" aria-label="Enable Ticket Price">
+                                    </span>
+                                    <input id="price-input" type="text" min="0" class="form-control" style="outline: none;" name="price-input" placeholder="00.00" disabled="true">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('seats-input') ? ' has-error' : '' }}">
+                            <label for="seats-input" class="col-md-4 control-label">Seat Numbers</label>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <input id="seats-checkbox" type="checkbox" aria-label="Enable Seats">
+                                    </span>
+                                    <select id="seats-input" class="form-control seat-select2" name="seats-input" style="width: 100%" multiple="multiple"></select>
+                                </div>
                             </div>
                         </div>
 
@@ -76,6 +115,7 @@
                                 </button>
                             </div>
                         </div>
+
                     </form>
                 </div>
             </div>

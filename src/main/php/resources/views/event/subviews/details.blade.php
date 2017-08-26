@@ -6,12 +6,16 @@
                     <b>Birthday Party at UTS</b>
                 </div>
                 <div class="panel-body">
-                   <ul class="nav nav-pills nav-stacked">
+                    <ul class="nav nav-pills nav-stacked">
                       <p> Event Time : <b> 20/01/2017 3.30pm to 21/01/2017 1.00am </b></p>
                       <p> Venue : <b> UTS, 21 somewhere st Australia</b></p>
                       <p> Ticket Price : <b> $30.00 </b></p>
                       <p> Description : <b> just another fun birthday party for myself </b></p>
-                      <p> Attending Guests 5/30: </p>
+                      <p> Attending Guests: <b> 5/30</b></p>
+                      <p>Seats Available: 
+                        <b>1A, 4A, 3B, 6D, 1E, 4E, 3F, 6F, 1G, 4H, 3I, 6I</b>
+                        <btn class="btn btn-xs btn-default" data-toggle="modal" data-target="#show-seats-modal"><span class="" name="event-guest-nb">+13  More...</span></a>
+                      </p>
                       <div class="list-group">
                         <span class="list-group-item">
                           <div class="row">
@@ -43,15 +47,24 @@
                             <a class="col-xs-7 text-right">Click Here for Dietary Requirements</a>
                           </div>
                         </span>
-
-                        <!-- <li class="list-group-item">Barry Allen<a> Click Here for Dietary Requirements </a></li>
-                        <li class="list-group-item">Diana Prince<a> Click Here for Dietary Requirements </a></li>
-                        <li class="list-group-item">Clark Kent<a> Click Here for Dietary Requirements </a></li>
-                        <li class="list-group-item">Bruce Wayne<a> Click Here for Dietary Requirements </a></li> -->
-                      </ul>
+                      </div>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<div id="show-seats-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Event Seats</h4>
+      </div>
+      <div class="modal-body">
+        @include('seats.subviews.show')
+      </div>
+    </div>
+  </div>
 </div>

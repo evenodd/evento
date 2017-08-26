@@ -55,18 +55,20 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/event/public">Public Events</a></li>
                         <!-- Authentication Links -->
                         @if (Auth::guest())
                             <li><a href="{{ route('login') }}">Login</a></li>
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
                             
-                            <li><a href="/event/create">Create Event</a></li>
-                            <li><a href="/venue/create">Create Venue</a></li>
                             <li><a href="/event/manager">Event Manager</a></li>
-                            <li><a href="/rsvp">RSVP</a></li>
-                            <li><a href="/event/details">Event Details</a></li>
+                            <li><a href="/event/create">Create Event</a></li>
                             <li><a href="/event/list">Event List</a></li>
+                            <li><a href="/event/details">Event Details</a></li>
+                            <li><a href="/venue/create">Create Venue</a></li>
+                            <li><a href="/venue/details">My Venue</a></li>
+                            <li><a href="/rsvp">RSVP</a></li>
 
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

@@ -17,6 +17,8 @@ Route::get('/event/manager', function () { return view('event.manager'); })->mid
 Route::get('/rsvp', function () { return view('rsvp'); })->middleware('auth');
 Route::get('/event/list', function () { return view('event.list'); })->middleware('auth');
 Route::get('/event/details', function () { return view('event.details'); })->middleware('auth');
+Route::get('/venue/details', function () { return view('venue.details'); })->middleware('auth');
+Route::get('/event/public', function () { return view('event.public'); });
 
 Auth::routes();
 
