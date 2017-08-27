@@ -1,9 +1,36 @@
 $(document).ready(function(){
+	
+	init_mainCalendar();
+	
+	$('#exitFullYear').on('click', 
+		function() {
+	        $('#calendar').toggle();
+	        $('#fullYear').toggle();
+	    }
+    );
+
+});
+
+function init_mainCalendar() {
 	$('#calendar').fullCalendar({
         header: {
-        	right : 'month, agendaWeek, agendaDay, prev, today, next',
+        	right : 'fullYear, month, agendaWeek, agendaDay, prev, today, next',
         	left : 'title' 
         },
+
+        customButtons: {
+	        fullYear: {
+	            text: 'Year',
+	            click: function() {
+	                $('#calendar').toggle();
+	                $('#fullYear').toggle();
+	                init_fullYearCalendars(
+	                	$('#calendar').fullCalendar('getDate').format("YYYY"),
+	                	$('#calendar').fullCalendar( 'clientEvents')
+                	);
+	            }
+	        }
+	    },
 
         // Test data for demo
         events: [
@@ -31,6 +58,20 @@ $(document).ready(function(){
         // eventSources: [{
         //     url: 'calendar/eventFeed', // use the `url` property
         // }],
-
     });
-});
+}
+
+function init_fullYearCalendars(year, clientEvents) {
+	for (i=1; i <= 12; i++) {		
+		$('#calendar-' + i).fullCalendar({
+			// Set date to the first day of the month in yyyy-mm-dd format
+			defaultDate : year + "-" + moment(String(i), "M").format("MM", "M") + "-01",
+			events : clientEvents,
+			titleFormat : "MMMM", 
+			header: {
+	        	right : null,
+	        	left : 'title' 
+	        }
+		});
+	}
+}

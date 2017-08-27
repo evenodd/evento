@@ -19,7 +19,7 @@
 
                         {{ csrf_field() }}
 
-                      <p> I, <b>Shayne</b> would like to RSVP to the event <b> Wedding at Stephanos </b> </p>
+                      <p> I, <b>{{Auth::user()->name}}</b> would like to RSVP to the event <b> Wedding at Stephanos </b> </p>
                       <div class="form-group ">
                         <label for="dietary-input" class="col-md-4 control-label">Dietary Requirements</label>
                           <div class="col-md-6">
