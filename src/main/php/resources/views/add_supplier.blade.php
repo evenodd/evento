@@ -34,29 +34,39 @@
 
                      
                       <div class="form-group ">
-                        <label for="product-input" class="col-md-4 control-label">Products</label>
-                            <div class="col-md-3">
-                                <input id="product-name-input" type="text" class="form-control" name="title-input"  placeholder="Product Name" value="Main Meal" required autofocus>
+                            <label for="product-input" class="col-md-4 control-label">Product 1</label>
+                                <div class="col-md-6">
+                                    <input id="product-name-input" type="text" class="form-control" name="title-input"  placeholder="Product Name" value="Main Meal" required autofocus>
+                                </div>
+                               <!--   !-->
+                                
+                        </div>
+                        <div class="form-group ">    
+                            <label for="description-input" class="col-md-4 control-label"></label>
+                            <div class="col-md-6">
+                                 <textarea id="description-input" type="text" class="form-control" name="description-input" required >Duck Soup with chives</textarea>
                             </div>
+                        </div>
+                        <div class="form-group ">    
+                            <label for="description-input" class="col-md-4 control-label"></label>
                             <div class="col-md-2">
                                 <input id="product-name-input" type="text" class="form-control" name="title-input"  placeholder="Price" value="$30" required autofocus>
                             </div>
                             <div class="dropdown col-md-1">
-                              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                Per Person
-                                <span class="caret"></span>
-                              </button>
-                              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                <li><a href="#">Per Person</a></li>
-                                <li><a href="#">Per Event</a></li>
-                              </ul>
-                            </div>                 
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Per Person
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li><a href="#">Per Person</a></li>
+                                    <li><a href="#">Per Event</a></li>
+                                </ul>
+                                </div> 
+                                  
                         </div>
                         <div class="form-group ">
                         <label for="description-input" class="col-md-4 control-label"></label>
-                            <div class="col-md-4">
-                                <textarea id="description-input" type="text" class="form-control" name="description-input" required >Duck Soup with chives</textarea>
-                            </div>
+                            
                             
                             <div class="col-md-3">
                                 <button type="button" class="btn btn-default">
@@ -66,29 +76,40 @@
                         </div>
                         <div class="form-group ">
                         <hr>
-                        <label for="product-input" class="col-md-4 control-label"></label>
-                            <div class="col-md-3">
-                                <input id="product-name-input" type="text" class="form-control" name="title-input"  placeholder="Product Name" required autofocus>
+                        <div class="form-group ">
+                            <label for="product-input" class="col-md-4 control-label">Product 2</label>
+                                <div class="col-md-6">
+                                    <input id="product-name-input" type="text" class="form-control" name="title-input"  placeholder="Product Name" required autofocus>
+                                </div>
+                               <!--   !-->
+                                
+                        </div>
+                        <div class="form-group ">    
+                            <label for="description-input" class="col-md-4 control-label"></label>
+                            <div class="col-md-6">
+                                 <textarea id="description-input" type="text" class="form-control" name="description-input" placeholder="Description" required ></textarea>
                             </div>
+                        </div>
+                        <div class="form-group ">    
+                            <label for="description-input" class="col-md-4 control-label"></label>
                             <div class="col-md-2">
-                                <input id="product-name-input" type="text" class="form-control" name="title-input"  placeholder="Price" required autofocus>
+                                <input id="product-name-input" type="text" class="form-control" name="title-input"  placeholder="Price" required utofocus>
                             </div>
                             <div class="dropdown col-md-1">
-                              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                Type
-                                <span class="caret"></span>
-                              </button>
-                              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                <li><a href="#">Per Person</a></li>
-                                <li><a href="#">Per Event</a></li>
-                              </ul>
-                            </div>                 
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Type
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li><a href="#">Per Person</a></li>
+                                    <li><a href="#">Per Event</a></li>
+                                </ul>
+                                </div> 
+                                  
                         </div>
                         <div class="form-group ">
                         <label for="description-input" class="col-md-4 control-label"></label>
-                            <div class="col-md-4">
-                                <textarea id="description-input" type="text" class="form-control" name="description-input" required></textarea>
-                            </div>
+                            
                             
                             <div class="col-md-3">
                                 <button type="button" class="btn btn-default">
@@ -96,7 +117,8 @@
                                 </button>
                             </div>
                         </div>
-
+                        <div class="form-group ">
+                        
 
                         <div class="form-group">
                             <div class="text-right col-md-6 col-md-offset-4">
