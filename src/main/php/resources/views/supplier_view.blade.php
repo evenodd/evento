@@ -37,7 +37,7 @@
                                     <div class=" col-xs-4 "> <b>Buffet: </b> Vegitarian </div>
                                     <div class="col-xs-4 text-right"> <b> Price </b> $900.00 x 
                                         <span class="ml-1"><button class="sl-2 btn btn-primary btn-xs"><span class="badge" name="event-guest-nb"> 1</span> Event </button></span>
-                                        = $900.0
+                                        = $900.00
                                     </div>
                                     <div class="col-xs-4 text-right">
                                         <button> Click For Details </button>
