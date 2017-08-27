@@ -22,6 +22,7 @@ Route::get('/venue/create', function () { return view('venue.create'); })->middl
 Route::get('/rsvp', function () { return view('rsvp'); })->middleware('auth');
 Route::get('/calendar', function () { return view('calendar.calendar'); })->middleware('auth');
 Route::get('/supplier', function () { return view('add_supplier'); })->middleware('auth');
+Route::get('/supplier_view', function () { return view('supplier_view'); })->middleware('auth');
 
 Auth::routes();
 
