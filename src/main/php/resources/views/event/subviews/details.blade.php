@@ -17,36 +17,13 @@
                         <btn class="btn btn-xs btn-default" data-toggle="modal" data-target="#show-seats-modal"><span class="" name="event-guest-nb">+13  More...</span></a>
                       </p>
                       <div class="list-group">
-                        <span class="list-group-item">
-                          <div class="row">
-                            <span class="col-xs-5">Arthur Curry</span>
-                            <a class="col-xs-7 text-right">Click Here for Dietary Requirements</a>
-                          </div>
-                        </span>
-                        <span class="list-group-item">
-                          <div class="row">
-                            <span class="col-xs-5">Barry Allen</span>
-                            <a class="col-xs-7 text-right">Click Here for Dietary Requirements</a>
-                          </div>
-                        </span>
-                        <span class="list-group-item">
-                          <div class="row">
-                            <span class="col-xs-5">Diana Prince</span>
-                            <a class="col-xs-7 text-right">Click Here for Dietary Requirements</a>
-                          </div>
-                        </span>
-                        <span class="list-group-item">
-                          <div class="row">
-                            <span class="col-xs-5">Clark Kent</span>
-                            <a class="col-xs-7 text-right">Click Here for Dietary Requirements</a>
-                          </div>
-                        </span>
-                        <span class="list-group-item">
-                          <div class="row">
-                            <span class="col-xs-5">Bruce Wayne</span>
-                            <a class="col-xs-7 text-right">Click Here for Dietary Requirements</a>
-                          </div>
-                        </span>
+                        @each('guests.subviews.row', array(
+                          (object) ['fullName' => 'Arthur Curry'],
+                          (object) ['fullName' => 'Barry Allen' ],
+                          (object) ['fullName' => 'Diana Prince'],
+                          (object) ['fullName' => 'Clark Kent'  ],
+                          (object) ['fullName' => 'Bruce Wayne' ]
+                        ), 'guest')
                       </div>
                     </ul>
                 </div>
