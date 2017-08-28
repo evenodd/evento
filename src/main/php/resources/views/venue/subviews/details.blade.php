@@ -11,18 +11,11 @@
     <ul class="nav nav-pills nav-stacked">
     <hr>
     <p><b> Future Events </b></p> 
-     <ul class="nav nav-pills nav-stacked">                 
-    <li role="presentation">
-        <div class="row">
-            <a href="#">
-                <div class=" col-xs-4 "> Going To The Movies</div>
-                <div class="col-xs-8 text-right">28th Sep 04:00 am
-                    <span class="ml-1"><button class="sl-2 btn btn-primary btn-xs">Guests <span class="badge" naevent-guest-nb">{{sprintf('%02d', rand(0,5))}}</span></button></span>
-                </div>
-            </a> 
-        </div>
-    </li>
+    <ul class="nav nav-pills nav-stacked">                 
+      @each(
+        'event.subviews.row',
+        array( (object) ['title' => 'Going To The Movies', 'start_time' => '28th Sep 04:00 am', 'guestsNb' => sprintf('%02d', rand(0,5)), 'last' => true] ),
+        'event'
+      )
     </ul>
-
-
 </div>
