@@ -91,7 +91,16 @@
                             </li>
                             <li><a href="/rsvp">RSVP</a></li>
                             <li><a href="/calendar">Calendar</a></li>
-                            <li><a href="/supplier">Supplier</a></li>
+                            <li class="dropdown"> 
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    Supplier<span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="/supplier">Create Supplier</a></li>
+                                    <li><a href="/supplier_view">Supplier View</a></li>
+                                </ul>
+                            
+                            </li>
 
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

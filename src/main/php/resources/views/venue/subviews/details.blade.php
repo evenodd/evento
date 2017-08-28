@@ -19,3 +19,6 @@
       )
     </ul>
 </div>
+<div class="panel-footer text-right">
+	<button class="btn btn-warning">Disable this Venue</button>
+</div>
