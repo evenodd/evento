@@ -8,11 +8,6 @@
                 'guestsNb' => sprintf('%02d', rand(0,99))
             ],
             (object)[
-                'title' => 'Birthday Party at UTS',
-                'start_time' => '28th Sep 04:00 am',
-                'guestsNb' => sprintf('%02d', rand(0,99))
-            ],
-            (object)[
                 'title' => 'Post Assignment Party',
                 'start_time' => '30th Aug 08:55 am',
                 'guestsNb' => sprintf('%02d', rand(0,99))
@@ -29,7 +24,7 @@
                 'last' => true
             ],
         ), 'event')
-                    
+
     </ul>
 </div>
 
