@@ -2,6 +2,7 @@
 
 @section('script')
 <script src="{{ asset('js/evento/manager.js') }}"></script>
+<script src="{{ asset('js/evento/create.js') }}"></script>
 @endsection
 
 @section('content')

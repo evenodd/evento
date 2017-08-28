@@ -24,6 +24,7 @@ $(document).ready(function(){
 	initCheckboxEvent('#rsvp-datetime-checkbox',"#rsvp-datetime-input");
 	initCheckboxEvent('#venue-checkbox',"#venue-input");
 	initCheckboxEvent('#seats-checkbox',"#seats-input");
+	initCheckboxEvent('#host-checkbox',"#host-name-input, #host-email-input, #from-host-checkbox");
 });
 
 function initCheckboxEvent(checkbox, input) {
