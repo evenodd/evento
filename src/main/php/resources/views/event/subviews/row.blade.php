@@ -1,7 +1,7 @@
-<!-- 
+{{--
 Params:
     object  $event contains event information
- -->
+--}}
 <li role="presentation">
     <div class="row">
         <a href="#">

@@ -1,8 +1,8 @@
-<!-- 
+{{--
 Params:
     string $labelSize sets the size for the label column e.g '3'
     string $inputSize sets the size for the input column e.g '6'
- -->
+--}}
 
 <form class="form-horizontal" method="POST" >
     {{ csrf_field() }}
