@@ -78,15 +78,17 @@ Params:
                 <span class="input-group-addon">
                     <input id="venue-checkbox" type="checkbox" aria-label="Enable Venue">
                 </span>
-                <input id="venue-input" list="venues-list" class="form-control" name="venue-input" required placeholder="Venue" disabled="true">
+                <input id="venue-input" list="venues-list" class="form-control" name="venue-input" required placeholder="Select Venue" disabled="true">
                 <datalist id="venues-list">
                     <option value="Costi's">
                     <option value="Uluru">
                     <option value="Cat Cafe?">
-
                     <option value="Home, 21 nowhere st">
                     <option value="UTS, 21 somewhere st Australia">
                 </datalist>
+                <span data-toggle="modal" data-target="#create-venue-modal" class="input-group-addon">
+                    <a href="#">Or Create Venue</a>
+                </span>
             </div>
         </div>
     </div>
@@ -136,3 +138,17 @@ Params:
     </div>
 
 </form>
+
+<div id="create-venue-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Create Venue</h4>
+            </div>
+            <div class="modal-body">
+                @include('venue.subviews.create')
+            </div>
+        </div>
+    </div>
+</div>

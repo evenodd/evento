@@ -17,7 +17,7 @@
                 </div>
                 <div class="panel-body">
 					
-					@include('event.subviews.create', ['labelSize' => '4'])
+					@include('event.subviews.create', ['labelSize' => '4', 'inputSize' => '6'])
 
 				</div>
             </div>

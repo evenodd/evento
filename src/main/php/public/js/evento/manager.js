@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	loadAddGuestPopup();
+	// moveStackedModals();
 });
 
 function loadAddGuestPopup() {
@@ -28,6 +29,10 @@ function loadAddGuestPopup() {
 	});
 }
 
+//moves any modals inside another modal outside the modal
+function moveStackedModals() {
+	$("div.modal  div.modal").appendTo("#managerContainer");
+}
 
 function onEventSelect(e) {
 	console.log(e);
