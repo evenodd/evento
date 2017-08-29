@@ -18,9 +18,9 @@
                   <hr>
                    
                         <p> Event Time : <b> 20/01/2017 3.30pm to 21/01/2017 1.00am </b></p>
-                        <p> Venue : <b> <a href="#">vinnies winery Australia</a></b></p>
+                        <p> Venue : <b> <a href="#">Stephanos Winery Australia</a></b></p>
                         <p> Ticket Price : <b> $00.00 </b></p>
-                        <p> Description : <b> finally getting marrid </b></p>
+                        <p> Description : <b> finally getting married </b></p>
                       
                        
                     <hr>
