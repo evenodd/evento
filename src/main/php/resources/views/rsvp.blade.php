@@ -14,18 +14,36 @@
                     <b>RSVP</b>
                 </div>
                 <div class="panel-body">
+                  <p> I, <b>{{Auth::user()->name}}</b> would like to RSVP to the event <b> Wedding at Stephanos </b> </p>
+                  <hr>
                    
+                        <p> Event Time : <b> 20/01/2017 3.30pm to 21/01/2017 1.00am </b></p>
+                        <p> Venue : <b> <a href="#">UTS, 21 somewhere st Australia</a></b></p>
+                        <p> Ticket Price : <b> $30.00 </b></p>
+                        <p> Description : <b> just another fun birthday party for myself </b></p>
+                      
+                       
+                    <hr>
                    <form class="form-horizontal" method="POST" >
 
                         {{ csrf_field() }}
 
-                      <p> I, <b>{{Auth::user()->name}}</b> would like to RSVP to the event <b> Wedding at Stephanos </b> </p>
-                      <div class="form-group ">
-                        <label for="dietary-input" class="col-md-4 control-label">Dietary Requirements</label>
-                          <div class="col-md-6">
-                            <textarea id="dietary-input" type="text" class="form-control" name="dietary-input" required></textarea>
-                          </div>
-                      </div>
+                    
+                    <p> <b> Jims Catering: </b> </p>
+                    <ul class="nav nav-pills nav-stacked">               
+                        <li role="presentation">
+                            <div class="row">
+                                <a href="#">
+                                    <div class=" col-xs-4 "> <b> Main Meal: </b> Duck Soup 
+                                    </div>
+                                    <div class="col-xs-4 text-right"> <b> Price: </b> $30.00 
+                                    </div>
+                                    <div class="col-xs-4 text-right">
+                                        <b> Order: </b><input type="checkbox">
+                                    </div>
+                                </a> 
+                            </div>
+                        </li>
                     </form>
                 </div>
             </div>
