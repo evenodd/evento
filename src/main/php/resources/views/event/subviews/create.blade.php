@@ -141,6 +141,13 @@ Params:
     </div>
 
     <div class="form-group">
+        <label class="text-right col-md-{{$inputSize}} col-md-offset-{{$labelSize}}" for="private-input">Private
+        <input id="" type="radio" name="public-private-input" checked="checked"></label>
+        <label class="text-right col-md-{{$inputSize}} col-md-offset-{{$labelSize}}" for="public-input">Public
+        <input id="" type="radio" name="public-private-input"></label>
+    </div>
+
+    <div class="form-group">
         <div class="text-right col-md-{{$inputSize}} col-md-offset-{{$labelSize}}">
             <button type="submit" class="btn btn-primary">
                 Submit

@@ -82,7 +82,7 @@
                           'multiplierType' => 'Guests'
                       ],
                       (object) [
-                          'name' => '<b>Buffet: </b> Vegitarian', 
+                          'name' => '<b>Buffet: </b> Vegetariann', 
                           'price' => 900, 
                           'multiplier' => 1, 
                           'multiplierType' => 'Event',
