@@ -37,9 +37,13 @@
                       </div>
                     </ul>
                 </div>
+
             </div>
+            <button type="button" class="btn btn-danger">Delete Event</button>
         </div>
+
     </div>
+    
 </div>
 
 <div class="container">
@@ -90,4 +94,5 @@
       </div>
     </div>
   </div>
+
 </div>
