@@ -9,6 +9,10 @@ $(document).ready(function(){
 			return res;
 		})
 	});
+	$('#suppliers-input').select2({
+		placeholder : "Add supplier...",
+		data: ['Jims Catering']
+	});
 
 	$('#seats-input').select2({
 		placeholder : "Enter Seats (e.g A1,A2,A3,A4,A5,B1...)",

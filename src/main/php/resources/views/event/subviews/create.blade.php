@@ -129,6 +129,18 @@ Params:
         </div>
     </div>
 
+    <div class="form-group{{ $errors->has('suppliers') ? ' has-error' : '' }}">
+        <label for="suppliers-input" class="col-md-{{$labelSize}} control-label">Suppliers</label>
+        <div class="col-md-{{$inputSize}}">
+            <div class="input-group">
+                <select id="suppliers-input" class="form-control seat-select2" placeholder="Select Supplier" name="seats-input" style="width: 100%" multiple="multiple"></select>
+                <span class="input-group-addon"> <a target="_blank" href="/supplier">Or Submit new Supplier</a>
+                    <!-- <input id="seats-checkbox" type="checkbox" aria-label="Enable Seats"> -->
+                </span>
+            </div>
+        </div>
+    </div>
+
     <div class="form-group">
         <div class="text-right col-md-{{$inputSize}} col-md-offset-{{$labelSize}}">
             <button type="submit" class="btn btn-primary">
