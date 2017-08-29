@@ -11,7 +11,7 @@ function loadAddGuestPopup() {
 		var events = ['Birthday Party at UTS','Post Assignment Party','Serious Business Meetup 203','Wedding at Stephanoes'];
 		
 		//render dropdown on event select
-		$('.evento-select2')
+		$('#evento-input')
 			.select2({
 				placeholder : "Select an event",
 				data : events
@@ -20,7 +20,7 @@ function loadAddGuestPopup() {
 			.on('select2:select', onEventSelect);	//Define event to load emails of selected event and add to guest dropdown
 
 		//Init guest dropdown as disabled
-		guestSelect = $('.guest-select2').select2({
+		guestSelect = $('#add-guests-modal #guests-list-input').select2({
 			placeholder : "Enter guests email here",
 			tags: true,
 			tokenSeparators: [',', ' '],
@@ -54,7 +54,7 @@ function onEventSelect(e) {
 			];
 
 			//render dropdown with event emails as options
-			guestSelect = $('.guest-select2').select2({
+			guestSelect = $('#add-guests-modal #guests-list-input').select2({
 				placeholder : "Enter guests' emails here",
 				tags: true,
 				tokenSeparators: [',', ' '],

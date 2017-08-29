@@ -1,8 +1,9 @@
 $(document).ready(function(){
 	//Render guest email select
-	$('.guest-select2').select2({
+	$('#createEventForm #guests-list-input').select2({
 		placeholder : "Enter guests email here",
 		tags: true,
+		disabled: false,
 		tokenSeparators: [',', ' '],
 		data : $.get('user/emails', function (res) {
 			console.log(res);
@@ -26,7 +27,6 @@ $(document).ready(function(){
 	initCheckboxEvent('#max-guests-checkbox',"#max-guests-input");
 	initCheckboxEvent('#price-checkbox',"#price-input");
 	initCheckboxEvent('#rsvp-datetime-checkbox',"#rsvp-datetime-input");
-	initCheckboxEvent('#venue-checkbox',"#venue-input");
 	initCheckboxEvent('#seats-checkbox',"#seats-input");
 	initCheckboxEvent('#host-checkbox',"#host-name-input, #host-email-input, #from-host-checkbox");
 });

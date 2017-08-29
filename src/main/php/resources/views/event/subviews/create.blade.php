@@ -3,7 +3,7 @@ Params:
     string $labelSize sets the size for the label column e.g '3'
     string $inputSize sets the size for the input column e.g '6'
 --}}
-
+<div id="createEventForm">
 <form class="form-horizontal" method="POST" >
     {{ csrf_field() }}
 
@@ -11,6 +11,49 @@ Params:
         <label for="title-input" class="col-md-{{$labelSize}} control-label">Event Title</label>
         <div class="col-md-{{$inputSize}}">
             <input id="title-input" type="text" class="form-control" name="title-input"  placeholder="My Event" required autofocus>
+        </div>
+    </div>
+
+
+    <div class="form-group{{ $errors->has('description-input') ? ' has-error' : '' }}">
+        <label for="description-input" class="col-md-{{$labelSize}} control-label">Description</label>
+        <div class="col-md-{{$inputSize}}">
+            <textarea id="description-input" type="text" class="form-control" name="description-input" required></textarea>
+        </div>
+    </div>
+
+    <div class="form-group{{ $errors->has('start-date-time') ? ' has-error' : '' }}">
+        <label for="start-date-time" class="col-md-{{$labelSize}} control-label">From</label>
+        <div class="col-md-{{$inputSize}}">
+            <input id="start-date-time" type="datetime-local" class="form-control" name="start-date-time" required placeholder="Starting at">
+        </div>
+    </div>
+
+    <div class="form-group{{ $errors->has('end-date-time') ? ' has-error' : '' }}">
+        <label for="end-date-time" class="col-md-{{$labelSize}} control-label">To</label>
+        <div class="col-md-{{$inputSize}}">
+            <input id="end-date-time" type="datetime-local" class="form-control" name="end-date-time" required placeholder="Ending at">
+        </div>
+    </div>
+
+    @include('guests.subviews.create', ['labelSize' => $labelSize, 'inputSize' => $inputSize])
+    
+    <div class="form-group{{ $errors->has('venue-input') ? ' has-error' : '' }}">
+        <label for="venue-input" class="col-md-{{$labelSize}} control-label">Venue</label>
+        <div class="col-md-{{$inputSize}}">
+            <div class="input-group">
+                <input id="venue-input" list="venues-list" class="form-control" name="venue-input" required placeholder="Select Venue">
+                <datalist id="venues-list">
+                    <option value="Costi's">
+                    <option value="Uluru">
+                    <option value="Cat Cafe?">
+                    <option value="Home, 21 nowhere st">
+                    <option value="UTS, 21 somewhere st Australia">
+                </datalist>
+                <span data-toggle="modal" data-target="#create-venue-modal" class="input-group-addon">
+                    <a href="#" >Or Create Venue</a>
+                </span>
+            </div>
         </div>
     </div>
 
@@ -36,29 +79,6 @@ Params:
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('description-input') ? ' has-error' : '' }}">
-        <label for="description-input" class="col-md-{{$labelSize}} control-label">Description</label>
-        <div class="col-md-{{$inputSize}}">
-            <textarea id="description-input" type="text" class="form-control" name="description-input" required></textarea>
-        </div>
-    </div>
-
-    <div class="form-group{{ $errors->has('start-date-time') ? ' has-error' : '' }}">
-        <label for="start-date-time" class="col-md-{{$labelSize}} control-label">From</label>
-        <div class="col-md-{{$inputSize}}">
-            <input id="start-date-time" type="datetime-local" class="form-control" name="start-date-time" required placeholder="Starting at">
-        </div>
-    </div>
-
-    <div class="form-group{{ $errors->has('end-date-time') ? ' has-error' : '' }}">
-        <label for="end-date-time" class="col-md-{{$labelSize}} control-label">To</label>
-        <div class="col-md-{{$inputSize}}">
-            <input id="end-date-time" type="datetime-local" class="form-control" name="end-date-time" required placeholder="Ending at">
-        </div>
-    </div>
-
-    @include('guests.subviews.create', ['labelSize' => $labelSize, 'inputSize' => $inputSize])
-
     <div class="form-group{{ $errors->has('rsvp-datetime-input') ? ' has-error' : '' }}">
         <label for="rsvp-datetime-input" class="col-md-{{$labelSize}} control-label">RSVP</label>
         <div class="col-md-{{$inputSize}}">
@@ -71,27 +91,6 @@ Params:
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('venue-input') ? ' has-error' : '' }}">
-        <label for="venue-input" class="col-md-{{$labelSize}} control-label">Venue</label>
-        <div class="col-md-{{$inputSize}}">
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <input id="venue-checkbox" type="checkbox" aria-label="Enable Venue">
-                </span>
-                <input id="venue-input" list="venues-list" class="form-control" name="venue-input" required placeholder="Select Venue" disabled="true">
-                <datalist id="venues-list">
-                    <option value="Costi's">
-                    <option value="Uluru">
-                    <option value="Cat Cafe?">
-                    <option value="Home, 21 nowhere st">
-                    <option value="UTS, 21 somewhere st Australia">
-                </datalist>
-                <span data-toggle="modal" data-target="#create-venue-modal" class="input-group-addon">
-                    <a href="#">Or Create Venue</a>
-                </span>
-            </div>
-        </div>
-    </div>
 
     <div class="form-group{{ $errors->has('max-guests-input') ? ' has-error' : '' }}">
         <label for="max-guests-input" class="col-md-{{$labelSize}} control-label">Max Guests</label>
@@ -150,6 +149,7 @@ Params:
     </div>
 
 </form>
+</div>
 
 <div id="create-venue-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
