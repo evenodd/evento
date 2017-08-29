@@ -31,11 +31,8 @@
                                 <datalist id="type-list">
                                     <option value="Event Planner">
                                     <option value="Caterer">
-                                    <option value="Florist">
-                                    <option value="Entertainer">
-                                    <option value="Decorator">
-                                    <option value="Sponsor">
-                                    <option value="Other">
+                                    <option value="Host">
+                                    <option value="Supplier">
                                 </datalist>
                                 @if ($errors->has('name'))
                                     <span class="help-block">
