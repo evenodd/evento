@@ -7,7 +7,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Register</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('register') }}">
+                    <form id="registerForm" class="form-horizontal" method="POST" action="{{ route('register') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -25,18 +25,18 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Account  type</label>
+                            <label for="type" class="col-md-4 control-label">Account  type</label>
                             <div class="col-md-6">
-                                <input id="type" list="type-list" class="form-control" name="type" value="{{ old('name') }}"  autofocus placeholder="Select an account type..">
-                                <datalist id="type-list">
-                                    <option value="Event Planner">
-                                    <option value="Caterer">
-                                    <option value="Host">
-                                    <option value="Supplier">
-                                </datalist>
-                                @if ($errors->has('name'))
+                                <select id="type" name="type" list="type-list" class="form-control" value="{{ old('type') }}" form="registerForm" placeholder="Select an account type..">
+                                    <option value="">Select an account type..</option>
+                                    <option value="event_planner">Event Planner</option>
+                                    <option value="supplier">Supplier</option>
+                                    <option value="host">Host</option>
+                                    <option value="venue_coordinator">Venue Coordinator</option>
+                                </select>
+                                @if ($errors->has('type'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong>{{ $errors->first('type') }}</strong>
                                     </span>
                                 @endif
                             </div>

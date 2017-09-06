@@ -14,7 +14,7 @@
                     <b>RSVP</b>
                 </div>
                 <div class="panel-body">
-                  <p> I, <b>{{Auth::user()->name}}</b> would like to RSVP to the event <b> Wedding at Stephanos </b> </p>
+                  <p> I, <b>{{Auth::guest() ? '' : Auth::user()->name}}</b> would like to RSVP to the event <b> Wedding at Stephanos </b> </p>
                   <hr>
                    
                         <p> Event Time : <b> 20/01/2017 3.30pm to 21/01/2017 1.00am </b></p>
