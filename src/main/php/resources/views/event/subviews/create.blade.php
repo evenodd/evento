@@ -3,53 +3,59 @@ Params:
     string $labelSize sets the size for the label column e.g '3'
     string $inputSize sets the size for the input column e.g '6'
 --}}
-<div id="createEventForm">
-<form class="form-horizontal" method="POST" >
+<div >
+<form id="createEventForm" class="form-horizontal" method="POST" action="/eventos">
     {{ csrf_field() }}
 
     <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
-        <label for="title-input" class="col-md-{{$labelSize}} control-label">Event Title</label>
+        <label for="title" class="col-md-{{$labelSize}} control-label">Event Title</label>
         <div class="col-md-{{$inputSize}}">
-            <input id="title-input" type="text" class="form-control" name="title-input"  placeholder="My Event" required autofocus>
+            <input id="title" type="text" class="form-control" name="title"  placeholder="My Event" required autofocus>
         </div>
     </div>
 
 
-    <div class="form-group{{ $errors->has('description-input') ? ' has-error' : '' }}">
-        <label for="description-input" class="col-md-{{$labelSize}} control-label">Description</label>
+    <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
+        <label for="description" class="col-md-{{$labelSize}} control-label">Description</label>
         <div class="col-md-{{$inputSize}}">
-            <textarea id="description-input" type="text" class="form-control" name="description-input" required></textarea>
+            <textarea id="description" type="text" class="form-control" name="description"></textarea>
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('start-date-time') ? ' has-error' : '' }}">
-        <label for="start-date-time" class="col-md-{{$labelSize}} control-label">From</label>
+    <div class="form-group{{ $errors->has('start-datetime') ? ' has-error' : '' }}">
+        <label for="start-datetime" class="col-md-{{$labelSize}} control-label">From</label>
         <div class="col-md-{{$inputSize}}">
-            <input id="start-date-time" type="datetime-local" class="form-control" name="start-date-time" required placeholder="Starting at">
+            <input id="start-datetime" type="datetime-local" class="form-control" name="start-datetime" required placeholder="Starting at">
         </div>
     </div>
+    @if ($errors->has('start-datetime'))
+        <span class="help-block">
+            <strong>{{ $errors->first('start-datetime') }}</strong>
+        </span>
+    @endif
 
-    <div class="form-group{{ $errors->has('end-date-time') ? ' has-error' : '' }}">
-        <label for="end-date-time" class="col-md-{{$labelSize}} control-label">To</label>
+
+    <div class="form-group{{ $errors->has('end-datetime') ? ' has-error' : '' }}">
+        <label for="end-datetime" class="col-md-{{$labelSize}} control-label">To</label>
         <div class="col-md-{{$inputSize}}">
-            <input id="end-date-time" type="datetime-local" class="form-control" name="end-date-time" required placeholder="Ending at">
+            <input id="end-datetime" type="datetime-local" class="form-control" name="end-datetime" required placeholder="Ending at">
         </div>
     </div>
+    @if ($errors->has('end-datetime'))
+        <span class="help-block">
+            <strong>{{ $errors->first('end-datetime') }}</strong>
+        </span>
+    @endif
 
     @include('guests.subviews.create', ['labelSize' => $labelSize, 'inputSize' => $inputSize])
     
-    <div class="form-group{{ $errors->has('venue-input') ? ' has-error' : '' }}">
-        <label for="venue-input" class="col-md-{{$labelSize}} control-label">Venue</label>
+    <div class="form-group{{ $errors->has('venue') ? ' has-error' : '' }}">
+        <label for="venue" class="col-md-{{$labelSize}} control-label">Venue</label>
         <div class="col-md-{{$inputSize}}">
             <div class="input-group">
-                <input id="venue-input" list="venues-list" class="form-control" name="venue-input" required placeholder="Select Venue">
-                <datalist id="venues-list">
-                    <option value="Costi's">
-                    <option value="Uluru">
-                    <option value="Cat Cafe?">
-                    <option value="Home, 21 nowhere st">
-                    <option value="UTS, 21 somewhere st Australia">
-                </datalist>
+                <select id="venue" class="form-control" name="venue" required placeholder="Select Venue">
+                    <option val=""></option>
+                </select>
                 <span data-toggle="modal" data-target="#create-venue-modal" class="input-group-addon">
                     <a href="#" >Or Create Venue</a>
                 </span>
@@ -57,15 +63,15 @@ Params:
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('host-name-input') || $errors->has('host-email-input')? ' has-error' : '' }}">
-        <label for="host-name-input" class="col-md-{{$labelSize}} control-label">Host</label>
+    <div class="form-group{{ $errors->has('host-name') || $errors->has('host-email')? ' has-error' : '' }}">
+        <label for="host-name" class="col-md-{{$labelSize}} control-label">Host</label>
         <div class="col-md-{{$inputSize}}">
             <div class="input-group">
                 <span class="input-group-addon">
                     <input id="host-checkbox" type="checkbox" aria-label="Set the host">
                 </span>
-                <input id="host-name-input" type="text" class="form-control" name="host-name-input" placeholder="Host name" disabled="true">
-                <input id="host-email-input" type="email" class="form-control" name="host-email-input" placeholder="Host email" disabled="true">
+                <input id="host-name" type="text" class="form-control" name="host-name" placeholder="Host name" disabled="true">
+                <input id="host-email" type="email" class="form-control" name="host-email" placeholder="Host email" disabled="true">
             </div>
         </div>
         <div class="col-md-{{$inputSize}} col-md-offset-{{$labelSize}}">
@@ -73,78 +79,79 @@ Params:
                 <span class="input-group-addon">
                     <input id="from-host-checkbox" type="checkbox" class="" name="from-host-checkbox" title="Enabling this option will send invitations addressed from the host (opposed to by you)" disabled="true">
                 </span>
-                <span class="input-group-addon text-left" style="width: 100%;">Invitations sent from host
+                <span class="input-group-addon text-left" style="width: 100%;">
+                    Invitations sent from host
                 </span>
             </div>
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('rsvp-datetime-input') ? ' has-error' : '' }}">
-        <label for="rsvp-datetime-input" class="col-md-{{$labelSize}} control-label">RSVP</label>
+    <div class="form-group{{ $errors->has('rsvp-datetime') ? ' has-error' : '' }}">
+        <label for="rsvp-datetime" class="col-md-{{$labelSize}} control-label">RSVP</label>
         <div class="col-md-{{$inputSize}}">
             <div class="input-group">
                 <span class="input-group-addon">
                     <input id="rsvp-datetime-checkbox" type="checkbox" aria-label="Enable RSVP">
                 </span>
-                <input id="rsvp-datetime-input" type="datetime-local" class="form-control" name="rsvp-datetime-input" required placeholder="Ending at" disabled="true">
+                <input id="rsvp-datetime" type="datetime-local" class="form-control" name="rsvp-datetime" required placeholder="Ending at" disabled="true">
             </div>
         </div>
     </div>
 
 
-    <div class="form-group{{ $errors->has('max-guests-input') ? ' has-error' : '' }}">
-        <label for="max-guests-input" class="col-md-{{$labelSize}} control-label">Max Guests</label>
+    <div class="form-group{{ $errors->has('max-guests') ? ' has-error' : '' }}">
+        <label for="max-guests" class="col-md-{{$labelSize}} control-label">Max Guests</label>
         <div class="col-md-{{$inputSize}}">
             <div class="input-group">
                 <span class="input-group-addon">
                     <input id="max-guests-checkbox" type="checkbox" aria-label="Enable Max Guests">
                   </span>
-                <input id="max-guests-input" type="number" min="0" class="form-control" name="max-guests-input" required disabled="true">
+                <input id="max-guests" type="number" min="0" class="form-control" name="max-guests" required disabled="true">
             </div>
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('price-input') ? ' has-error' : '' }}">
-        <label for="max-guests-input" class="col-md-{{$labelSize}} control-label">Ticket Price</label>
+    <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
+        <label for="price" class="col-md-{{$labelSize}} control-label">Ticket Price</label>
         <div class="col-md-{{$inputSize}}">
             <div class="input-group">
                 <span class="input-group-addon">
                     <input id="price-checkbox" type="checkbox" aria-label="Enable Ticket Price">
                 </span>
-                <input id="price-input" type="text" min="0" class="form-control" style="outline: none;" name="price-input" placeholder="00.00" disabled="true">
+                <input id="price" type="text" min="0" class="form-control" style="outline: none;" name="price" placeholder="00.00" disabled="true">
             </div>
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('seats-input') ? ' has-error' : '' }}">
-        <label for="seats-input" class="col-md-{{$labelSize}} control-label">Seat Numbers</label>
+    <div class="form-group{{ $errors->has('seats') ? ' has-error' : '' }}">
+        <label for="seats" class="col-md-{{$labelSize}} control-label">Seat Numbers</label>
         <div class="col-md-{{$inputSize}}">
             <div class="input-group">
                 <span class="input-group-addon">
                     <input id="seats-checkbox" type="checkbox" aria-label="Enable Seats">
                 </span>
-                <select id="seats-input" class="form-control seat-select2" name="seats-input" style="width: 100%" multiple="multiple"></select>
+                <select id="seats" class="form-control seat-select2" name="seats" style="width: 100%" multiple="multiple"></select>
             </div>
         </div>
     </div>
 
     <div class="form-group{{ $errors->has('suppliers') ? ' has-error' : '' }}">
-        <label for="suppliers-input" class="col-md-{{$labelSize}} control-label">Suppliers</label>
+        <label for="suppliers" class="col-md-{{$labelSize}} control-label">Suppliers</label>
         <div class="col-md-{{$inputSize}}">
             <div class="input-group">
-                <select id="suppliers-input" class="form-control seat-select2" placeholder="Select Supplier" name="seats-input" style="width: 100%" multiple="multiple"></select>
-                <span class="input-group-addon"> <a target="_blank" href="/supplier">Or Submit new Supplier</a>
-                    <!-- <input id="seats-checkbox" type="checkbox" aria-label="Enable Seats"> -->
+                <select id="suppliers" class="form-control seat-select2" placeholder="Select Supplier" name="suppliers" style="width: 100%" multiple="multiple"></select>
+                <span class="input-group-addon"> 
+                    <a target="_blank" href="/supplier">Or Submit new Supplier</a>
                 </span>
             </div>
         </div>
     </div>
 
     <div class="form-group">
-        <label class="text-right col-md-{{$inputSize}} col-md-offset-{{$labelSize}}" for="private-input">Private
-        <input id="" type="radio" name="public-private-input" checked="checked"></label>
-        <label class="text-right col-md-{{$inputSize}} col-md-offset-{{$labelSize}}" for="public-input">Public
-        <input id="" type="radio" name="public-private-input"></label>
+        <label class="text-right col-md-{{$inputSize}} col-md-offset-{{$labelSize}}" for="public-private">Private
+        <input id="private" type="radio" name="public-private" checked="checked"></label>
+        <label class="text-right col-md-{{$inputSize}} col-md-offset-{{$labelSize}}" for="public-private">Public
+        <input id="public" type="radio" name="public-private"></label>
     </div>
 
     <div class="form-group">

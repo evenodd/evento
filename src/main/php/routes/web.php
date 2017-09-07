@@ -13,7 +13,6 @@
 //DEMO VIEWS
 Route::get('/manager', 'ManagerController@index')->name('manager')->middleware('auth');
 Route::get('/event/manager', function () { return view('event.manager'); })->middleware('auth');
-Route::get('/event/create', function () { return view('event.create'); })->middleware('auth');
 Route::get('/event/list', function () { return view('event.list'); })->middleware('auth');
 Route::get('/event/details', function () { return view('event.details'); })->middleware('auth');
 Route::get('/event/public', function () { return view('event.public'); });
@@ -30,4 +29,7 @@ Auth::routes();
 // Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 Route::get('/', 'ManagerController@index')->name('manager')->middleware('auth');
 
-Route::resource('eventos', 'EventoController');
+//Event endpoints
+Route::get('/event/create', 'EventoController@create')->middleware('auth');
+Route::get('eventos', 		'EventoController@index')->middleware('auth');
+Route::post('eventos', 		'EventoController@store')->middleware('auth', 'formatDateTimes');

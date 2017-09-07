@@ -36,7 +36,7 @@ class EventoController extends Controller
         //     return response('Permission Denied', '403');
 
         return DB::table('eventos_owners')
-            ->select('title', 'description', 'start_time', 'end_time', 'venue')
+            ->select('title', 'description', 'start-datetime', 'end-datetime', 'venue')
             ->where('user', Auth::user()->id)
             ->join('eventos', 'eventos_owners.evento', '=', 'eventos.id')
             ->get();
@@ -49,7 +49,7 @@ class EventoController extends Controller
      */
     public function create()
     {
-        //
+        return view('event.create');
     }
 
     /**
@@ -60,20 +60,39 @@ class EventoController extends Controller
      */
     public function store(Request $req)
     {
-        if($req->has('newVenue'))
-            VenueController::store($req);
-
-        DB::table('eventos')->insert([
-            'preferences' => json_encode($req->input('preferences')),
+        $this->validate($req,[
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'start-datetime' => 'required',
+            'end-datetime'=> 'required',
+        ]);
+        
+        $preferences = new \stdClass();
+        
+        if ($req->has('seats'))
+            $preferences->seats = $req->input('seats');
+        
+        $id = DB::table('eventos')->insert([
             'title' => $req->input('title'),
             'description' => $req->input('description'),
-            'start_time' => $req->input('start_time'),
-            'end_time' => $req->input('end_time'),
-            'rsvp_time' => $req->input('rsvp_time'),
-            'max_guests' => $req->input('max_guests'),
-            'private' => $req->input('private'),
+            'start-datetime' => $req->input('start-datetime'),
+            'end-datetime' => $req->input('end-datetime'),
+            'rsvp-datetime' => $req->has('rsvp-datetime') ? $req->input('rsvp-datetime') : null,
+            'max-guests' => $req->has('max-guests') ? $req->input('max-guests') : null,
             'venue' => $req->input('venue'),
+            'host-name' => $req->has('host-name') ? $req->input('host-name') : null,
+            'host-email' => $req->has('host-email') ? $req->input('host-email') : null,
+            'from-host' => $req->has('from-host-checkbox') ? $req->input('from-host-checkbox') : false,
+            'preferences' => json_encode($preferences),
+            'price' => $req->has('price') ?  $req->input('price') : null,
+            'private' => $req->has('private') && $req->input('private') == 'on' ? true : false,
         ]);
+
+        return [
+            'id' => $id, 
+            'status' => 'success', 
+            'msg' => 'Event "' . $req->input('title') . '" created successfully'
+        ];
     }
 
     /**
