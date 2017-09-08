@@ -66,6 +66,7 @@ class EventoController extends Controller
             'start-datetime' => 'required',
             'end-datetime'=> 'required',
             'public-private' =>  array('required', 'regex:/public|private/'),
+            'price' => 'nullable|float'
         ]);
 
         $preferences = new \stdClass();

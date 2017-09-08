@@ -47,8 +47,6 @@ Params:
         </span>
     @endif
 
-    @include('guests.subviews.create', ['labelSize' => $labelSize, 'inputSize' => $inputSize])
-    
     <div class="form-group{{ $errors->has('venue') ? ' has-error' : '' }}">
         <label for="venue" class="col-md-{{$labelSize}} control-label">Venue</label>
         <div class="col-md-{{$inputSize}}">
@@ -63,6 +61,8 @@ Params:
         </div>
     </div>
 
+    @include('guests.subviews.create', ['labelSize' => $labelSize, 'inputSize' => $inputSize])
+    
     <div class="form-group{{ $errors->has('host-name') || $errors->has('host-email')? ' has-error' : '' }}">
         <label for="host-name" class="col-md-{{$labelSize}} control-label">Host</label>
         <div class="col-md-{{$inputSize}}">
