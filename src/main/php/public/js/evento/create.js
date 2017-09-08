@@ -1,10 +1,27 @@
+
+/**
+ * Returns the value of any items with the specified name.
+ * 
+ * @param arr  the serialized array 
+ * @param name the name to find
+ * @return an array of values
+ */
+function serializedArray_getDuplicates(arr, name) {
+	return arr
+	    	.filter(function(e) {
+	    		return e.name == name;
+	    	})
+	    	.map(function(e) {
+	    		return e.value;
+	    	});
+}
+
 /**
  * Sets the specified checkbox element to toggle the disabled attribute of the specified input element.
  * 
  * @param checkbox a css selector for the checkbox element 
  * @param input    a css selector for the input element
  */
-
 function initCheckboxEvent(checkbox, input) {
 	$(checkbox).change(function () {
         $(input).prop('disabled', !$(this).is(':checked'));
@@ -82,15 +99,42 @@ function initSeatsSelect() {
 	});
 }
 
+function getCreateEventFormData() {
+	//get all inputs from the form
+    inputs = $('#createEventForm').serializeArray();
+    
+    // get arrays of all the seats and guests
+    seats = serializedArray_getDuplicates(inputs, 'seats');
+    guests = serializedArray_getDuplicates(inputs, 'guests-list');
+    
+    //filter out the seats and guests from the original inputs array
+    inputs = inputs.filter(function(input) {
+    	return !['seats', 'guests-list'].includes(input.name)
+    });
+
+    //add the new seats & guests arrays back in the inputs array
+    inputs.push(
+    	{'name' : 'seats', 'value' : seats},
+    	{'name' : 'guests-list', 'value' : guests}
+	);
+
+	return inputs;
+}
+
 /**
  * Overwrites the default submit form event
  */
 function initFormSubmitEvent() {
 	$('#createEventForm').submit(function(e){
 	    e.preventDefault();
+
+	    // Close any create event modals on the page
+	    if ($('#create-event-modal').length)
+	    	$('#create-event-modal').modal('hide');
+
 	    $.post({
 	        url : '/eventos',
-	        data : $('#createEventForm').serialize(),
+	        data : getCreateEventFormData(),
 	        //if successful, display an alert and focus on it
 	        success : function(res){
 	            if (res.status && res.msg) {
@@ -102,8 +146,16 @@ function initFormSubmitEvent() {
 	            	);
 		        	$('#event-alert-' + res.id).attr("tabindex",-1).focus();
 		        }
-	        }
-	    });
+	        },
+	    }).fail(function(res) {
+        	$('#alertPanel').append(
+            	'<div id="event-alert-error" class="fade in alert alert-warning">' + 
+            	'<a href="#" class="close" data-dismiss="alert">&times;</a>' +
+            	'Woops, we encountered a problem trying to create your event, if this error perssist you can contact us at evento.help@fourtytwo.com ' + 
+            	'</div>'
+        	);
+        	$('#event-alert-' + res.id).attr("tabindex",-1).focus();
+        });
 	});
 }
 

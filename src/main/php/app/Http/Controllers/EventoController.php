@@ -65,8 +65,9 @@ class EventoController extends Controller
             'description' => 'nullable|string|max:255',
             'start-datetime' => 'required',
             'end-datetime'=> 'required',
+            'public-private' =>  array('required', 'regex:/public|private/'),
         ]);
-        
+
         $preferences = new \stdClass();
         
         if ($req->has('seats'))
@@ -85,7 +86,7 @@ class EventoController extends Controller
             'from-host' => $req->has('from-host-checkbox') ? $req->input('from-host-checkbox') : false,
             'preferences' => json_encode($preferences),
             'price' => $req->has('price') ?  $req->input('price') : null,
-            'private' => $req->has('private') && $req->input('private') == 'on' ? true : false,
+            'private' => ($req->input('public-private') === 'private'),
         ]);
 
         return [

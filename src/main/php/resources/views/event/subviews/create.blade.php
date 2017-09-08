@@ -149,9 +149,9 @@ Params:
 
     <div class="form-group">
         <label class="text-right col-md-{{$inputSize}} col-md-offset-{{$labelSize}}" for="public-private">Private
-        <input id="private" type="radio" name="public-private" checked="checked"></label>
+        <input id="private" type="radio" value="private" name="public-private" checked="checked"></label>
         <label class="text-right col-md-{{$inputSize}} col-md-offset-{{$labelSize}}" for="public-private">Public
-        <input id="public" type="radio" name="public-private"></label>
+        <input id="public" type="radio" value="public" name="public-private"></label>
     </div>
 
     <div class="form-group">
