@@ -25,6 +25,7 @@ Route::get('/supplier', function () { return view('suppliers.create'); })->middl
 Route::get('/supplier_view', function () { return view('suppliers.details'); })->middleware('auth');
 
 Auth::routes();
+Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');
 
 // Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
 // Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
