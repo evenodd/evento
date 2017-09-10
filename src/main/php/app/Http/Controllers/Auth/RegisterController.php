@@ -6,6 +6,10 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
+use App\Jobs\SendVerificationEmail;
+
 
 class RegisterController extends Controller
 {
@@ -67,7 +71,47 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'type' => $data['type']
+            'type' => $data['type'],
+            'email_token' => bin2hex(random_bytes(64)),
         ]);
+    }
+
+    /**
+    * Handle a registration request for the application.
+    *
+    * @param \Illuminate\Http\Request $request
+    * @return \Illuminate\Http\Response
+    */
+    public function register(Request $request)
+    {
+        // Validate email request
+        $this->validator($request->all())->validate();
+        // Add user to db
+        event(new Registered($user = $this->create($request->all())));
+        // Send email to user
+        dispatch(new SendVerificationEmail($user));
+        // Return user to login page
+        return view('auth.login')->with([
+            'status' => 'success', 
+            'msg' => 'Your account has been created. You will recieve an email to activate your account.'
+        ]);
+    }
+
+    /**
+    * Handle a registration request for the application.
+    *
+    * @param $token
+    * @return \Illuminate\Http\Response
+    */
+    public function verify($token)
+    {
+        $user = User::where('email_token', $token)->first();
+        $user->verified = true;
+        if($user->save()){
+            return view('auth.login')->with([
+                'status' => 'success', 
+                'msg' => 'Your account has been successfully activated. Login below.'
+            ]);
+        }
     }
 }
