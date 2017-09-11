@@ -11,14 +11,18 @@ class GuestInvitation extends Mailable
 {
     use Queueable, SerializesModels;
 
+    protected $rsvp;
+    protected $event;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($rsvp, $event)
     {
-        //
+        $this->rsvp = $rsvp;
+        $this->event = $event;
     }
 
     /**
@@ -28,6 +32,7 @@ class GuestInvitation extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->markdown('email.invitation')
+                    ->with(['rsvp' => $rsvp, 'event' => $event]);
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventosOwnersTable extends Migration
+class CreateRsvpsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateEventosOwnersTable extends Migration
      */
     public function up()
     {
-        Schema::create('eventos_owners', function (Blueprint $table) {
+        Schema::create('rsvps', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user');
-            $table->integer('evento');
-            $table->string('permissions');
+            $table->string('email');
+            $table->integer('event-id');
+            $table->json('prefernces');
+            $table->string('email_token')->nullable();
+            $table->boolean('sent')->default(false);
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateEventosOwnersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('eventos_owners');
+        Schema::dropIfExists('rsvps');
     }
 }

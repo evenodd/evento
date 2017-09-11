@@ -15,16 +15,17 @@ class CreateEventosTable extends Migration
     {
         Schema::create('eventos', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('event_planner');
             $table->string('title');
             $table->longtext('description')->nullable();
-            $table->dateTime('start-datetime');
-            $table->dateTime('end-datetime');
-            $table->dateTime('rsvp-datetime')->nullable();
-            $table->integer('max-guests')->nullable();
+            $table->dateTime('start_datetime');
+            $table->dateTime('end_datetime');
+            $table->dateTime('rsvp_datetime')->nullable();
+            $table->integer('max_guests')->nullable();
             $table->integer('venue');
-            $table->string('host-name')->nullable();
-            $table->string('host-email')->nullable();
-            $table->boolean('from-host')->nullable();
+            $table->string('host_name')->nullable();
+            $table->string('host_email')->nullable();
+            $table->boolean('from_host')->nullable();
             $table->json('preferences')->nullable();
             $table->float('price')->nullable();
             $table->boolean('private');
