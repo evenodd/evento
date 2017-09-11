@@ -3,16 +3,16 @@
     {{ csrf_field() }}
 
     <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
-        <label for="title-input" class="col-md-4 control-label">Venue Name</label>
+        <label for="title" class="col-md-4 control-label">Venue Name</label>
         <div class="col-md-6">
-            <input id="title-input" type="text" class="form-control" name="title-input"  placeholder="New Venue Name" required autofocus>
+            <input id="title" type="text" class="form-control" name="title"  placeholder="New Venue Name" required autofocus>
         </div>
     </div>
 
     <div class="form-group ">
-        <label for="description-input" class="col-md-4 control-label">Description</label>
+        <label for="description" class="col-md-4 control-label">Description</label>
         <div class="col-md-6">
-            <textarea id="description-input" type="text" class="form-control" name="description-input" required></textarea>
+            <textarea id="description" type="text" class="form-control" name="description"></textarea>
         </div>
     </div>
 
