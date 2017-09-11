@@ -60,13 +60,23 @@ class EventoController extends Controller
      */
     public function store(Request $req)
     {
-        $this->validate($req,[
+        $this->validate($req, 
+        // Validation rules
+        [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
             'start-datetime' => 'required',
-            'end-datetime'=> 'required',
+            'end-datetime'=> 'required|after:start-datetime',
             'public-private' =>  array('required', 'regex:/public|private/'),
             'price' => 'nullable|float'
+        ],
+        //Error messages to use
+        [
+            'title.required' => 'A title is required',
+            'description.required'  => 'A message is required',
+            'start-datetime.required' => 'A start datetime is required',
+            'end-datetime.required' => 'A "To" date is required',
+            'end-datetime.after' => 'The "To" date must be after the "From" date',
         ]);
 
         $preferences = new \stdClass();

@@ -128,7 +128,14 @@
         </nav>
         <div class="container">
             <div class="row">
-                <div id="alertPanel" class="sticky-top col-md-8 col-md-offset-2"></div>
+                <div id="alertPanel" class="sticky-top col-md-8 col-md-offset-2">
+                    @if(isset($status) && isset($msg))
+                        <div id="alert-with-view" class="fade in alert alert-{{ $status }}">
+                            <a href="#" class="close" data-dismiss="alert">&times;</a>
+                            {{ $msg }}
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
 
