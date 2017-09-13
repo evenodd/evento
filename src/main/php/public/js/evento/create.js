@@ -129,7 +129,7 @@ function displayErrorAlert(errors) {
                     'if this error persists you can contact us at evento.help@fourtytwo.com'
     else 
     {
-        errorMsg += 'There were some errors in the event submitted. Please Address the following:</br><ul>';
+    errorMsg += 'There were some errors in the event submitted. Please change the following:</br><ul>';
         if ('end-datetime' in errors)
             errorMsg += '<li>' + errors['end-datetime'] + '</li>';
         errorMsg += '</ul>';

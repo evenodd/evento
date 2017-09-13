@@ -75,7 +75,9 @@
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="/event/manager">Event Manager</a></li>
+                                    @can('create', App\Post::class)
                                     <li><a href="/event/create">Create Event</a></li>
+                                    @endcan
                                     <li><a href="/event/list">Event List</a></li>
                                     <li><a href="/event/details">Event Details</a></li>
                                 </ul>

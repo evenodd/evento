@@ -49,6 +49,8 @@ class EventoController extends Controller
      */
     public function create()
     {
+        // $this->authorize('create', Evento::class);
+        $this->authorize('create', Evento::class);
         return view('event.create');
     }
 
@@ -60,6 +62,8 @@ class EventoController extends Controller
      */
     public function store(Request $req)
     {
+        //Check user can make an event
+        $this->authorize('create', Evento::class);
         $this->validate($req, 
         // Validation rules
         [
