@@ -13,7 +13,7 @@ class UsersTableSeeder extends Seeder
     {
         DB::table('users')->insert([
         	[
-	        	'id' => 1,
+	        	// 'id' => 1,
 	        	'name' => 'Test event planner',
 	        	'email' => 'event.planner@evento.com',
 	        	'password' => bcrypt('secret'),
@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
 	        	'email_token' => null,
 			],
 			[
-	        	'id' => 2,
+	        	// 'id' => 2,
 	        	'name' => 'Test supplier',
 	        	'email' => 'supplier@evento.com',
 	        	'password' => bcrypt('secret'),
@@ -31,7 +31,7 @@ class UsersTableSeeder extends Seeder
 	        	'email_token' => null,
 			],
 			[
-	        	'id' => 3,
+	        	// 'id' => 3,
 	        	'name' => 'Test host',
 	        	'email' => 'host@evento.com',
 	        	'password' => bcrypt('secret'),
@@ -40,7 +40,7 @@ class UsersTableSeeder extends Seeder
 	        	'email_token' => null,
 			],
 			[
-	        	'id' => 4,
+	        	// 'id' => 4,
 	        	'name' => 'Test venue coordinator',
 	        	'email' => 'venue.coordinator@evento.com',
 	        	'password' => bcrypt('secret'),
