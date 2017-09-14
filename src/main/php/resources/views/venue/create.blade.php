@@ -4,6 +4,8 @@
 <script src="{{ asset('js/home/home.js') }}"></script>
 @endsection
 
+<!-- small change -->
+
 @section('content')
 <div class="container">
     <div class="row">
