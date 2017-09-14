@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Rsvp;
 use App\Evento;
 use Illuminate\Http\Request;
+use App\Jobs\SendInvitationEmail;
 
 class RsvpController extends Controller
 {
@@ -111,8 +112,12 @@ class RsvpController extends Controller
     }
 
     public function send(Rsvp $rsvp) {
-        $this->authorise->('update', $rsvp);
-
-        
+        // check user is allowed to edit an rsvp
+        $this->authorize('update', $rsvp);
+        $rsvp->email_token = bin2hex(random_bytes(64));
+        // dispatch(new SendInvitationEmail($rsvp));
+        // $rsvp->save();
+        // $rsvp->sent = true;
+        // return $rsvp;
     }
 }

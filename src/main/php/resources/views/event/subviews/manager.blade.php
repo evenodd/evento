@@ -7,7 +7,7 @@
                 </div>
                 <div class="panel-body">
                    <ul class="nav nav-pills nav-stacked">
-                      @can('create', App\Post::class)
+                      @can('create', App\Evento::class)
                       <li role="presentation"><a href="#" data-toggle="modal" data-target="#create-event-modal"> Create A New Event </a></li>
                       @endcan
                       <li role="presentation"><a href="#" data-toggle="modal" data-target="#add-guests-modal">Invite More Guests To An Event</a></li>
@@ -18,7 +18,7 @@
         </div>
     </div>
 </div>
-@can('create', App\Post::class)
+@can('create', App\Evento::class)
 <div id="create-event-modal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">

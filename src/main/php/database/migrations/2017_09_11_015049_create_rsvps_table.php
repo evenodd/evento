@@ -17,7 +17,7 @@ class CreateRsvpsTable extends Migration
             $table->increments('id');
             $table->string('email');
             $table->integer('event-id');
-            $table->json('prefernces');
+            $table->json('preferences');
             $table->string('email_token')->nullable();
             $table->boolean('sent')->default(false);
             $table->timestamps();
