@@ -106,7 +106,7 @@ Params:
                 <span class="input-group-addon">
                     <input id="max-guests-checkbox" type="checkbox" aria-label="Enable Max Guests">
                   </span>
-                <input id="max-guests" type="number" min="0" class="form-control" name="max-guests" required disabled="true">
+                <input id="max-guests" type="number" min="1" class="form-control" name="max-guests" required disabled="true">
             </div>
         </div>
     </div>

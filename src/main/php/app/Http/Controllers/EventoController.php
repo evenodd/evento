@@ -71,20 +71,26 @@ class EventoController extends Controller
         [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
-            'start-datetime' => 'required',
+            'start-datetime' => 'required|after:now',
             'end-datetime'=> 'required|after:start-datetime',
+            'rsvp-datetime'=> 'nullable|before:start-datetime|after:now',
             'public-private' =>  array('required', 'regex:/public|private/'),
-            'price' => 'nullable|float',
+            'price' => 'nullable|numeric|min:0.01',
             'guests-list' => 'array|nullable',
             'guests-list.*' => 'email',
+            'max-guests' => 'nullable|min:1|integer'
         ],
         //Error messages to use
         [
             'title.required' => 'A title is required',
             'description.required'  => 'A message is required',
             'start-datetime.required' => 'A start datetime is required',
+            'start-datetime.after' => 'The event start date/time must be in the future',
+            'rsvp-datetime.before' => 'The "rsvp" date/time must be in the future',
+            'rsvp-datetime.after' => 'The "rsvp" date/time must be before the start of the event',
             'end-datetime.required' => 'A "To" date is required',
             'end-datetime.after' => 'The "To" date must be after the "From" date',
+            'price.numeric' => 'The price is not a valid number',
         ]);
 
         $preferences = new \stdClass();

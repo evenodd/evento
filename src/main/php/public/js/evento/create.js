@@ -146,8 +146,9 @@ function displayErrorAlert(errors) {
     else 
     {
     errorMsg += 'There were some errors in the event submitted. Please change the following:</br><ul>';
-        if ('end-datetime' in errors)
-            errorMsg += '<li>' + errors['end-datetime'] + '</li>';
+        $.each(errors, function(key, error) {
+            errorMsg += '<li>' + error + '</li>';
+        });
         errorMsg += '</ul>';
     }
 
