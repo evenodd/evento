@@ -6,9 +6,12 @@ use App\Rsvp;
 use App\Evento;
 use Illuminate\Http\Request;
 use App\Jobs\SendInvitationEmail;
+use App\Traits\StoresRsvps;
 
 class RsvpController extends Controller
 {
+    use StoresRsvps;
+
     /**
      * Display a listing of the resource.
      *
@@ -37,33 +40,7 @@ class RsvpController extends Controller
      */
      public function store(Request $req)
     {
-        // check user has permissions to create a RSVP
-        $this->authorise('create', Rsvp::class)
-
-        // check request is valid
-        $this->validate($req, [
-            'guests-list' => 'required|array|min:1',
-            'guests-list.*' => 'email',
-            'event' => 'required|exists:eventos,id'
-        ]);
-
-        // check user has permissions to edit the event the RSVPs are for
-        $this->authorise('update', Evento::find($req->input('event')))
-
-
-        foreach ($req->input('guests-list') as $email) {
-            // add rsvp to db
-            $preferences = new \stdClass();
-            $preferences->accepted = false;
-            $rsvp = new Rsvp();
-            $rsvp->email = $email;
-            $rsvp->preferences = json_encode($preferences);
-            $rsvp->event = $req->input('event');
-            $rsvp->email_token = null;
-            $rsvp->sent = false;
-            $rsvp->save();
-        }
-
+        return $this->storeRsvp($req);
     }
 
     /**
@@ -111,13 +88,14 @@ class RsvpController extends Controller
         //
     }
 
-    public function send(Rsvp $rsvp) {
+    public function send(Request $req, int $id) {
+        $rsvp = Rsvp::findOrFail($id);
         // check user is allowed to edit an rsvp
         $this->authorize('update', $rsvp);
         $rsvp->email_token = bin2hex(random_bytes(64));
-        // dispatch(new SendInvitationEmail($rsvp));
-        // $rsvp->save();
-        // $rsvp->sent = true;
-        // return $rsvp;
+        $rsvp->sent = true;
+        $rsvp->save();
+        dispatch(new SendInvitationEmail($rsvp));
+        return $rsvp;
     }
 }

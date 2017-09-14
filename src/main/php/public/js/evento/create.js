@@ -1,19 +1,30 @@
 
 /**
- * Returns the value of any items with the specified name.
+ * Returns the serialized array with an index appended to the specified names.
  * 
- * @param arr  the serialized array 
- * @param name the name to find
+ * E.g [{name : 'a', value : 1},{name : 'a', value : bar2}] ;
+ *     becomes 
+ *     [{name : 'a[0]', value : bar},{name : 'a[1]', value : bar2}] 
+ *     when ['a'] is passed as a name
+ *
+ * @param arr   the serialized array 
+ * @param names the names to index
  * @return an array of values
  */
-function serializedArray_getDuplicates(arr, name) {
-    return arr
-            .filter(function(e) {
-                return e.name == name;
-            })
-            .map(function(e) {
-                return e.value;
-            });
+function serializedArray_indexDuplicates(arr, names) {
+    //an array of indexes to index each name
+    var indexes = [];
+    names.forEach(function(name) {
+        indexes[name] = 0;
+    });
+
+    arr.forEach(function(e) {
+        // if the element's name is one of the names append an index an increment that name's index
+        if (names.indexOf(e.name) != -1)
+            e.name += '[' + (indexes[e.name]++) + ']';
+    });
+
+    return arr;
 }
 
 /**
@@ -103,20 +114,25 @@ function getCreateEventFormData() {
     //get all inputs from the form
     inputs = $('#createEventForm').serializeArray();
     
+    return serializedArray_indexDuplicates(inputs, ['seats', 'guests-list'])
+
     // get arrays of all the seats and guests
     seats = serializedArray_getDuplicates(inputs, 'seats');
     guests = serializedArray_getDuplicates(inputs, 'guests-list');
-    
+
     //filter out the seats and guests from the original inputs array
     inputs = inputs.filter(function(input) {
         return !['seats', 'guests-list'].includes(input.name)
     });
 
+    // inputs = $('#createEventForm').serialize();
+
     //add the new seats & guests arrays back in the inputs array
     inputs.push(
-        {'name' : 'seats', 'value' : seats},
-        {'name' : 'guests-list', 'value' : guests}
+        {'name' : 'seats[]', 'value' : seats},
+        {'name' : 'guests-list[]', 'value' : guests}
     );
+    console.log(inputs);
 
     return inputs;
 }
@@ -168,6 +184,7 @@ function initFormSubmitEvent() {
                         '</div>'
                     );
                     $('#event-alert-' + res.id).attr("tabindex",-1).focus();
+
                 }
             },
         }).fail(function(res) {

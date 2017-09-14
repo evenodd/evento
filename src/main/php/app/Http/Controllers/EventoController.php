@@ -6,9 +6,11 @@ use App\Evento;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
+use App\Traits\StoresRsvps;
 
 class EventoController extends Controller
 {
+    use StoresRsvps;
     /**
      * Create a new controller instance.
      *
@@ -72,7 +74,9 @@ class EventoController extends Controller
             'start-datetime' => 'required',
             'end-datetime'=> 'required|after:start-datetime',
             'public-private' =>  array('required', 'regex:/public|private/'),
-            'price' => 'nullable|float'
+            'price' => 'nullable|float',
+            'guests-list' => 'array|nullable',
+            'guests-list.*' => 'email',
         ],
         //Error messages to use
         [
@@ -104,6 +108,12 @@ class EventoController extends Controller
             'price' => $req->has('price') ?  $req->input('price') : null,
             'private' => ($req->input('public-private') === 'private'),
         ]);
+
+        if ($req->has('guests-list'))
+            $this->storeRsvp(new Request([
+            'guests-list' => $req->input('guests-list'),
+            'event' => $id
+        ]));
 
         return [
             'id' => $id, 

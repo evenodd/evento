@@ -16,7 +16,7 @@ class CreateRsvpsTable extends Migration
         Schema::create('rsvps', function (Blueprint $table) {
             $table->increments('id');
             $table->string('email');
-            $table->integer('event-id');
+            $table->integer('event');
             $table->json('preferences');
             $table->string('email_token')->nullable();
             $table->boolean('sent')->default(false);
