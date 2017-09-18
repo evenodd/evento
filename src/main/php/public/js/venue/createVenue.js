@@ -63,7 +63,8 @@ function initFormSubmitEvent() {
                 $('#event-alert-' + res.id).attr("tabindex",-1).focus();
             }
         }).fail(function(res){
-            alert("oh shit");
+            console.log(res);
+            //alert(res.responseJSON);
         });
 
     });

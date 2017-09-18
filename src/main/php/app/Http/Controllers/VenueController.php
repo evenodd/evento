@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use DB;
 use App\Venue;
 use Illuminate\Http\Request;
 
@@ -50,13 +50,6 @@ class VenueController extends Controller
     {
         //check user can creat VenuePolicy
 
-        //validate the $req 
-
-        //$vebue = new Venue;
-        //
-        //$venue->save();
-        //$venue = Venue::find($id)
-         $this->validate($req, 
         // Validation rules
         [
             'venueName' => 'required|string|max:255',
@@ -81,34 +74,30 @@ class VenueController extends Controller
             'country.required' => 'A country is required',
             'max-capacity.required'  => 'invalid max-capacity',
         ]);
+        
+        
+        $address = $req->input('address-number') . ' '
+                   . $req->input('street-name') . ' '
+                   . $req->input('city') . ' '
+                   . $req->input('state') . ' '
+                   . $req->input('postcode') . ' '
+                   . $req->input('country');
 
-         $address = $req->input('address-number') . ' '
-                    . $req->input('street-name') . ' '
-                    . $req->input('city') . ' '
-                    . $req->input('state') . ' '
-                    . $req->input('postcode') . ' '
-                    . $req->input('country');
 
+        $venue = new Venue();
 
-        /* $id = DB::table('venues')->insert([
-            'name' => $req->input('venueName'),
-            'address' => $address,
-            'capacity' => $req->input('max-capacity')
-         ]); */
-        $id = DB::table('venues')->insert([
-            'name' => 'noo',
-            'address' => 'noon',
-            'contact' => '{"not": "done"}',
-            'capacity' => 1//$req->input('max-capacity')
-        ]);
+        $venue->name = $req->input('venueName');
+        $venue->address = $address;
+        $venue->contact = json_encode('{"phone" : "(02) 9003 3820"}');
+        $venue->capacity = $req->input('max-capacity');
+
+        $venue->save(); 
 
         return [
-            'id' => $id, 
+            'id' => '098', 
             'status' => 'success', 
-            'msg' => 'Venue "' . '420' . '" created successfully'
+            'msg' => 'Venue "' . $venue->name . '" created successfully'
         ];
-
-
         
 
     }
