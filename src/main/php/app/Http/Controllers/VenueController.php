@@ -51,6 +51,7 @@ class VenueController extends Controller
         //check user can creat VenuePolicy
 
         // Validation rules
+        $this->validate($req,
         [
             'venueName' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
@@ -94,7 +95,7 @@ class VenueController extends Controller
         $venue->save(); 
 
         return [
-            'id' => '098', 
+            'id' => $venue->id , 
             'status' => 'success', 
             'msg' => 'Venue "' . $venue->name . '" created successfully'
         ];

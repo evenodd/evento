@@ -63,8 +63,13 @@ function initFormSubmitEvent() {
                 $('#event-alert-' + res.id).attr("tabindex",-1).focus();
             }
         }).fail(function(res){
-            console.log(res);
-            //alert(res.responseJSON);
+            $('#alertPanel').append(
+                '<div id="event-alert-' + id + '" class="fade in alert alert-warning">' +
+                    '<a href="#" class="close" data-dismiss="alert">&times;</a>' +
+                    'There was an error creating your venue' + 
+                '</div>'
+            );
+            $('#event-alert-' + id).attr("tabindex",-1).focus();
         });
 
     });
