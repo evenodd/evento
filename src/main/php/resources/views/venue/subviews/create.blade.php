@@ -1,11 +1,12 @@
-<!-- TODO: form errors -->
-<form class="form-horizontal" method="POST" >
+<!-- <form id="createVenueForm" class="form-horizontal" method="POST" action="/eventos"> -->
+
+<form id="createVenueForm" class="form-horizontal" method="POST" action="/createVenue">
     {{ csrf_field() }}
 
-    <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
-        <label for="title" class="col-md-4 control-label">Venue Name</label>
+    <div class="form-group{{ $errors->has('venueName') ? ' has-error' : '' }}">
+        <label for="venueName" class="col-md-4 control-label">Venue Name</label>
         <div class="col-md-6">
-            <input id="title" type="text" class="form-control" name="title"  placeholder="New Venue Name" required autofocus>
+            <input id="venueName" type="text" class="form-control" name="venueName"  placeholder="New Venue Name" required autofocus>
         </div>
     </div>
 
@@ -17,7 +18,7 @@
     </div>
 
     <div class="form-group">
-        <label for="address-input" class="col-md-4 control-label">Address</label>
+        <label for="address-number" class="col-md-4 control-label">Address</label>
         <div class="col-md-2">
             <input id="address-number" type="int" class="form-control" name="address-number" required placeholder="#">
         </div>
@@ -29,27 +30,27 @@
     <div class="form-group">
         <label class="col-md-4 control-label"></label>
         <div class="col-md-3">
-            <input id="city-input" type="text" class="form-control" name="city-input" required placeholder="City">
+            <input id="city" type="text" class="form-control" name="city" required placeholder="City">
         </div>
         <div class="col-md-3">
-            <input id="state-input" type="text" class="form-control" name="state-input" required placeholder="State">
+            <input id="state" type="text" class="form-control" name="state" required placeholder="State">
         </div>
     </div>
 
     <div class="form-group">
         <label class="col-md-4 control-label"></label>
         <div class="col-md-2">
-            <input id="postcode-input" type="text" class="form-control" name="postcode-number" required placeholder="Postcode">
+            <input id="postcode" type="text" class="form-control" name="postcode" required placeholder="Postcode">
         </div>
         <div class="col-md-4">
-            <input id="country-input" type="text" class="form-control" name="country-number" required placeholder="Country">
+            <input id="country" type="text" class="form-control" name="country" required placeholder="Country">
         </div>
     </div>
 
     <div class="form-group">
-        <label for="max-capacity-input" class="col-md-4 control-label">Max Capacity</label>
+        <label for="max-capacity" class="col-md-4 control-label">Max Capacity</label>
         <div class="col-md-6">
-            <input id="max-capacity-input" type="number" class="form-control" name="max-capacity-input" required>
+            <input id="max-capacity" type="number" class="form-control" name="max-capacity" required>
         </div>
     </div>
 
