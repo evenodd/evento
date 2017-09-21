@@ -19,7 +19,6 @@ function serializedArray_getDuplicates(arr, name) {
 
 
 $(document).ready(function() {
-   alert("hello world");
    initFormSubmitEvent();
 });
 
@@ -40,16 +39,7 @@ function initFormSubmitEvent() {
         //postcode = serializedArray_getDuplicates(input,'postcode');
         //country = serializedArray_getDuplicates(input,'country');
         //maxCapacity = serializedArray_getDuplicates(input,'max-capacity');
-        //alert( venueName);
-        //alert( description);
-        //alert(addressNumber );
-        //alert(streetName );
-        //alert(city );
-        //alert(state );
-        //alert(postcode );
-        //alert(country );
-        //alert(maxCapacity); 
-        //return formData;
+
         $.post({
             url: '/createVenue',
             data : formData,
@@ -63,6 +53,7 @@ function initFormSubmitEvent() {
                 $('#event-alert-' + res.id).attr("tabindex",-1).focus();
             }
         }).fail(function(res){
+            id = Date.now();
             $('#alertPanel').append(
                 '<div id="event-alert-' + id + '" class="fade in alert alert-warning">' +
                     '<a href="#" class="close" data-dismiss="alert">&times;</a>' +
