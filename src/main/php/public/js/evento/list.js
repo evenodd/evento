@@ -1,8 +1,9 @@
 var eventList;
+var listLoader;
 
 $(document).ready(function() {
-    // Create the event list component
-    const listLoader = new Vue({
+    // Disaply a loading prompt while requesting events
+    listLoader = new Vue({
         el : "#list-loader",
         data : {
             loading : true,
@@ -11,13 +12,14 @@ $(document).ready(function() {
     })
     // Request the user's events
     $.get('/eventos', function (res) {
-        console.log(res);
+        //display the events
         eventList = new Vue({
             el : '#event-list',
             data : {
                 events : res, 
             }
         }); 
+        //hide the loader
         listLoader.loading = false;
     });
 

@@ -185,7 +185,8 @@ function initFormSubmitEvent() {
                         '</div>'
                     );
                     $('#event-alert-' + res.id).attr("tabindex",-1).focus();
-
+                    if(eventList)
+                        eventList.events.push(res.event);
                 }
             },
         }).fail(function(res) {

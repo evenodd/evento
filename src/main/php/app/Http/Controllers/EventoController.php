@@ -100,31 +100,32 @@ class EventoController extends Controller
         if ($req->has('seats'))
             $preferences->seats = $req->input('seats');
         
-        $id = DB::table('eventos')->insertGetId([
-            'title' => $req->input('title'),
-            'event_planner' => Auth::user()->id,
-            'description' => $req->input('description'),
-            'start_datetime' => $req->input('start-datetime'),
-            'end_datetime' => $req->input('end-datetime'),
-            'rsvp_datetime' => $req->has('rsvp-datetime') ? $req->input('rsvp-datetime') : null,
-            'max_guests' => $req->has('max-guests') ? $req->input('max-guests') : null,
-            'venue' => $req->input('venue'),
-            'host_name' => $req->has('host-name') ? $req->input('host-name') : null,
-            'host_email' => $req->has('host-email') ? $req->input('host-email') : null,
-            'from_host' => $req->has('from-host-checkbox') ? $req->input('from-host-checkbox') : false,
-            'preferences' => json_encode($preferences),
-            'price' => $req->has('price') ?  $req->input('price') : null,
-            'private' => ($req->input('public-private') === 'private'),
-        ]);
+        $evento = new Evento();
+        $evento->title = $req->input('title');
+        $evento->event_planner = Auth::user()->id;
+        $evento->description = $req->input('description');
+        $evento->start_datetime = $req->input('start-datetime');
+        $evento->end_datetime = $req->input('end-datetime');
+        $evento->rsvp_datetime = $req->has('rsvp-datetime') ? $req->input('rsvp-datetime') : null;
+        $evento->max_guests = $req->has('max-guests') ? $req->input('max-guests') : null;
+        $evento->venue = $req->input('venue');
+        $evento->host_name = $req->has('host-name') ? $req->input('host-name') : null;
+        $evento->host_email = $req->has('host-email') ? $req->input('host-email') : null;
+        $evento->from_host = $req->has('from-host-checkbox') ? $req->input('from-host-checkbox') : false;
+        $evento->preferences = json_encode($preferences);
+        $evento->price = $req->has('price') ?  $req->input('price') : null;
+        $evento->private = ($req->input('public-private') === 'private');
+        $evento->save();
 
         if ($req->has('guests-list'))
             $this->storeRsvp(new Request([
             'guests-list' => $req->input('guests-list'),
-            'event' => $id
+            'event' => $evento->id
         ]));
 
         return [
-            'id' => $id, 
+            'id' => $evento->id,
+            'event' => $evento, 
             'status' => 'success', 
             'msg' => 'Event "' . $req->input('title') . '" created successfully'
         ];
