@@ -37,6 +37,8 @@ class EventoController extends Controller
         // if(!Auth::check())
         //     return response('Permission Denied', '403');
 
+        return Evento::where('event_planner', Auth::user()->id)->get();
+
         return DB::table('eventos_owners')
             ->select('title', 'description', 'start-datetime', 'end-datetime', 'venue')
             ->where('user', Auth::user()->id)
@@ -98,7 +100,7 @@ class EventoController extends Controller
         if ($req->has('seats'))
             $preferences->seats = $req->input('seats');
         
-        $id = DB::table('eventos')->insert([
+        $id = DB::table('eventos')->insertGetId([
             'title' => $req->input('title'),
             'event_planner' => Auth::user()->id,
             'description' => $req->input('description'),

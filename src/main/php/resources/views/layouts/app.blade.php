@@ -145,5 +145,6 @@
     </div>
     <!-- Page script -->
     @yield('script')
+    @stack('scripts')
 </body>
 </html>
