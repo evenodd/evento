@@ -8,6 +8,7 @@ use Auth;
 use DB;
 use Illuminate\Http\Request;
 use App\Traits\StoresRsvps;
+use App\Jobs\SendGuestEmail;
 
 class EventoController extends Controller
 {
@@ -172,10 +173,12 @@ class EventoController extends Controller
         $this->authorize('update', $evento);
         $evento->canceled = true;
         //get all the rsvps that have already been sent
-        $rsvps = getRsvps(new Request(['sent' => true]), $evento);
+        $rsvps = $this->getRsvps(new Request(['sent' => true]), $evento);
         foreach ($rsvps as $rsvp) {
-            dispatch(new SendGuestEmail($rsvp, 'emails.canceled'));
+            dispatch(new SendGuestEmail($rsvp, 'emails.canceled', "Canceled: "));
         }
+        $evento->save();
+        return redirect('/eventos/details/' . $evento->id);
     }
 
     

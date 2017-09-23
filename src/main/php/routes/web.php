@@ -39,6 +39,7 @@ Route::post('eventos',                    'EventoController@store')->middleware(
 Route::get('eventos/details/{evento}',    'EventoController@show')->middleware('auth');
 Route::get('/eventos/{evento}/nbOfGuests', 'EventoController@getNumberOfGuests')->middleware('auth');
 Route::get('/eventos/{evento}/rsvps',      'EventoController@getRsvps')->middleware('auth');
+Route::post('/eventos/{evento}/cancel',      'EventoController@cancel')->middleware('auth');
 
 //Rsvp endpoints
 Route::post('rsvp/send/{rsvp}',           'RsvpController@send')->middleware('auth');

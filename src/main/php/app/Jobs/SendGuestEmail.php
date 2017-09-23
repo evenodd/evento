@@ -19,16 +19,18 @@ class SendGuestEmail implements ShouldQueue
     protected $rsvp;
     protected $event;
     protected $view;
+    protected $subject;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($rsvp, $view)
+    public function __construct($rsvp, $view, $subject = "")
     {
         $this->rsvp = $rsvp;
         $this->event = Evento::find($rsvp->event);
         $this->view = $view;
+        $this->subject = $subject;
     }
 
     /**
@@ -43,7 +45,8 @@ class SendGuestEmail implements ShouldQueue
             ->send(new GuestMail(
                 $this->rsvp, 
                 $this->event, 
-                $this->view
+                $this->view,
+                $this->subject
             ));
     }
 

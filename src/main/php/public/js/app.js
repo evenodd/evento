@@ -58316,6 +58316,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 var sprintf = __webpack_require__(161).sprintf;
 
@@ -58571,9 +58573,13 @@ var render = function() {
         },
         [
           _c("a", { attrs: { href: "#" } }, [
-            _c("div", { staticClass: " col-xs-7 " }, [
-              _vm._v(" " + _vm._s(_vm.event.title))
-            ]),
+            _vm.event.canceled
+              ? _c("div", { staticClass: " col-xs-7 " }, [
+                  _c("del", [_vm._v(" " + _vm._s(_vm.event.title) + " ")])
+                ])
+              : _c("div", { staticClass: " col-xs-7 " }, [
+                  _vm._v(" " + _vm._s(_vm.event.title) + " ")
+                ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-5 text-right" }, [
               _vm._v(
@@ -58614,9 +58620,14 @@ var render = function() {
                   [_vm._v("×")]
                 ),
                 _vm._v(" "),
-                _c("h4", { staticClass: "modal-title" }, [
-                  _vm._v(_vm._s(_vm.event.title))
-                ])
+                _vm.event.canceled
+                  ? _c("h4", { staticClass: "modal-title" }, [
+                      _vm._v("Canceled Event: "),
+                      _c("del", [_vm._v(_vm._s(_vm.event.title))])
+                    ])
+                  : _c("h4", { staticClass: "modal-title" }, [
+                      _vm._v(_vm._s(_vm.event.title))
+                    ])
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [

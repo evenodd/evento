@@ -3,7 +3,8 @@
         <li role="presentation">
             <div data-toggle="modal" v-bind:data-target=" '#event-details-modal-' + event.id" class="row">
                 <a href="#">
-                    <div class=" col-xs-7 "> {{ event.title }}</div>
+                    <div v-if="event.canceled" class=" col-xs-7 "><del> {{ event.title }} </del></div>
+                    <div v-else class=" col-xs-7 "> {{ event.title }} </div>
                     <div class="col-xs-5 text-right">{{ event.start_datetime | shortDate }}
                         <span class="ml-1">
                             <button class="sl-2 btn btn-primary btn-xs">Guests 
@@ -18,7 +19,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">{{ event.title }}</h4>
+                            <h4 v-if="event.canceled" class="modal-title">Canceled Event: <del>{{ event.title }}</del></h4>
+                            <h4 v-else class="modal-title">{{ event.title }}</h4>
                         </div>
                         <div class="modal-body">
                             <p> Event Time : <b> {{ event.start_datetime | longDate }} to {{ event.end_datetime | longDate }} </b></p>
