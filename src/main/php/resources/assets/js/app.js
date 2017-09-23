@@ -20,6 +20,8 @@ Vue.component('example', require('./components/Example.vue'));
 Vue.component('event-row', require('./components/event/Row.vue'));
 Vue.component('event-list', require('./components/event/List.vue'));
 Vue.component('pacman-loader', require('vue-spinner/src/PacmanLoader.vue'));
+Vue.component('pulse-loader', require('vue-spinner/src/PulseLoader.vue'));
+
 
 Vue.filter('shortDate',  function (date) {
 	return moment(date, "YYYY-MM-DD hh:mm:ss").format("Do MMM hh:mm a");

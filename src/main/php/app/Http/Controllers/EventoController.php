@@ -171,7 +171,8 @@ class EventoController extends Controller
     public function cancel(Evento $evento) {
         $this->authorize('update', $evento);
         $evento->canceled = true;
-        $rsvps = getSentRsvps($evento);
+        //get all the rsvps that have already been sent
+        $rsvps = getRsvps(new Request(['sent' => true]), $evento);
         foreach ($rsvps as $rsvp) {
             dispatch(new SendGuestEmail($rsvp, 'emails.canceled'));
         }
@@ -189,8 +190,18 @@ class EventoController extends Controller
         return RSVP::where('event', $evento->id)->count();
     }
 
-    public function getSentRsvps(Evento $evento) {
+    public function getRsvps(Request $req, Evento $evento) {
         $this->authorize('view', $evento);
-        return RSVP::where('event', $evento->id)->where('sent')->get();
+        $this->validate($req, [
+            'sent' => 'boolean'
+        ]);
+
+        //Get all rsvps for this event
+        $rsvps = RSVP::where('event', $evento->id);
+        //filter by sent if requested
+        if($req->has('sent'))
+            $rsvps = $rsvps->where('sent', $req->input('sent'));
+
+        return $rsvps->get();
     }
 }

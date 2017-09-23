@@ -1,7 +1,7 @@
 <template>
     <div>
         <li role="presentation">
-            <div data-toggle="modal" data-target="#event-details-modal" class="row">
+            <div data-toggle="modal" v-bind:data-target=" '#event-details-modal-' + event.id" class="row">
                 <a href="#">
                     <div class=" col-xs-7 "> {{ event.title }}</div>
                     <div class="col-xs-5 text-right">{{ event.start_datetime | shortDate }}
@@ -13,7 +13,7 @@
                     </div>
                 </a> 
             </div>
-            <div id="event-details-modal" class="modal fade" role="dialog">
+            <div v-bind:id=" 'event-details-modal-' + event.id" class="modal fade" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -51,7 +51,7 @@
             console.log(this);
             var vm = this;
             //request and set the number of guests for the event
-            $.get('/evento/' + this.event.id + '/nbOfGuests', function(res){
+            $.get('/eventos/' + this.event.id + '/nbOfGuests', function(res){
                 vm.$set(vm.event, 'nbOfGuests', sprintf('%02d', res));
             });
         },

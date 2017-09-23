@@ -46,4 +46,14 @@ class SendGuestEmail implements ShouldQueue
                 $this->view
             ));
     }
+
+    public function failed($e) 
+    {
+        \Log::info('Failed to send email for rsvp: ' . $this->rsvp->id);
+        if($this->view == "emails.invitation"){
+            $this->rsvp->email_token = null;
+            $this->rsvp->sent = false;
+            $this->rsvp->save();
+        }
+    }
 }

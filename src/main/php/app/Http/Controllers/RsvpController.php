@@ -91,6 +91,9 @@ class RsvpController extends Controller
     public function send(Rsvp $rsvp) {
         // check user is allowed to edit an rsvp
         $this->authorize('update', $rsvp);
+        
+        if($rsvp->sent)
+            return response('Already been sent.', 400);
         // generate a random token
         $rsvp->email_token = bin2hex(random_bytes(64));
         // Record that the invitation is being sent
