@@ -3,9 +3,13 @@
         <li role="presentation">
             <div data-toggle="modal" data-target="#event-details-modal" class="row">
                 <a href="#">
-                    <div class=" col-xs-8 "> {{ event.title }}</div>
-                    <div class="col-xs-4 text-right">{{ event.start_datetime | shortDate }}
-                        <span class="ml-1"><button class="sl-2 btn btn-primary btn-xs">Guests <span class="badge" name="event-guest-nb">{{ event.guestsNb }}</span></button></span>
+                    <div class=" col-xs-7 "> {{ event.title }}</div>
+                    <div class="col-xs-5 text-right">{{ event.start_datetime | shortDate }}
+                        <span class="ml-1">
+                            <button class="sl-2 btn btn-primary btn-xs">Guests 
+                                <span class="badge" name="event-guest-nb">{{ event.nbOfGuests }}</span>
+                            </button>
+                        </span>
                     </div>
                 </a> 
             </div>
@@ -18,9 +22,16 @@
                         </div>
                         <div class="modal-body">
                             <p> Event Time : <b> {{ event.start_datetime | longDate }} to {{ event.end_datetime | longDate }} </b></p>
+                            <!-- TODO Replace this with a global venue row component -->
                             <p> Venue : <b> <a href="#">{{ event.venue }}</a></b></p>
-                            <p> Ticket Price : <b> ${{ event.price }} </b></p>
-                            <p> Description : <b> {{ event.description}} </b></p>
+                            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+                            <div v-if="event.price" ><p> Ticket Price : <b> ${{ event.price }} </b></p></div>
+                            <div v-if="event.description" ><p> Description : <b> {{ event.description}} </b></p></div>
+                            <div class="row">
+                                <div class="col-xs-12 text-right">
+                                    <a :href="detailsRoute(event.id)"><h4>More details...</h4></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -32,7 +43,22 @@
 
 
 <script>
+    const sprintf = require("sprintf-js").sprintf;
+
     export default {
-        props: ['event']
+        props: ['event'],
+        created : function () {
+            console.log(this);
+            var vm = this;
+            //request and set the number of guests for the event
+            $.get('/evento/' + this.event.id + '/nbOfGuests', function(res){
+                vm.$set(vm.event, 'nbOfGuests', sprintf('%02d', res));
+            });
+        },
+        methods : {
+            detailsRoute: function(id) {
+                return '/eventos/details/' + id;
+            }
+        }
     }
 </script>

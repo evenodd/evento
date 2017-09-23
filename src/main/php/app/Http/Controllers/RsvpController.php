@@ -88,13 +88,15 @@ class RsvpController extends Controller
         //
     }
 
-    public function send(Request $req, int $id) {
-        $rsvp = Rsvp::findOrFail($id);
+    public function send(Rsvp $rsvp) {
         // check user is allowed to edit an rsvp
         $this->authorize('update', $rsvp);
+        // generate a random token
         $rsvp->email_token = bin2hex(random_bytes(64));
+        // Record that the invitation is being sent
         $rsvp->sent = true;
         $rsvp->save();
+        //send the email
         dispatch(new SendInvitationEmail($rsvp));
         return $rsvp;
     }

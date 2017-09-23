@@ -16,9 +16,7 @@
 Route::get('/manager', 'ManagerController@index')->name('manager')->middleware('auth');
 Route::get('/event/manager', function () { return view('event.manager'); })->middleware('auth');
 Route::get('/event/list', function () { return view('event.list'); })->middleware('auth');
-Route::get('/event/details', function () { return view('event.details'); })->middleware('auth');
 Route::get('/event/public', function () { return view('event.public'); });
-Route::get('/venue/details', function () { return view('venue.details'); })->middleware('auth');
 // Route::get('/venue/create', function () { return view('venue.create'); })->middleware('auth');
 
 
@@ -35,14 +33,16 @@ Route::get('/verifyemail/{token}', 'Auth\RegisterController@verify');
 Route::get('/', 'ManagerController@index')->name('manager')->middleware('auth');
 
 //Event endpoints
-Route::get('/event/create', 'EventoController@create')->middleware('auth');
-Route::get('eventos', 		'EventoController@index')->middleware('auth');
-Route::post('eventos', 		'EventoController@store')->middleware('auth', 'formatDateTimes');
+Route::get('/event/create',         'EventoController@create')->middleware('auth');
+Route::get('eventos',               'EventoController@index')->middleware('auth');
+Route::post('eventos',              'EventoController@store')->middleware('auth', 'formatDateTimes');
+Route::get('eventos/details/{evento}',  'EventoController@show')->middleware('auth');
 
 //Rsvp endpoints
-Route::post('rsvp/send/{id}',	'RsvpController@send')->middleware('auth');
-Route::get('/rsvp/{token}', function () { return view('rsvp'); })->name('rsvp');
+Route::post('rsvp/send/{rsvp}',       'RsvpController@send')->middleware('auth');
+Route::get('/rsvp/{token}',         function () { return view('rsvp'); })->name('rsvp');
 
-
-Route::get('/venue/create', 'VenueController@create')->middleware('auth');
-Route::post('createVenue', 	'VenueController@store')->middleware('auth');
+Route::get('/venue/create',         'VenueController@create')->middleware('auth');
+Route::post('createVenue',          'VenueController@store')->middleware('auth');
+Route::get('/venue/details/{venue}',   'VenueController@show')->middleware('auth');
+Route::get('/evento/{evento}/nbOfGuests', 'EventoController@getNumberOfGuests')->middleware('auth');

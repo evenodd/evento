@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Evento;
+use App\Rsvp;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -29,21 +30,7 @@ class EventoController extends Controller
      */
     public function index()
     {
-        
-        /**
-         * Use this if middleware is shitty
-         */
-
-        // if(!Auth::check())
-        //     return response('Permission Denied', '403');
-
         return Evento::where('event_planner', Auth::user()->id)->get();
-
-        return DB::table('eventos_owners')
-            ->select('title', 'description', 'start-datetime', 'end-datetime', 'venue')
-            ->where('user', Auth::user()->id)
-            ->join('eventos', 'eventos_owners.evento', '=', 'eventos.id')
-            ->get();
     }
 
     /**
@@ -53,7 +40,6 @@ class EventoController extends Controller
      */
     public function create()
     {
-        // $this->authorize('create', Evento::class);
         $this->authorize('create', Evento::class);
         return view('event.create');
     }
@@ -139,7 +125,7 @@ class EventoController extends Controller
      */
     public function show(Evento $evento)
     {
-        //
+        return view('event.details', ['event' => $evento]);
     }
 
     /**
@@ -174,5 +160,12 @@ class EventoController extends Controller
     public function destroy(Evento $evento)
     {
         //
+    }
+
+    
+    // returns the number of guests that have been added to the event
+    public function getNumberOfGuests(Evento $evento) {
+        $this->authorize('view', $evento);
+        return RSVP::where('event', $evento->id)->count();
     }
 }

@@ -96,6 +96,7 @@ class VenueController extends Controller
 
         return [
             'id' => $venue->id , 
+            'venue' => $venue,
             'status' => 'success', 
             'msg' => 'Venue "' . $venue->name . '" created successfully'
         ];
@@ -111,7 +112,7 @@ class VenueController extends Controller
      */
     public function show(Venue $venue)
     {
-        //
+        return view('venue.details', ['venue' => $venue]);
     }
 
     /**

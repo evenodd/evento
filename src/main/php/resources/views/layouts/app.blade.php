@@ -79,7 +79,6 @@
                                     <li><a href="/event/create">Create Event</a></li>
                                     @endcan
                                     <li><a href="/event/list">Event List</a></li>
-                                    <li><a href="/event/details">Event Details</a></li>
                                 </ul>
                             </li>
                             <li class="dropdown">

@@ -16448,7 +16448,7 @@ return zhTw;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(127);
-module.exports = __webpack_require__(171);
+module.exports = __webpack_require__(172);
 
 
 /***/ }),
@@ -16475,8 +16475,8 @@ window.Vue = __webpack_require__(153);
 
 Vue.component('example', __webpack_require__(154));
 Vue.component('event-row', __webpack_require__(157));
-Vue.component('event-list', __webpack_require__(160));
-Vue.component('pacman-loader', __webpack_require__(163));
+Vue.component('event-list', __webpack_require__(161));
+Vue.component('pacman-loader', __webpack_require__(164));
 
 Vue.filter('shortDate', function (date) {
   return moment(date, "YYYY-MM-DD hh:mm:ss").format("Do MMM hh:mm a");
@@ -57925,7 +57925,7 @@ var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(158)
 /* template */
-var __vue_template__ = __webpack_require__(159)
+var __vue_template__ = __webpack_require__(160)
 /* styles */
 var __vue_styles__ = null
 /* scopeId */
@@ -58001,13 +58001,253 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var sprintf = __webpack_require__(159).sprintf;
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['event']
+    props: ['event'],
+    created: function created() {
+        console.log(this);
+        var vm = this;
+        //request and set the number of guests for the event
+        $.get('/evento/' + this.event.id + '/nbOfGuests', function (res) {
+            vm.$set(vm.event, 'nbOfGuests', sprintf('%02d', res));
+        });
+    },
+    methods: {
+        detailsRoute: function detailsRoute(id) {
+            return '/eventos/details/' + id;
+        }
+    }
 });
 
 /***/ }),
 /* 159 */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function(window) {
+    var re = {
+        not_string: /[^s]/,
+        number: /[diefg]/,
+        json: /[j]/,
+        not_json: /[^j]/,
+        text: /^[^\x25]+/,
+        modulo: /^\x25{2}/,
+        placeholder: /^\x25(?:([1-9]\d*)\$|\(([^\)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-gijosuxX])/,
+        key: /^([a-z_][a-z_\d]*)/i,
+        key_access: /^\.([a-z_][a-z_\d]*)/i,
+        index_access: /^\[(\d+)\]/,
+        sign: /^[\+\-]/
+    }
+
+    function sprintf() {
+        var key = arguments[0], cache = sprintf.cache
+        if (!(cache[key] && cache.hasOwnProperty(key))) {
+            cache[key] = sprintf.parse(key)
+        }
+        return sprintf.format.call(null, cache[key], arguments)
+    }
+
+    sprintf.format = function(parse_tree, argv) {
+        var cursor = 1, tree_length = parse_tree.length, node_type = "", arg, output = [], i, k, match, pad, pad_character, pad_length, is_positive = true, sign = ""
+        for (i = 0; i < tree_length; i++) {
+            node_type = get_type(parse_tree[i])
+            if (node_type === "string") {
+                output[output.length] = parse_tree[i]
+            }
+            else if (node_type === "array") {
+                match = parse_tree[i] // convenience purposes only
+                if (match[2]) { // keyword argument
+                    arg = argv[cursor]
+                    for (k = 0; k < match[2].length; k++) {
+                        if (!arg.hasOwnProperty(match[2][k])) {
+                            throw new Error(sprintf("[sprintf] property '%s' does not exist", match[2][k]))
+                        }
+                        arg = arg[match[2][k]]
+                    }
+                }
+                else if (match[1]) { // positional argument (explicit)
+                    arg = argv[match[1]]
+                }
+                else { // positional argument (implicit)
+                    arg = argv[cursor++]
+                }
+
+                if (get_type(arg) == "function") {
+                    arg = arg()
+                }
+
+                if (re.not_string.test(match[8]) && re.not_json.test(match[8]) && (get_type(arg) != "number" && isNaN(arg))) {
+                    throw new TypeError(sprintf("[sprintf] expecting number but found %s", get_type(arg)))
+                }
+
+                if (re.number.test(match[8])) {
+                    is_positive = arg >= 0
+                }
+
+                switch (match[8]) {
+                    case "b":
+                        arg = arg.toString(2)
+                    break
+                    case "c":
+                        arg = String.fromCharCode(arg)
+                    break
+                    case "d":
+                    case "i":
+                        arg = parseInt(arg, 10)
+                    break
+                    case "j":
+                        arg = JSON.stringify(arg, null, match[6] ? parseInt(match[6]) : 0)
+                    break
+                    case "e":
+                        arg = match[7] ? arg.toExponential(match[7]) : arg.toExponential()
+                    break
+                    case "f":
+                        arg = match[7] ? parseFloat(arg).toFixed(match[7]) : parseFloat(arg)
+                    break
+                    case "g":
+                        arg = match[7] ? parseFloat(arg).toPrecision(match[7]) : parseFloat(arg)
+                    break
+                    case "o":
+                        arg = arg.toString(8)
+                    break
+                    case "s":
+                        arg = ((arg = String(arg)) && match[7] ? arg.substring(0, match[7]) : arg)
+                    break
+                    case "u":
+                        arg = arg >>> 0
+                    break
+                    case "x":
+                        arg = arg.toString(16)
+                    break
+                    case "X":
+                        arg = arg.toString(16).toUpperCase()
+                    break
+                }
+                if (re.json.test(match[8])) {
+                    output[output.length] = arg
+                }
+                else {
+                    if (re.number.test(match[8]) && (!is_positive || match[3])) {
+                        sign = is_positive ? "+" : "-"
+                        arg = arg.toString().replace(re.sign, "")
+                    }
+                    else {
+                        sign = ""
+                    }
+                    pad_character = match[4] ? match[4] === "0" ? "0" : match[4].charAt(1) : " "
+                    pad_length = match[6] - (sign + arg).length
+                    pad = match[6] ? (pad_length > 0 ? str_repeat(pad_character, pad_length) : "") : ""
+                    output[output.length] = match[5] ? sign + arg + pad : (pad_character === "0" ? sign + pad + arg : pad + sign + arg)
+                }
+            }
+        }
+        return output.join("")
+    }
+
+    sprintf.cache = {}
+
+    sprintf.parse = function(fmt) {
+        var _fmt = fmt, match = [], parse_tree = [], arg_names = 0
+        while (_fmt) {
+            if ((match = re.text.exec(_fmt)) !== null) {
+                parse_tree[parse_tree.length] = match[0]
+            }
+            else if ((match = re.modulo.exec(_fmt)) !== null) {
+                parse_tree[parse_tree.length] = "%"
+            }
+            else if ((match = re.placeholder.exec(_fmt)) !== null) {
+                if (match[2]) {
+                    arg_names |= 1
+                    var field_list = [], replacement_field = match[2], field_match = []
+                    if ((field_match = re.key.exec(replacement_field)) !== null) {
+                        field_list[field_list.length] = field_match[1]
+                        while ((replacement_field = replacement_field.substring(field_match[0].length)) !== "") {
+                            if ((field_match = re.key_access.exec(replacement_field)) !== null) {
+                                field_list[field_list.length] = field_match[1]
+                            }
+                            else if ((field_match = re.index_access.exec(replacement_field)) !== null) {
+                                field_list[field_list.length] = field_match[1]
+                            }
+                            else {
+                                throw new SyntaxError("[sprintf] failed to parse named argument key")
+                            }
+                        }
+                    }
+                    else {
+                        throw new SyntaxError("[sprintf] failed to parse named argument key")
+                    }
+                    match[2] = field_list
+                }
+                else {
+                    arg_names |= 2
+                }
+                if (arg_names === 3) {
+                    throw new Error("[sprintf] mixing positional and named placeholders is not (yet) supported")
+                }
+                parse_tree[parse_tree.length] = match
+            }
+            else {
+                throw new SyntaxError("[sprintf] unexpected placeholder")
+            }
+            _fmt = _fmt.substring(match[0].length)
+        }
+        return parse_tree
+    }
+
+    var vsprintf = function(fmt, argv, _argv) {
+        _argv = (argv || []).slice(0)
+        _argv.splice(0, 0, fmt)
+        return sprintf.apply(null, _argv)
+    }
+
+    /**
+     * helpers
+     */
+    function get_type(variable) {
+        return Object.prototype.toString.call(variable).slice(8, -1).toLowerCase()
+    }
+
+    function str_repeat(input, multiplier) {
+        return Array(multiplier + 1).join(input)
+    }
+
+    /**
+     * export to either browser or node.js
+     */
+    if (true) {
+        exports.sprintf = sprintf
+        exports.vsprintf = vsprintf
+    }
+    else {
+        window.sprintf = sprintf
+        window.vsprintf = vsprintf
+
+        if (typeof define === "function" && define.amd) {
+            define(function() {
+                return {
+                    sprintf: sprintf,
+                    vsprintf: vsprintf
+                }
+            })
+        }
+    }
+})(typeof window === "undefined" ? this : window);
+
+
+/***/ }),
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -58027,22 +58267,22 @@ var render = function() {
         },
         [
           _c("a", { attrs: { href: "#" } }, [
-            _c("div", { staticClass: " col-xs-8 " }, [
+            _c("div", { staticClass: " col-xs-7 " }, [
               _vm._v(" " + _vm._s(_vm.event.title))
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-xs-4 text-right" }, [
+            _c("div", { staticClass: "col-xs-5 text-right" }, [
               _vm._v(
                 _vm._s(_vm._f("shortDate")(_vm.event.start_datetime)) +
                   "\n                    "
               ),
               _c("span", { staticClass: "ml-1" }, [
                 _c("button", { staticClass: "sl-2 btn btn-primary btn-xs" }, [
-                  _vm._v("Guests "),
+                  _vm._v("Guests \n                            "),
                   _c(
                     "span",
                     { staticClass: "badge", attrs: { name: "event-guest-nb" } },
-                    [_vm._v(_vm._s(_vm.event.guestsNb))]
+                    [_vm._v(_vm._s(_vm.event.nbOfGuests))]
                   )
                 ])
               ])
@@ -58098,14 +58338,34 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _c("p", [
-                  _vm._v(" Ticket Price : "),
-                  _c("b", [_vm._v(" $" + _vm._s(_vm.event.price) + " ")])
-                ]),
+                _vm.event.price
+                  ? _c("div", [
+                      _c("p", [
+                        _vm._v(" Ticket Price : "),
+                        _c("b", [_vm._v(" $" + _vm._s(_vm.event.price) + " ")])
+                      ])
+                    ])
+                  : _vm._e(),
                 _vm._v(" "),
-                _c("p", [
-                  _vm._v(" Description : "),
-                  _c("b", [_vm._v(" " + _vm._s(_vm.event.description) + " ")])
+                _vm.event.description
+                  ? _c("div", [
+                      _c("p", [
+                        _vm._v(" Description : "),
+                        _c("b", [
+                          _vm._v(" " + _vm._s(_vm.event.description) + " ")
+                        ])
+                      ])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-xs-12 text-right" }, [
+                    _c(
+                      "a",
+                      { attrs: { href: _vm.detailsRoute(_vm.event.id) } },
+                      [_c("h4", [_vm._v("More details...")])]
+                    )
+                  ])
                 ])
               ])
             ])
@@ -58128,15 +58388,15 @@ if (false) {
 }
 
 /***/ }),
-/* 160 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(2)
 /* script */
-var __vue_script__ = __webpack_require__(161)
+var __vue_script__ = __webpack_require__(162)
 /* template */
-var __vue_template__ = __webpack_require__(162)
+var __vue_template__ = __webpack_require__(163)
 /* styles */
 var __vue_styles__ = null
 /* scopeId */
@@ -58174,7 +58434,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58195,7 +58455,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -58221,19 +58481,19 @@ if (false) {
 }
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(164)
+  __webpack_require__(165)
 }
 var normalizeComponent = __webpack_require__(2)
 /* script */
-var __vue_script__ = __webpack_require__(169)
+var __vue_script__ = __webpack_require__(170)
 /* template */
-var __vue_template__ = __webpack_require__(170)
+var __vue_template__ = __webpack_require__(171)
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
@@ -58271,17 +58531,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(165);
+var content = __webpack_require__(166);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(167)("12b0b15e", content, false);
+var update = __webpack_require__(168)("12b0b15e", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -58297,10 +58557,10 @@ if(false) {
 }
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(166)(undefined);
+exports = module.exports = __webpack_require__(167)(undefined);
 // imports
 
 
@@ -58311,7 +58571,7 @@ exports.push([module.i, "\n.v-spinner\n{\n    text-align: center;\n}\n\n/*TODO c
 
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, exports) {
 
 /*
@@ -58393,7 +58653,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -58412,7 +58672,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(168)
+var listToStyles = __webpack_require__(169)
 
 /*
 type StyleObject = {
@@ -58614,7 +58874,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports) {
 
 /**
@@ -58647,7 +58907,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58754,7 +59014,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -58810,7 +59070,7 @@ if (false) {
 }
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
