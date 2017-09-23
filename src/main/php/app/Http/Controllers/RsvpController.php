@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Rsvp;
 use App\Evento;
 use Illuminate\Http\Request;
-use App\Jobs\SendInvitationEmail;
+use App\Jobs\SendGuestEmail;
 use App\Traits\StoresRsvps;
 
 class RsvpController extends Controller
@@ -96,8 +96,8 @@ class RsvpController extends Controller
         // Record that the invitation is being sent
         $rsvp->sent = true;
         $rsvp->save();
-        //send the email
-        dispatch(new SendInvitationEmail($rsvp));
+        //email teh invitations
+        dispatch(new SendGuestEmail($rsvp, 'emails.invitation'));
         return $rsvp;
     }
 }

@@ -162,10 +162,35 @@ class EventoController extends Controller
         //
     }
 
+    /**
+     * Cancels the event, notifying all guests via email
+     *
+     * @param  \App\Evento  $Evento
+     * @return \Illuminate\Http\Response
+     */
+    public function cancel(Evento $evento) {
+        $this->authorize('update', $evento);
+        $evento->canceled = true;
+        $rsvps = getSentRsvps($evento);
+        foreach ($rsvps as $rsvp) {
+            dispatch(new SendGuestEmail($rsvp, 'emails.canceled'));
+        }
+    }
+
     
-    // returns the number of guests that have been added to the event
+    /**
+     * Returns the number of guests added to the event
+     * (does not care if guests accepted invitation or not)
+     * @param  \App\Evento  $Evento
+     * @return int
+     */
     public function getNumberOfGuests(Evento $evento) {
         $this->authorize('view', $evento);
         return RSVP::where('event', $evento->id)->count();
+    }
+
+    public function getSentRsvps(Evento $evento) {
+        $this->authorize('view', $evento);
+        return RSVP::where('event', $evento->id)->where('sent')->get();
     }
 }

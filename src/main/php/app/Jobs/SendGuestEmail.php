@@ -8,25 +8,27 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Mail;
-use App\Mail\GuestInvitation;
+use App\Mail\GuestMail;
 use App\Evento;
 use App\User;
 
-class SendInvitationEmail implements ShouldQueue
+class SendGuestEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     
     protected $rsvp;
     protected $event;
+    protected $view;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($rsvp)
+    public function __construct($rsvp, $view)
     {
         $this->rsvp = $rsvp;
         $this->event = Evento::find($rsvp->event);
+        $this->view = $view;
     }
 
     /**
@@ -38,6 +40,10 @@ class SendInvitationEmail implements ShouldQueue
     {
         
         Mail::to($this->rsvp->email)
-            ->send(new GuestInvitation($this->rsvp, $this->event));
+            ->send(new GuestMail(
+                $this->rsvp, 
+                $this->event, 
+                $this->view
+            ));
     }
 }

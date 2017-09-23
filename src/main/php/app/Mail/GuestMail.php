@@ -9,22 +9,24 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\User;
 
 
-class GuestInvitation extends Mailable
+class GuestMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     protected $rsvp;
     protected $event;
+    public $view;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($rsvp, $event)
+    public function __construct($rsvp, $event, $view)
     {
         $this->rsvp = $rsvp;
         $this->event = $event;
+        $this->view = $view;
     }
 
     /**
@@ -34,10 +36,16 @@ class GuestInvitation extends Mailable
      */
     public function build()
     {
-        $address = $this->event->from_host ? $this->event->host_email : User::find($this->event->event_planner)->email;
-        $name    = $this->event->from_host ? $this->event->host_name  : User::find($this->event->event_planner)->name;
-
-        return $this->markdown('emails.invitation')
+        if ($this->event->from_host) {
+            $address =  $this->event->host_email;
+            $name = $this->event->host_name;
+        }
+        else {
+            $event_planner = User::find($this->event->event_planner);
+            $address =  $event_planner->email;
+            $name = $event_planner->name;
+        }
+        return $this->markdown($this->view)
                     ->with(['rsvp' => $this->rsvp, 'event' => $this->event])
                     ->subject($this->event->title . '(Evento)')
                     ->from($address, $name);

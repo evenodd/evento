@@ -29,6 +29,7 @@ class CreateEventosTable extends Migration
             $table->json('preferences')->nullable();
             $table->float('price')->nullable();
             $table->boolean('private');
+            $table->boolean('canceled')->default(false);
             $table->timestamps();
         });
     }
