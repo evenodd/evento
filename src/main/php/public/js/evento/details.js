@@ -42,7 +42,7 @@ function InvitationModal(rsvps){
     });
 
     this.sendInvitations = function() {
-        this.sending=true;
+        this.sending = true;
         var that = this;
         
         this.invites.forEach(function(invite) {

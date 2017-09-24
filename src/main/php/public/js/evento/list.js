@@ -16,7 +16,8 @@ $(document).ready(function() {
         eventList = new Vue({
             el : '#event-list',
             data : {
-                events : res, 
+                events : res,
+                forGuests : false 
             }
         }); 
         //hide the loader
