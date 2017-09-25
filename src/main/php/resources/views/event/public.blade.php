@@ -19,7 +19,11 @@
                             <pacman-loader id="publicEventLoader" :loading="loading" :color="color" :size="size"></pacman-loader>
                         </div>
                     </div>
-                    <event-list v-bind:events="events" id="publicEventList"></event-list>
+                    <event-list 
+                    	id="publicEventList"
+                    	v-bind:events="events" 
+        				v-bind:show_guests="show_guests">
+                	</event-list>
                 </div>
 	        </div>
         </div>

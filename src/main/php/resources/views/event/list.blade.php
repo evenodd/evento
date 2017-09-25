@@ -16,7 +16,11 @@
                             <pacman-loader id="list-loader" :loading="loading" :color="color" :size="size"></pacman-loader>
                         </div>
                     </div>
-				    <event-list v-bind:events="events" id="event-list"></event-list>
+                    <event-list 
+                        id="event-list"
+                        v-bind:events="events" 
+                        v-bind:show_guests="show_guests">
+                    </event-list>
 				</div>
             </div>
         </div>

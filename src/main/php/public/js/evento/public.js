@@ -16,7 +16,7 @@ function PublicEventListPanel() {
         el : "#publicEventList",
         data : {
             events : [],
-            forGuests : true
+            show_guests : false
         }
     });
     var errorMessage = new Vue ({

@@ -7,7 +7,8 @@ $(document).ready(function() {
         el : "#list-loader",
         data : {
             loading : true,
-            color : "grey"
+            color : "grey",
+            size : '30px'
         }
     })
     // Request the user's events
@@ -17,7 +18,7 @@ $(document).ready(function() {
             el : '#event-list',
             data : {
                 events : res,
-                forGuests : false 
+                show_guests : true 
             }
         }); 
         //hide the loader

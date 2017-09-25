@@ -6,11 +6,11 @@
                     <div v-if="event.canceled" class=" col-xs-7 "><del> {{ event.title }} </del></div>
                     <div v-else class=" col-xs-7 "> {{ event.title }} </div>
                     <div class="col-xs-5 text-right">{{ event.start_datetime | shortDate }}
-                        <span class="ml-1">
-                            <button class="sl-2 btn btn-primary btn-xs">Guests 
-                                <span class="badge" name="event-guest-nb">{{ event.nbOfGuests }}</span>
-                            </button>
-                        </span>
+                        <guest-badge
+                            v-if="show_guests"
+                            v-bind:event="event"
+                            >    
+                        </guest-badge>
                     </div>
                 </a> 
             </div>
@@ -48,15 +48,7 @@
     const sprintf = require("sprintf-js").sprintf;
 
     export default {
-        props: ['event'],
-        created : function () {
-            console.log(this);
-            var vm = this;
-            //request and set the number of guests for the event
-            $.get('/eventos/' + this.event.id + '/nbOfGuests', function(res){
-                vm.$set(vm.event, 'nbOfGuests', sprintf('%02d', res));
-            });
-        },
+        props: ['event','show_guests'],
         methods : {
             detailsRoute: function(id) {
                 return '/eventos/details/' + id;

@@ -3,6 +3,7 @@
 		<event-row 
 			v-for="event in events" 
 			v-bind:event="event"
+			v-bind:show_guests="show_guests"
 			v-bind:key="event.id">	
 		</event-row>
 	</div>
@@ -10,6 +11,6 @@
 
 <script>
     export default {
-        props: ['events']
+        props: ['events','show_guests']
     }
 </script>

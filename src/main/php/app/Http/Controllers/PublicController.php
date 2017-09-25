@@ -9,6 +9,8 @@ use App\Traits\StoresRsvps;
 class PublicController extends Controller
 {
     public function index(Request $req) {
-    	return Evento::where('private', false)->get();
+    	return Evento::where('private', false)
+    		->where('canceled', false)
+    		->get();
     }
 }

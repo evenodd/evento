@@ -18,6 +18,7 @@ window.Vue = require('vue');
 
 Vue.component('example', require('./components/Example.vue'));
 Vue.component('event-row', require('./components/event/Row.vue'));
+Vue.component('guest-badge', require('./components/event/GuestBadge.vue'));
 Vue.component('event-list', require('./components/event/List.vue'));
 Vue.component('pacman-loader', require('vue-spinner/src/PacmanLoader.vue'));
 Vue.component('pulse-loader', require('vue-spinner/src/PulseLoader.vue'));
