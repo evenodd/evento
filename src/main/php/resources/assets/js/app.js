@@ -12,6 +12,7 @@ window.Vue = require('vue');
 window.moment = require('moment');
 window.select2 = require('select2');
 window.fullCalendar = require('fullCalendar');
+window.stringHash = require('string-hash');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -25,6 +26,10 @@ Vue.component('example', require('./components/Example.vue'));
 Vue.component('event-row', require('./components/event/Row.vue'));
 Vue.component('guest-badge', require('./components/event/GuestBadge.vue'));
 Vue.component('event-list', require('./components/event/List.vue'));
+
+// venue components
+Vue.component('contact-inputs', require('./components/venue/ContactInputs.vue'));
+
 
 //open source components 
 Vue.component('pacman-loader', require('vue-spinner/src/PacmanLoader.vue'));

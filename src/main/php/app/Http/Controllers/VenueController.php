@@ -61,7 +61,8 @@ class VenueController extends Controller
             'state' => 'required',
             'postcode' => 'required',
             'country' => 'required',
-            'max-capacity' => 'required|int'
+            'max-capacity' => 'required|int',
+            'contacts' => 'json',
         ],
         //Error messages to use
         [
@@ -89,7 +90,7 @@ class VenueController extends Controller
 
         $venue->name = $req->input('venueName');
         $venue->address = $address;
-        $venue->contact = json_encode('{"phone" : "(02) 9003 3820"}');
+        $venue->contact = $req->input('contacts');
         $venue->capacity = $req->input('max-capacity');
 
         $venue->save(); 

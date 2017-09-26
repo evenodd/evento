@@ -1,48 +1,53 @@
 
-/**
- * Returns the value of any items with the specified name.
- * 
- * @param arr  the serialized array 
- * @param name the name to find
- * @return an array of values
- */
-function serializedArray_getDuplicates(arr, name) {
-    return arr
-            .filter(function(e) {
-                return e.name == name;
-            })
-            .map(function(e) {
-                return e.value;
-            });
+function ContactFormGroup(el, contacts) {
+    this.vue = new Vue({
+        el : el,
+        data : {
+            contacts : contacts
+        }
+    }); 
+}
+
+ContactFormGroup.prototype.getData = function() {
+    var data = new Object();
+    this.vue.contacts.forEach(function(contact) {
+        data[contact] = $("#contactsFormGroup #" + stringHash(contact)).val();
+    });
+    return data;
+}
+
+function CreateVenueForm(el) {
+    var that = this;
+    this.el = $(el); 
+    this.contactFormGroup = new ContactFormGroup("#contactsFormGroup", ["Phone", "Email"]);
+
+    // returns form data as a serialized array. Includes all the contacts in a json object.
+    this.getData = function() {
+        var data = that.el.serializeArray();
+        data.push({
+            name : 'contacts', 
+            value : JSON.stringify(that.contactFormGroup.getData())
+        });
+        return data;
+    };
+
+    configFormSubmitEvent(this.getData);
 }
 
 
-
 $(document).ready(function() {
-   initFormSubmitEvent();
+   createVenueForm = new CreateVenueForm("#createVenueForm");
 });
 
 /**
  * Overwrites the default submit form event
  */
-function initFormSubmitEvent() {
+function configFormSubmitEvent(dataGenerator) {
     $('#createVenueForm').submit(function(e){
         e.preventDefault();
-
-        formData = $('#createVenueForm').serializeArray();
-        //venueName = serializedArray_getDuplicates(input, 'venueName');
-        //description = serializedArray_getDuplicates(input, 'description');
-        //addressNumber = serializedArray_getDuplicates(input,'address-number');
-        //streetName = serializedArray_getDuplicates(input,'street-name');
-        //city = serializedArray_getDuplicates(input,'city');
-        //state = serializedArray_getDuplicates(input,'state');
-        //postcode = serializedArray_getDuplicates(input,'postcode');
-        //country = serializedArray_getDuplicates(input,'country');
-        //maxCapacity = serializedArray_getDuplicates(input,'max-capacity');
-
         $.post({
             url: '/createVenue',
-            data : formData,
+            data : dataGenerator(),
             success : function(res){
                 $('#alertPanel').append(
                         '<div id="event-alert-' + res.id + '" class="fade in alert alert-' + res.status + '">' + 

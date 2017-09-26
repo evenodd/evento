@@ -114,27 +114,7 @@ function getCreateEventFormData() {
     //get all inputs from the form
     inputs = $('#createEventForm').serializeArray();
     
-    return serializedArray_indexDuplicates(inputs, ['seats', 'guests-list'])
-
-    // get arrays of all the seats and guests
-    seats = serializedArray_getDuplicates(inputs, 'seats');
-    guests = serializedArray_getDuplicates(inputs, 'guests-list');
-
-    //filter out the seats and guests from the original inputs array
-    inputs = inputs.filter(function(input) {
-        return !['seats', 'guests-list'].includes(input.name)
-    });
-
-    // inputs = $('#createEventForm').serialize();
-
-    //add the new seats & guests arrays back in the inputs array
-    inputs.push(
-        {'name' : 'seats[]', 'value' : seats},
-        {'name' : 'guests-list[]', 'value' : guests}
-    );
-    console.log(inputs);
-
-    return inputs;
+    return serializedArray_indexDuplicates(inputs, ['seats', 'guests-list']);
 }
 
 function displayErrorAlert(errors) {
