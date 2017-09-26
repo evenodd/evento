@@ -1,4 +1,3 @@
-
 function ContactFormGroup(el, contacts) {
     this.vue = new Vue({
         el : el,
@@ -10,9 +9,15 @@ function ContactFormGroup(el, contacts) {
 
 ContactFormGroup.prototype.getData = function() {
     var data = new Object();
-    this.vue.contacts.forEach(function(contact) {
-        data[contact] = $("#contactsFormGroup #" + stringHash(contact)).val();
-    });
+    this.vue.contacts
+        //filter out contact fields with empty values
+        .filter(function (contact){
+            return $.inArray($("#contactsFormGroup #" + stringHash(contact)).val(), ['', null, 'undefined']) == -1;
+        })
+        // add each contact field and value into the data Object
+        .forEach(function(contact) {
+            data[contact] = $("#contactsFormGroup #" + stringHash(contact)).val();
+        });
     return data;
 }
 
@@ -45,6 +50,10 @@ $(document).ready(function() {
 function configFormSubmitEvent(dataGenerator) {
     $('#createVenueForm').submit(function(e){
         e.preventDefault();
+
+        if ($('#create-venue-modal').length)
+            $('#create-venue-modal').modal('hide');
+
         $.post({
             url: '/createVenue',
             data : dataGenerator(),
@@ -56,6 +65,8 @@ function configFormSubmitEvent(dataGenerator) {
                         '</div>'
                     );
                 $('#event-alert-' + res.id).attr("tabindex",-1).focus();
+                if(window.venueSelect)
+                    window.venueSelect.selectVenueModel(res.venue);
             }
         }).fail(function(res){
             id = Date.now();

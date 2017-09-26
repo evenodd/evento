@@ -31,7 +31,7 @@
                 if(newContact != "" && $.inArray(newContact, this.contacts) == -1 && this.contacts.length < 10)
                 	//add new contact to array
                 	this.contacts.push(newContact);
-                //empty the more contact field to
+                //empty the more contact field
                 var newContact = $("#moreContactInput").val("");
             },
             // The first field doen't need an offset

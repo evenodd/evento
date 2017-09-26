@@ -47,6 +47,7 @@ Route::get('/rsvp/{token}',                function () { return view('rsvp'); })
 Route::get('/venue/create',                'VenueController@create')->middleware('auth');
 Route::post('createVenue',                 'VenueController@store')->middleware('auth');
 Route::get('/venue/details/{venue}',       'VenueController@show')->middleware('auth');
+Route::get('/venues/',					   'VenueController@index')->middleware('auth');
 
 //Public
 Route::get('/eventos/public', 			   'PublicController@index');

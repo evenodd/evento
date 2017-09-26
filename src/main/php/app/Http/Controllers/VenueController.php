@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use DB;
 use App\Venue;
+use Auth;
 use Illuminate\Http\Request;
 
 class VenueController extends Controller
@@ -25,7 +26,7 @@ class VenueController extends Controller
      */
     public function index()
     {
-        //
+        return Venue::where('enabled', true)->get();
     }
 
     /**
@@ -53,16 +54,15 @@ class VenueController extends Controller
         // Validation rules
         $this->validate($req,
         [
-            'venueName' => 'required|string|max:255',
-            'description' => 'nullable|string|max:255',
-            'address-number' => 'required',
-            'street-name' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'postcode' => 'required',
-            'country' => 'required',
-            'max-capacity' => 'required|int',
-            'contacts' => 'json',
+            'venueName' => 'string|max:255',
+            'address-number' => 'string',
+            'street-name' => 'string|nullable',
+            'city' => 'string|nullable',
+            'state' => 'string|nullable',
+            'postcode' => 'string|nullable',
+            'country' => 'string|nullable',
+            'max-capacity' => 'required|int|min:1',
+            'contacts' => 'json|notIn:{}',
         ],
         //Error messages to use
         [
@@ -75,6 +75,7 @@ class VenueController extends Controller
             'postcode.required' => 'A postcode is required',
             'country.required' => 'A country is required',
             'max-capacity.required'  => 'invalid max-capacity',
+            'contacts.*' => 'Contact information is required'
         ]);
         
         
@@ -89,6 +90,7 @@ class VenueController extends Controller
         $venue = new Venue();
 
         $venue->name = $req->input('venueName');
+        $venue->owner = Auth::user()->id;
         $venue->address = $address;
         $venue->contact = $req->input('contacts');
         $venue->capacity = $req->input('max-capacity');
