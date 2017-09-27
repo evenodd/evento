@@ -1,6 +1,6 @@
 function SerializedArray(serializedArray) {
     var that = this
-    this.serializeArray = serializedArray;
+    this.serializedArray = serializedArray;
 
     this.getArray = function () {
         return that.serializedArray;
@@ -21,11 +21,10 @@ function SerializedArray(serializedArray) {
  */
 SerializedArray.prototype.indexDuplicateNames = function(names) {
     var indexes = [];
-    console.log(names);
     names.forEach(function(name) {
         indexes[name] = 0;
     });
-    this.serializeArray.forEach(function(e) {
+    this.serializedArray.forEach(function(e) {
         // if the element's name is one of the names append an index an increment that name's index
         if (names.indexOf(e.name) != -1)
             e.name += '[' + (indexes[e.name]++) + ']';
@@ -87,47 +86,53 @@ function CheckboxToInputBind(checkbox, input) {
     });
 }
 
-function ErrorAlert(errors) {
+function AlertMessage() {
     this.id = Date.now();
+    this.panel = $("#alertPanel");
+    this.el = "#evento-alert-" + this.id;
+}
+
+AlertMessage.prototype.focus = function() {
+    $(this.el).attr("tabindex",-1).focus();
+};
+
+function ErrorAlert(errors) {
+    AlertMessage.call(this);
     var errorMsg = '';
     if (typeof errors != 'object')
         errorMsg += 'Woops, we encountered a problem trying to create your event, ' + 
                     'if this error persists you can contact us at evento.help@fourtytwo.com'
     else 
     {
-    errorMsg += 'There were some errors in the event submitted. Please change the following:</br><ul>';
+        errorMsg += 'There were some errors in the event submitted. Please change the following:</br><ul>';
         $.each(errors, function(key, error) {
             errorMsg += '<li>' + error + '</li>';
         });
         errorMsg += '</ul>';
     }
 
-    $('#alertPanel').append(
-        '<div id="event-alert-' + id + '" class="fade in alert alert-warning">' +
+    this.panel.append(
+        '<div id="evento-alert-' + this.id + '" class="fade in alert alert-warning">' +
             '<a href="#" class="close" data-dismiss="alert">&times;</a>' +
             errorMsg + 
         '</div>'
     );
+    return this;
 }
-
-ErrorAlert.prototype.focus = function() {
-    $('#event-alert-' + this.id).attr("tabindex",-1).focus();
-};
+ErrorAlert.prototype = Object.create(AlertMessage.prototype);
+ErrorAlert.prototype.constructor = ErrorAlert;
 
 function SuccessAlert(msg) {
-    this.id = Date.now();
-    $('#alertPanel').append(
-        '<div id="event-alert-' + this.id + '" class="fade in alert alert-success">' + 
+    AlertMessage.call(this);
+    this.panel.append(
+        '<div id="evento-alert-' + this.id + '" class="fade in alert alert-success">' + 
         '<a href="#" class="close" data-dismiss="alert">&times;</a>' +
         msg + 
         '</div>'
     );
 }
-
-ErrorAlert.prototype.focus = function() {
-    $('#event-alert-' + this.id).attr("tabindex",-1).focus();
-};
-
+SuccessAlert.prototype = Object.create(AlertMessage.prototype);
+SuccessAlert.prototype.constructor = SuccessAlert;
 
 function GuestSelect() {
     $('#createEventForm #guests-list').select2({
