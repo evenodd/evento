@@ -88,6 +88,10 @@ class RsvpController extends Controller
         //
     }
 
+    public function receiveRsvp($token){
+          return(" fuck off " . $token);
+    }
+
     public function send(Rsvp $rsvp) {
         // check user is allowed to edit an rsvp
         $this->authorize('update', $rsvp);
