@@ -12,13 +12,12 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+    <!-- <link href="{{ asset('css/flat-ui.css') }}" rel="stylesheet"> -->
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-
 </head>
 <body>
-    <div id="app">
+    <div id="app" class="" style="height:100vh;">
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
                 <div class="navbar-header">

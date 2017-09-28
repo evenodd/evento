@@ -14,12 +14,11 @@
 	    </div>
         <div style="max-height:400px; overflow-y:auto; overflow-x: hidden;">
 			<div class="nav nav-pills nav-stacked">
-			    <event-row 
-					v-for="event in events" 
-					v-bind:event="event"
-					v-bind:show_guests="show_guests"
-					v-bind:key="event.id">	
-				</event-row>
+			    <venue-row 
+					v-for="venue in venues" 
+					v-bind:venue="venue"
+					v-bind:key="venue.id">	
+				</venue-row>
 			</div>
 		</div>
 	</div>
@@ -34,21 +33,21 @@
     	],
     	data() {
     		return {
-    			events : [],
+    			venues : [],
     			loading : true,
     			errors : false
     		}
     	},
         created : function() {
-        	this.getEvents();
+        	this.getVenues();
         },
         methods : {
-        	getEvents : function() {
+        	getVenues : function() {
         		var that = this;
         		$.get({
 			        url : this.url,
 			        success : function(res) {
-			        	that.events = res;
+			        	that.venues = res;
 			        }
 			    })
 			    .fail(function(errors) {
