@@ -15,10 +15,12 @@ class CreateVenuesTable extends Migration
     {
         Schema::create('venues', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('owner');
             $table->string('name');
             $table->string('address');
             $table->json('contact');
             $table->integer('capacity');
+            $table->boolean('enabled')->default(true);
             $table->timestamps();
         });
     }

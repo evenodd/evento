@@ -32,6 +32,10 @@ MAIL_ENCRYPTION=null
 
 2. Navigate to the __src/main/php__ directory and run `composer install` to resolve dependencies.
 
+3. Run `php artisan migrate` and `php artisan db:seed`
+
 3. To serve the web application you can simply run PHP's built-in server with the command `php artisan serve`.
+
+4. Also to bring up the job queue run `php artisan queue:work`
 
 4. Run `curl http://127.0.0.1:8000` to check the site is up. (Note: The app may be served on a different port)

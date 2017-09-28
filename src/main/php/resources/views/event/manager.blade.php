@@ -3,6 +3,9 @@
 @section('script')
 <script src="{{ asset('js/evento/manager.js') }}"></script>
 <script src="{{ asset('js/evento/create.js') }}"></script>
+<script src="{{ asset('js/evento/list.js') }}"></script>
+<script src="{{ asset('js/venue/createVenue.js') }}"></script>
+
 @endsection
 
 @section('content')
@@ -14,29 +17,14 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">        
                 <div class="panel-heading"><b>My Events</b></div>
-				@include('event.subviews.list', ['events' => array(
-		            (object)[
-		                'title' => 'Birthday Party at UTS',
-		                'start_time' => '28th Sep 04:00 am',
-		                'guestsNb' => sprintf('%02d', rand(0,99))
-		            ],
-		            (object)[
-		                'title' => 'Post Assignment Party',
-		                'start_time' => '30th Aug 08:55 am',
-		                'guestsNb' => sprintf('%02d', rand(0,99))
-		            ],
-		            (object)[
-		                'title' => 'Serious Business Meetup 203',
-		                'start_time' => '28th Oct 03:00 pm',
-		                'guestsNb' => sprintf('%02d', rand(0,99))
-		            ],
-		            (object)[
-		                'title' => 'Wedding at Stephanoes',
-		                'start_time' => '02nd Nov 12:00 pm',
-		                'guestsNb' => sprintf('%02d', rand(0,99)),
-		                'last' => true
-		            ],
-		        )])
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-2 col-xs-offset-5">
+                            <pacman-loader id="list-loader" :loading="loading" :color="color" :size="size"></pacman-loader>
+                        </div>
+                    </div>
+                    <event-list v-bind:events="events" id="event-list"></event-list>
+                </div>
             </div>
         </div>
     </div>

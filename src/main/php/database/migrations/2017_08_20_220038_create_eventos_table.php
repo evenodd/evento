@@ -15,16 +15,21 @@ class CreateEventosTable extends Migration
     {
         Schema::create('eventos', function (Blueprint $table) {
             $table->increments('id');
-            //is string as we may want multi owners in a list e.g."1342,1314,1415"
-            $table->json('preferences');
+            $table->integer('event_planner');
             $table->string('title');
-            $table->longtext('description');
+            $table->longtext('description')->nullable();
+            $table->dateTime('start_datetime');
+            $table->dateTime('end_datetime');
+            $table->dateTime('rsvp_datetime')->nullable();
+            $table->integer('max_guests')->nullable();
             $table->integer('venue');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
-            $table->dateTime('rsvp_time');
-            $table->integer('max_guests');
+            $table->string('host_name')->nullable();
+            $table->string('host_email')->nullable();
+            $table->boolean('from_host')->nullable();
+            $table->json('preferences')->nullable();
+            $table->float('price')->nullable();
             $table->boolean('private');
+            $table->boolean('canceled')->default(false);
             $table->timestamps();
         });
     }

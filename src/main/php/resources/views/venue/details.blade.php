@@ -1,3 +1,8 @@
+{{--
+	Params:
+	Venue $venue
+ --}}
+
 @extends('layouts.app')
 
 @section('script')
@@ -14,7 +19,7 @@
 	        	</button>
         	</p>
             <div class="panel panel-default">
-				@include('venue.subviews.details')
+				@include('venue.subviews.details', $venue)
 				
 			</div>
 		</div>

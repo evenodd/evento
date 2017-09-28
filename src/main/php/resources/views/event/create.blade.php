@@ -3,7 +3,7 @@
 @section('script')
 
 <script src="{{ asset('js/evento/create.js') }}"></script>
-
+<script src="{{ asset('js/venue/createVenue.js') }}"></script>
 @endsection
 
 @section('content')

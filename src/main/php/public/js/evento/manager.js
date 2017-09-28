@@ -5,16 +5,12 @@ $(document).ready(function(){
 
 function loadAddGuestPopup() {
 	$.get('/eventos', function (res) {
-		console.log(res);
-	
-		//Define some test data for demo
-		var events = ['Birthday Party at UTS','Post Assignment Party','Serious Business Meetup 203','Wedding at Stephanoes'];
 		
 		//render dropdown on event select
 		$('#evento-input')
 			.select2({
 				placeholder : "Select an event",
-				data : events
+				data : res
 			})
 			.val(null).trigger('change')				//Set value to placeholder (i.e. nothing is selected)
 			.on('select2:select', onEventSelect);	//Define event to load emails of selected event and add to guest dropdown

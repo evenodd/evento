@@ -7,7 +7,12 @@
 
 require('./bootstrap');
 
+// yes lets use window cus fuk portability👍
 window.Vue = require('vue');
+window.moment = require('moment');
+window.select2 = require('select2');
+window.fullCalendar = require('fullCalendar');
+window.stringHash = require('string-hash');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -17,6 +22,27 @@ window.Vue = require('vue');
 
 Vue.component('example', require('./components/Example.vue'));
 
-const app = new Vue({
-    el: '#app'
+//event components
+Vue.component('event-row', require('./components/event/Row.vue'));
+Vue.component('guest-badge', require('./components/event/GuestBadge.vue'));
+Vue.component('event-list', require('./components/event/List.vue'));
+
+// venue components
+Vue.component('contact-inputs', require('./components/venue/ContactInputs.vue'));
+
+
+//open source components 
+Vue.component('pacman-loader', require('vue-spinner/src/PacmanLoader.vue'));
+Vue.component('pulse-loader', require('vue-spinner/src/PulseLoader.vue'));
+
+// define some global date formats to use
+Vue.filter('shortDate',  function (date) {
+	return moment(date, "YYYY-MM-DD hh:mm:ss").format("Do MMM hh:mm a");
 });
+Vue.filter('longDate', function (date) {
+	return moment(date, "YYYY-MM-DD hh:mm:ss").format("Do, MMMM YYYY hh:mm a");
+});
+
+// const app = new Vue({
+//     el: '#app'
+// });
