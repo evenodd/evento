@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Jobs\SendGuestEmail;
 use App\Traits\StoresRsvps;
 
+use DB;
+
 class RsvpController extends Controller
 {
     use StoresRsvps;
@@ -88,8 +90,16 @@ class RsvpController extends Controller
         //
     }
 
+    public function storeRsvpResponse(Request $req){
+
+    }
+
     public function receiveRsvp($token){
-          return(" fuck off " . $token);
+        $rsvp = DB::table('rsvps')->where('email_token', (string)$token)->first();
+        //DB::table('rsvps')->where('email_token', (string)$token)->update(['email_token'=>'usedUp']);
+        $event = DB::table('eventos')->where('id', $rsvp->event)->first();
+        $venue = DB::table('venues')->where('id', $event->venue)->first();
+        return view('rsvp.rsvp', ['rsvp' => $rsvp, 'event' => $event, 'venue' => $venue] );
     }
 
     public function send(Rsvp $rsvp) {

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+ 
 use App\Evento;
 use App\Rsvp;
 use Auth;
