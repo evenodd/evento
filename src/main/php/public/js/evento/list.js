@@ -1,6 +1,9 @@
 function EventList(el){
     this.vue = new Vue({
-        el : el
+        el : el,
+        data : {
+        	events : []
+        }
     })
 }
 

@@ -30,7 +30,7 @@ class VenuePolicy
      */
     public function create(User $user)
     {
-        //
+        return in_array($user->type, ['event_planner', 'venue_coordinator']);
     }
 
     /**

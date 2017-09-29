@@ -26,11 +26,18 @@
 
 <script>
     export default {
-        props : [
-        	'show_guests', 
-        	'url', 
-        	'error_message'
-    	],
+        props : {
+        	url : {
+        		type : String
+        	}, 
+        	error_message : {
+        		type : String
+        	},
+        	venues : {
+        		default : []
+        	}
+    	},
+
     	data() {
     		return {
     			venues : [],

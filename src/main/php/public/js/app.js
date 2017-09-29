@@ -82387,7 +82387,7 @@ var sprintf = __webpack_require__(5).sprintf;
         $.get({
             url: '/eventos/' + this.event.id + '/nbOfGuests',
             success: function success(res) {
-                that.event.nbOfGuests = sprintf('%02d', res);
+                that.event.nbOfGuests = sprintf('%d', res);
             }
         });
     }
@@ -82501,10 +82501,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['show_guests', 'url', 'error_message'],
+    props: {
+        show_guests: {
+            type: Boolean
+        },
+        url: {
+            type: String
+        },
+        error_message: {
+            type: String
+        },
+        events: {
+            default: []
+        }
+    },
     data: function data() {
         return {
-            events: [],
             loading: true,
             errors: false
         };
@@ -82830,7 +82842,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 var sprintf = __webpack_require__(5).sprintf;
 
@@ -82863,26 +82874,19 @@ var render = function() {
           }
         },
         [
-          _c(
-            "a",
-            { attrs: { href: _vm.detailsRoute(_vm.venue.id) } },
-            [
-              _c("badge", [
-                _vm.venue.canceled
-                  ? _c("div", { staticClass: " col-xs-7 " }, [
-                      _c("del", [_vm._v(" " + _vm._s(_vm.venue.name) + " ")])
-                    ])
-                  : _c("div", { staticClass: " col-xs-7 " }, [
-                      _vm._v(" " + _vm._s(_vm.venue.name) + " ")
-                    ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-xs-5 text-right" }, [
-                  _vm._v(_vm._s(_vm.venue.address))
+          _c("a", { attrs: { href: _vm.detailsRoute(_vm.venue.id) } }, [
+            _vm.venue.canceled
+              ? _c("div", { staticClass: " col-xs-7 " }, [
+                  _c("del", [_vm._v(" " + _vm._s(_vm.venue.name) + " ")])
                 ])
-              ])
-            ],
-            1
-          )
+              : _c("div", { staticClass: " col-xs-7 " }, [
+                  _vm._v(" " + _vm._s(_vm.venue.name) + " ")
+                ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-5 text-right" }, [
+              _vm._v(_vm._s(_vm.venue.address))
+            ])
+          ])
         ]
       )
     ]),
@@ -82980,7 +82984,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['show_guests', 'url', 'error_message'],
+    props: {
+        url: {
+            type: String
+        },
+        error_message: {
+            type: String
+        },
+        venues: {
+            default: []
+        }
+    },
+
     data: function data() {
         return {
             venues: [],

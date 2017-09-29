@@ -23,6 +23,9 @@ class ManagerController extends Controller
      */
     public function index()
     {
-        return view('event.manager');
+        return view('event.manager', [
+            'msg' => 'Testing notification box',
+            'status' => 'success'
+        ]);
     }
 }

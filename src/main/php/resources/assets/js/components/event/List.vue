@@ -27,14 +27,22 @@
 
 <script>
     export default {
-        props : [
-        	'show_guests', 
-        	'url', 
-        	'error_message'
-    	],
+        props : {
+        	show_guests : {
+        		type : Boolean
+        	}, 
+        	url : {
+        		type : String
+        	}, 
+        	error_message : {
+        		type : String
+        	},
+        	events : {
+        		default : []
+        	}
+    	},
     	data() {
     		return {
-    			events : [],
     			loading : true,
     			errors : false
     		}

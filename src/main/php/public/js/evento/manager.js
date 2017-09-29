@@ -31,7 +31,10 @@ function Calendar() {
 
 function VenueListPanel(el) {
 	this.vue = new Vue({
-		el : el
+		el : el,
+		data : {
+			venues : []
+		}
 	});
 }
 
