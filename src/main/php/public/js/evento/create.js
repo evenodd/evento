@@ -54,7 +54,7 @@ function CreateEventForm(el) {
             success : function(res) {
                 // add new event to list if defined
                 if(window.eventList)
-                    window.eventList.events.push(res.event);
+                    window.eventList.vue.events.push(res.event);
                 new SuccessAlert(res.msg).focus();
             },
             fail : function(res) {

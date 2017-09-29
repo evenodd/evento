@@ -5,29 +5,44 @@
 <script src="{{ asset('js/evento/create.js') }}"></script>
 <script src="{{ asset('js/evento/list.js') }}"></script>
 <script src="{{ asset('js/venue/createVenue.js') }}"></script>
+<script src="{{ asset('js/calendar/calendar.js') }}"></script>
+
+@endsection
+@section('main-content')            
+    <div class="panel panel-default">        
+        <div class="panel-heading"><b>My Events</b></div>
+        <div class="panel-body">
+            <event-list 
+                id="eventList"
+                url="/eventos"
+                error_message="Error could could not get data from server"
+                show_guests="true"
+                :events="events">
+            </event-list>
+        </div>
+    </div>
+
+    <div class="panel panel-default">        
+        <div class="panel-heading"><b>My Venues</b></div>
+        <div class="panel-body">
+            <venue-list 
+                id="venueList"
+                url="/venues"
+                error_message="Error could could not get data from server"
+                :venues="venues">
+            </venue-list>
+        </div>
+    </div>
 
 @endsection
 
-@section('content')
+@section('sub-content')
+    
+    @include('event.subviews.manager')
 
-@include('event.subviews.manager')
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">        
-                <div class="panel-heading"><b>My Events</b></div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-xs-2 col-xs-offset-5">
-                            <pacman-loader id="list-loader" :loading="loading" :color="color" :size="size"></pacman-loader>
-                        </div>
-                    </div>
-                    <event-list v-bind:events="events" id="event-list"></event-list>
-                </div>
-            </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div id='calendar'></div>
         </div>
     </div>
-</div>
-
 @endsection

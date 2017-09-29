@@ -5,6 +5,7 @@ use DB;
 use App\Venue;
 use Auth;
 use Illuminate\Http\Request;
+use App\Evento;
 
 class VenueController extends Controller
 {
@@ -150,5 +151,11 @@ class VenueController extends Controller
     public function destroy(Venue $venue)
     {
         //
+    } 
+
+    public function getEvents(Venue $venue) {
+        $this->authorize('view', $venue);
+
+        return Evento::where('venue', $venue->id)->get();
     }
 }

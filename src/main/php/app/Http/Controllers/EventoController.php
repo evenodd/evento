@@ -31,7 +31,9 @@ class EventoController extends Controller
      */
     public function index()
     {
-        return Evento::where('event_planner', Auth::user()->id)->get();
+        return Evento::where('event_planner', Auth::user()->id)
+            ->orderBy('start_datetime', 'asc')
+            ->get();
     }
 
     /**

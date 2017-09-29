@@ -1,6 +1,47 @@
+function Calendar() {
+	this. calendar = $('#calendar').fullCalendar({
+        header: {
+        	right : 'prev, today, next',
+        	left : 'title' 
+        },
+        events: [
+	        {
+	            title  : 'Birthday Party at UTS',
+	            start  : '2017-09-28T04:00:00',
+	            allDay : false // will make the time show
+	        },
+	        {
+	            title  : 'Post Assignment Party',
+	            start  : '2017-08-30T08:55:00',
+	            allDay : false // will make the time show
+	        },
+	        {
+	            title  : 'Serious Business Meetup 203',
+	            start  : '2017-10-28T15:00:00',
+	            allDay : false // will make the time show
+	        },
+	        {
+	            title  : 'Wedding at Stephanoes',
+	            start  : '2017-02-11T12:00:00',
+	            allDay : false // will make the time show
+           }
+	    ]
+    });
+}
+
+function VenueListPanel(el) {
+	this.vue = new Vue({
+		el : el,
+		data : {
+			venues : []
+		}
+	});
+}
+
 $(document).ready(function(){
 	loadAddGuestPopup();
-	// moveStackedModals();
+	calendar = new Calendar();
+	venueList = new VenueListPanel('#venueList')
 });
 
 function loadAddGuestPopup() {

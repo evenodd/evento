@@ -19,45 +19,58 @@
                 </div>
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked">
-                        <p> Event Time : <b> 20/01/2017 3.30pm to 21/01/2017 1.00am </b></p>
-                        <p> Venue : <b> <a href="#">UTS, 21 somewhere st Australia</a></b></p>
+                        <p> Event Time : <b> {{ $event->start_datetime}} to {{ $event->end_datetime }} </b></p>
+                        
+                        <!-- Todo -->
+                        <!-- Create a generic venue element -->
+                        <p> Venue : <b> <a href="#"> {{ $event->venue }}</a></b></p>
+                        <!--  -->
                         <p> Ticket Price : <b> ${{ $event->price }} </b></p>
                         <p> Description : <b> just another fun birthday party for myself </b></p>
-                        <p> Attending Guests: <b> 5/{{ $event->max_guests }}</b></p>
+                        @if($event->max_guests)
+                            <p> Attending Guests:
+                                <b> 
+                                <span id="guestNumber">
+                                    @{{guestNb}}
+                                </span>
+                                /{{ $event->max_guests }}
+                                </b>
+                            </p>
+                        @endif
                         @if(!$event->canceled)
-                        <p>Seats Available: 
-                            <b>1A, 4A, 3B, 6D, 1E, 4E, 3F, 6F, 1G, 4H, 3I, 6I</b>
-                            <button class="btn btn-xs btn-default" data-toggle="modal" data-target="#show-seats-modal">
-                                <span class="" name="event-guest-nb">+13  More...</span>
-                            </button>
-                        </p>
-                        <p>Suppliers:
-                            <span class="btn-group">
-                                <button class="btn btn-default btn-large btn-secondary" data-toggle="modal" data-target="#supplierModal">Jims Catering</button>
-                                <button class="btn btn-default btn-large btn-secondary">Add Supplier</button>
-                            </span>     
-                        </p>                                 
-                        <a id="sendInvitationsButton" class="btn btn-lg btn-success center-block">Send Invitations</a>
-                        <br>
-                        <div id="guestList" class="list-group">
-                            @each('guests.subviews.row', array(
-                                (object) ['fullName' => 'Arthur Curry'],
-                                (object) ['fullName' => 'Barry Allen' ],
-                                (object) ['fullName' => 'Diana Prince'],
-                                (object) ['fullName' => 'Clark Kent'  ],
-                                (object) ['fullName' => 'Bruce Wayne' ]
-                            ), 'guest')
-                        </div>
+                            <p>Seats Available: 
+                                <b>1A, 4A, 3B, 6D, 1E, 4E, 3F, 6F, 1G, 4H, 3I, 6I</b>
+                                <button class="btn btn-xs btn-default" data-toggle="modal" data-target="#show-seats-modal">
+                                    <span class="" name="event-guest-nb">+13  More...</span>
+                                </button>
+                            </p>
+                            <p>Suppliers:
+                                <span class="btn-group">
+                                    <!-- <button class="btn btn-default btn-large btn-secondary" data-toggle="modal" data-target="#supplierModal">Jims Catering</button> -->
+                                    <button class="btn btn-default btn-large btn-secondary">Add Supplier</button>
+                                </span>     
+                            </p>                                 
+                            <a id="sendInvitationsButton" class="btn btn-lg btn-success center-block">Send Invitations</a>
+                            <br>
+                            <div id="guestList" class="list-group">
+                                @each('guests.subviews.row', array(
+                                    (object) ['fullName' => 'Arthur Curry'],
+                                    (object) ['fullName' => 'Barry Allen' ],
+                                    (object) ['fullName' => 'Diana Prince'],
+                                    (object) ['fullName' => 'Clark Kent'  ],
+                                    (object) ['fullName' => 'Bruce Wayne' ]
+                                ), 'guest')
+                            </div>
                         @endif
                     </ul>
                     @if(!$event->canceled)
-		            <div class="text-right">
-			            <a class="btn btn-default">Edit</a>
-                        <form style="display:inline;" action="/eventos/{{$event->id}}/cancel" method="post">
-                            {{ csrf_field() }}
-                            <button id="cancelEventButton" type="submit" class="btn btn-danger">Cancel Event</button>
-                        </form>
-		            </div>
+                        <div class="text-right">
+    			            <a class="btn btn-default">Edit</a>
+                            <form style="display:inline;" action="/eventos/{{$event->id}}/cancel" method="post">
+                                {{ csrf_field() }}
+                                <button id="cancelEventButton" type="submit" class="btn btn-danger">Cancel Event</button>
+                            </form>
+    		            </div>
                     @endif
                 </div>
             </div>
@@ -93,8 +106,8 @@
                 <div style="max-height:400px; overflow-y:auto; overflow-x: hidden;">
                     <ol style="list-style:none;">
                         <li v-for="invite in invites" class="row" style="height: 40px;">
-                            <span class="col-xs-3 vertical-center text-left">@{{invite.email}}</span>
-                            <span class="col-xs-6 text-left vertical-center">
+                            <span class="col-xs-8 vertical-center text-left">@{{invite.email}}</span>
+                            <span class="col-xs-3 text-right vertical-center">
                                 <span :id="'sendResults-' + invite.id"></span>
                                 <pulse-loader :loading="invite.loading" :color="'grey'" :size="'5px'">
                                     

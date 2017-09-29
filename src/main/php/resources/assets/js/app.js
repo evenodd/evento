@@ -29,6 +29,8 @@ Vue.component('event-list', require('./components/event/List.vue'));
 
 // venue components
 Vue.component('contact-inputs', require('./components/venue/ContactInputs.vue'));
+Vue.component('venue-row', require('./components/venue/Row.vue'));
+Vue.component('venue-list', require('./components/venue/List.vue'));
 
 
 //open source components 
