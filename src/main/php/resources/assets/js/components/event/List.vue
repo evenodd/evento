@@ -18,7 +18,8 @@
 					v-for="event in events" 
 					v-bind:event="event"
 					v-bind:show_guests="show_guests"
-					v-bind:key="event.id">	
+					v-bind:key="event.id"
+					:redirect="redirect">	
 				</event-row>
 			</div>
 		</div>
@@ -34,11 +35,16 @@
         	url : {
         		type : String
         	}, 
+        	redirect : {
+        		type : String
+        	},
         	error_message : {
         		type : String
         	},
         	events : {
-        		default : []
+        		default : function(){
+                    return [];
+                }
         	}
     	},
     	data() {

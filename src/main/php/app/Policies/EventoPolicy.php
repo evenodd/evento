@@ -19,7 +19,7 @@ class EventoPolicy
      */
     public function view(User $user, Evento $evento)
     {
-        return $user->id === $evento->event_planner; //So who can and cant view events again???
+        return $user->id === $evento->event_planner; // So who can and cant view events again???
     }
 
     /**

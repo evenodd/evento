@@ -69,10 +69,8 @@
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="/venue/create">Create Venue</a></li>
-                                    <li><a href="/venue/details">My Venue</a></li>
                                 </ul>
                             </li>
-                            <li><a href="/rsvp">RSVP</a></li>
                             <li><a href="/calendar">Calendar</a></li>
                             <li class="dropdown"> 
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -116,10 +114,8 @@
                     <div class="col-md-8 col-md-offset-2">
                         <div id="alertPanel" class="panel-body">
                             @if(isset($status) && isset($msg))
-                                <div id="alert-with-view" class="fade-in alert alert-{{ $status }}">
-                                    <a href="#" class="close" data-dismiss="alert">&times;</a>
-                                    {{ $msg }}
-                                </div>
+                                @component('components.alerts', ['status' => $status, 'msg' =>$msg])
+                                @endcomponent
                             @endif
                         </div>
                     </div>
@@ -127,29 +123,11 @@
             </div>
         @endif
 
-        @yield('content')
 
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    @if (!Auth::guest())
-                        <div class="panel panel-default">        
-                            <div class="panel-heading"><b>Notifications</b></div>
-                            <div id="alertPanel" class="panel-body">
-                                @if(isset($status) && isset($msg))
-                                    <div id="alert-with-view" class="fade-in alert alert-{{ $status }}">
-                                        <a href="#" class="close" data-dismiss="alert">&times;</a>
-                                        {{ $msg }}
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    @endif
-                    <!-- <div id="alertPanel" class="col-md-8 "> -->
-                    <!-- </div> -->
-                    
                     @yield('sub-content')
-
                 </div>
 
                 <div class="col-md-8">
@@ -157,6 +135,7 @@
                 </div>
             </div>
         </div>
+        @yield('content')
     <!-- Page script -->
     @yield('script')
     @stack('scripts')

@@ -48,10 +48,10 @@
     const sprintf = require("sprintf-js").sprintf;
 
     export default {
-        props: ['event','show_guests'],
+        props: ['event','show_guests','redirect'],
         methods : {
             detailsRoute: function(id) {
-                return '/eventos/details/' + id;
+                return this.redirect + id;
             }
         }
     }

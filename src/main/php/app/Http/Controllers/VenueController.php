@@ -27,7 +27,9 @@ class VenueController extends Controller
      */
     public function index()
     {
-        return Venue::where('enabled', true)->get();
+        return Venue::where('enabled', true)
+                ->where('owner', Auth::user()->id)
+                ->get();
     }
 
     /**
