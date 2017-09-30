@@ -53,6 +53,9 @@
         		var that = this;
         		$.get({
 			        url : this.url,
+			        data : {
+			        	owner : 'self'
+			        },
 			        success : function(res) {
 			        	that.venues = res;
 			        }

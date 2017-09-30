@@ -44,11 +44,11 @@ Route::post('rsvp/send/{rsvp}',            'RsvpController@send')->middleware('a
 Route::get('/rsvp/{token}',                function () { return view('rsvp'); })->name('rsvp');
 
 //Venue endpoints
-Route::get('/venue/create',                'VenueController@create')->middleware('auth');
-Route::post('createVenue',                 'VenueController@store')->middleware('auth');
-Route::get('/venue/details/{venue}',       'VenueController@show')->middleware('auth');
-Route::get('/venues/',					   'VenueController@index')->middleware('auth');
-Route::get('venue/details/{venue}/events', 'VenueController@getEvents')->middleware('auth');
-
+Route::get('/venue/create',                           'VenueController@create')->middleware('auth');
+Route::post('createVenue',                            'VenueController@store')->middleware('auth');
+Route::get('/venue/details/{venue}',                  'VenueController@show')->middleware('auth');
+Route::get('/venues/',					              'VenueController@index')->middleware('auth');
+Route::get('venue/details/{venue}/events',            'VenueController@getEvents')->middleware('auth');
+Route::get('/venues/{venue}/events/details/{evento}', 'VenueController@getEventDetails')->middleware('auth');
 //Public
 Route::get('/eventos/public', 			   'PublicController@index');

@@ -25,11 +25,15 @@ class VenueController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $req)
     {
-        return Venue::where('enabled', true)
-                ->where('owner', Auth::user()->id)
-                ->get();
+        $query = Venue::where('enabled', true);
+
+        // filter venues to only include the user's venues if requested
+        if($req->has('owner') && $req->input('owner') === 'self')
+            $query = $query->where('owner', Auth::user()->id);
+
+        return $query->orderBy('name', 'asc')->get();
     }
 
     /**
@@ -148,6 +152,19 @@ class VenueController extends Controller
     public function getEvents(Venue $venue) {
         $this->authorize('view', $venue);
 
-        return Evento::where('venue', $venue->id)->get();
+        return Evento::where('venue', $venue->id)
+            ->orderBy('start_datetime', 'asc')
+            ->get();
+    }
+
+    public function getEventDetails(Venue $venue, Evento $evento) {
+        $this->authorize('view', $venue);
+        $this->authorize('viewSummary', [$evento, $venue]);
+
+        $evento->setVisible(['id', 'title', 'description', 'start_datetime', 'end_datetime', 'rsvp_datetime', 'venue']);
+
+        return view('event.details', [
+            'event' => $evento           
+        ]);
     }
 }

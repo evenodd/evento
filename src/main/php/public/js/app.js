@@ -83022,6 +83022,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var that = this;
             $.get({
                 url: this.url,
+                data: {
+                    owner: 'self'
+                },
                 success: function success(res) {
                     that.venues = res;
                 }
