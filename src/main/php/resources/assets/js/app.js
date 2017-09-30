@@ -13,6 +13,7 @@ window.moment = require('moment');
 window.select2 = require('select2');
 window.fullCalendar = require('fullCalendar');
 window.stringHash = require('string-hash');
+window.sprintf= require('sprintf-js').sprintf;
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
