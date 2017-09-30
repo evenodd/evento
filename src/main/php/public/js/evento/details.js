@@ -116,9 +116,20 @@ GuestNb.prototype.get = function(callbacks) {
     .fail(callbacks.fail);
 };
 
+function EventSeats(el, event) {
+    this.vue = new Vue({
+        el : el,
+        data : {
+            event : event
+        }
+    });
+}
+
 $(document).ready(function() { 
     event = new Evento($("#event-details-container").data('event'));
     guestNb = new GuestNb("#guestNumber", event);
+    eventSeats = new EventSeats("#eventSeats", event);
+
     //request rsvps and use data to render the invitationModal
     $.get({
         url : "/eventos/" + event.getId() + "/rsvps",

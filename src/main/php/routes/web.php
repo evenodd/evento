@@ -31,13 +31,14 @@ Route::get('/verifyemail/{token}',        'Auth\RegisterController@verify');
 Route::get('/',                           'ManagerController@index')->name('manager')->middleware('auth');
 
 //Event endpoints
-Route::get('/event/create',                'EventoController@create')->middleware('auth');
-Route::get('eventos',                      'EventoController@index')->middleware('auth');
-Route::post('eventos',                     'EventoController@store')->middleware('auth', 'formatDateTimes');
-Route::get('eventos/details/{evento}',     'EventoController@show')->middleware('auth');
-Route::get('/eventos/{evento}/nbOfGuests', 'EventoController@getNumberOfGuests')->middleware('auth');
-Route::get('/eventos/{evento}/rsvps',      'EventoController@getRsvps')->middleware('auth');
-Route::post('/eventos/{evento}/cancel',    'EventoController@cancel')->middleware('auth');
+Route::get('/event/create',                   'EventoController@create')->middleware('auth');
+Route::get('eventos',                         'EventoController@index')->middleware('auth');
+Route::post('eventos',                        'EventoController@store')->middleware('auth', 'formatDateTimes');
+Route::get('eventos/details/{evento}',        'EventoController@show')->middleware('auth');
+Route::get('/eventos/{evento}/nbOfGuests',    'EventoController@getNumberOfGuests')->middleware('auth');
+Route::get('/eventos/{evento}/rsvps',         'EventoController@getRsvps')->middleware('auth');
+Route::post('/eventos/{evento}/cancel',       'EventoController@cancel')->middleware('auth');
+Route::get('/eventos/details/{evento}/seats', 'EventoController@getSeats')->middleware('auth');
 
 //Rsvp endpoints
 Route::post('rsvp/send/{rsvp}',            'RsvpController@send')->middleware('auth');

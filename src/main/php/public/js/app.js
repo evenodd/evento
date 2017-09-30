@@ -27019,7 +27019,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(184)
+var listToStyles = __webpack_require__(187)
 
 /*
 type StyleObject = {
@@ -27225,7 +27225,7 @@ function applyToTag (styleElement, obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(131);
-module.exports = __webpack_require__(192);
+module.exports = __webpack_require__(195);
 
 
 /***/ }),
@@ -27260,15 +27260,16 @@ Vue.component('example', __webpack_require__(160));
 Vue.component('event-row', __webpack_require__(163));
 Vue.component('guest-badge', __webpack_require__(166));
 Vue.component('event-list', __webpack_require__(169));
+Vue.component('event-seats', __webpack_require__(172));
 
 // venue components
-Vue.component('contact-inputs', __webpack_require__(172));
-Vue.component('venue-row', __webpack_require__(175));
-Vue.component('venue-list', __webpack_require__(178));
+Vue.component('contact-inputs', __webpack_require__(175));
+Vue.component('venue-row', __webpack_require__(178));
+Vue.component('venue-list', __webpack_require__(181));
 
 //open source components 
-Vue.component('pacman-loader', __webpack_require__(181));
-Vue.component('pulse-loader', __webpack_require__(187));
+Vue.component('pacman-loader', __webpack_require__(184));
+Vue.component('pulse-loader', __webpack_require__(190));
 
 // define some global date formats to use
 Vue.filter('shortDate', function (date) {
@@ -82635,6 +82636,309 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
+Component.options.__file = "resources/assets/js/components/event/Seats.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Seats.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-db157e2e", Component.options)
+  } else {
+    hotAPI.reload("data-v-db157e2e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 173 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['event'],
+    data: function data() {
+        return {
+            available: [],
+            booked: [],
+            loading: true,
+            errors: false
+        };
+    },
+
+    created: function created() {
+        this.getSeats();
+    },
+    methods: {
+        getSeats: function getSeats() {
+            var that = this;
+            $.get({
+                url: '/eventos/details/' + this.event.getId() + '/seats',
+                success: function success(res) {
+                    that.available = res.available;
+                    that.booked = res.booked;
+                }
+            }).fail(function (errors) {
+                that.errors = true;
+            }).always(function (res) {
+                that.loading = false;
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 174 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "span",
+    [
+      _vm.loading ? _c("b", [_vm._v("...")]) : _vm._e(),
+      _vm.errors
+        ? _c("b", [_c("small", [_vm._v("Error, couldn't get seats...  soz")])])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._l(_vm.available, function(seat, i) {
+        return i < 10
+          ? _c("b", [
+              _c("b", [
+                _vm._v(_vm._s(seat) + "\n\t\t\t\t"),
+                !(i == _vm.available.length - 1 || i == 9)
+                  ? _c("b", [_vm._v(", ")])
+                  : _vm._e()
+              ])
+            ])
+          : _vm._e()
+      }),
+      _vm._v(" "),
+      _vm.available.length > 10 || _vm.booked.lenth > 0
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-xs btn-default",
+              attrs: {
+                "data-toggle": "modal",
+                "data-target": "#show-seats-modal"
+              }
+            },
+            [
+              _c("span", { attrs: { name: "event-guest-nb" } }, [
+                _vm._v("\n\t        \t+\n\t        \t"),
+                _vm.available.length > 10
+                  ? _c("span", [
+                      _vm._v(
+                        "\n\t\t        \t" +
+                          _vm._s(_vm.available.length - 10) +
+                          "\n\t\t        "
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v("\n\t        \t More...\n        \t")
+              ])
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "modal fade",
+          attrs: { id: "show-seats-modal", role: "dialog" }
+        },
+        [
+          _c("div", { staticClass: "modal-dialog" }, [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", [_vm._v("Avaliable Seats")]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "btn-toolbar",
+                    attrs: {
+                      role: "toolbar",
+                      "aria-label": "Toolbar with button groups"
+                    }
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "btn-group mr-2",
+                        attrs: { role: "group", "aria-label": "First group" }
+                      },
+                      _vm._l(_vm.available, function(seat) {
+                        return _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-secondary btn-success",
+                            attrs: { type: "button" }
+                          },
+                          [_vm._v(_vm._s(seat))]
+                        )
+                      })
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", [_vm._v("Reserved Seats")]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "btn-toolbar",
+                    attrs: {
+                      role: "toolbar",
+                      "aria-label": "Toolbar with button groups"
+                    }
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "btn-group mr-2",
+                        attrs: { role: "group", "aria-label": "Second group" }
+                      },
+                      _vm._l(_vm.booked, function(seat) {
+                        return _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-secondary btn-danger",
+                            attrs: { type: "button" }
+                          },
+                          [_vm._v(_vm._s(seat))]
+                        )
+                      })
+                    )
+                  ]
+                )
+              ])
+            ])
+          ])
+        ]
+      )
+    ],
+    2
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("×")]
+      ),
+      _vm._v(" "),
+      _c("h4", { staticClass: "modal-title" }, [_vm._v("Event Seats")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-db157e2e", module.exports)
+  }
+}
+
+/***/ }),
+/* 175 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(176)
+/* template */
+var __vue_template__ = __webpack_require__(177)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
 Component.options.__file = "resources/assets/js/components/venue/ContactInputs.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ContactInputs.vue: functional components are not supported with templates, they should use render functions.")}
@@ -82659,7 +82963,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 173 */
+/* 176 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -82713,7 +83017,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 174 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -82785,15 +83089,15 @@ if (false) {
 }
 
 /***/ }),
-/* 175 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(2)
 /* script */
-var __vue_script__ = __webpack_require__(176)
+var __vue_script__ = __webpack_require__(179)
 /* template */
-var __vue_template__ = __webpack_require__(177)
+var __vue_template__ = __webpack_require__(180)
 /* styles */
 var __vue_styles__ = null
 /* scopeId */
@@ -82831,7 +83135,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 176 */
+/* 179 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -82865,7 +83169,7 @@ var sprintf = __webpack_require__(5).sprintf;
 });
 
 /***/ }),
-/* 177 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -82915,15 +83219,15 @@ if (false) {
 }
 
 /***/ }),
-/* 178 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(2)
 /* script */
-var __vue_script__ = __webpack_require__(179)
+var __vue_script__ = __webpack_require__(182)
 /* template */
-var __vue_template__ = __webpack_require__(180)
+var __vue_template__ = __webpack_require__(183)
 /* styles */
 var __vue_styles__ = null
 /* scopeId */
@@ -82961,7 +83265,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 179 */
+/* 182 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -83038,7 +83342,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 180 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -83095,19 +83399,19 @@ if (false) {
 }
 
 /***/ }),
-/* 181 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(182)
+  __webpack_require__(185)
 }
 var normalizeComponent = __webpack_require__(2)
 /* script */
-var __vue_script__ = __webpack_require__(185)
+var __vue_script__ = __webpack_require__(188)
 /* template */
-var __vue_template__ = __webpack_require__(186)
+var __vue_template__ = __webpack_require__(189)
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
@@ -83145,13 +83449,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 182 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(183);
+var content = __webpack_require__(186);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -83171,7 +83475,7 @@ if(false) {
 }
 
 /***/ }),
-/* 183 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(128)(undefined);
@@ -83185,7 +83489,7 @@ exports.push([module.i, "\n.v-spinner\n{\n    text-align: center;\n}\n\n/*TODO c
 
 
 /***/ }),
-/* 184 */
+/* 187 */
 /***/ (function(module, exports) {
 
 /**
@@ -83218,7 +83522,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 185 */
+/* 188 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -83325,7 +83629,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 186 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -83381,19 +83685,19 @@ if (false) {
 }
 
 /***/ }),
-/* 187 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(188)
+  __webpack_require__(191)
 }
 var normalizeComponent = __webpack_require__(2)
 /* script */
-var __vue_script__ = __webpack_require__(190)
+var __vue_script__ = __webpack_require__(193)
 /* template */
-var __vue_template__ = __webpack_require__(191)
+var __vue_template__ = __webpack_require__(194)
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
@@ -83431,13 +83735,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 188 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(189);
+var content = __webpack_require__(192);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -83457,7 +83761,7 @@ if(false) {
 }
 
 /***/ }),
-/* 189 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(128)(undefined);
@@ -83471,7 +83775,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 
 /***/ }),
-/* 190 */
+/* 193 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -83541,7 +83845,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 191 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -83588,7 +83892,7 @@ if (false) {
 }
 
 /***/ }),
-/* 192 */
+/* 195 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

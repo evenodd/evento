@@ -28,7 +28,6 @@ class VenueController extends Controller
     public function index(Request $req)
     {
         $query = Venue::where('enabled', true);
-
         // filter venues to only include the user's venues if requested
         if($req->has('owner') && $req->input('owner') === 'self')
             $query = $query->where('owner', Auth::user()->id);
@@ -44,7 +43,7 @@ class VenueController extends Controller
     public function create()
     {
         // return create venue view
-       // $this->authorize('create', Venue::class);
+       $this->authorize('create', Venue::class);
         return view('venue.create');
     }
 
@@ -56,8 +55,8 @@ class VenueController extends Controller
      */
     public function store(Request $req)
     {
-        //check user can creat VenuePolicy
-
+        //check user can create from VenuePolicy
+       $this->authorize('create', Venue::class);
         // Validation rules
         $this->validate($req,
         [

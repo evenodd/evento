@@ -25,26 +25,23 @@
                         <!-- Create a generic venue element -->
                         <p> Venue : <b> <a href="#"> {{ $event->venue }}</a></b></p>
                         <!--  -->
-                        <p> Ticket Price : <b> ${{ $event->price }} </b></p>
-                        <p> Description : <b> just another fun birthday party for myself </b></p>
-                        @if($event->max_guests)
-                            <p> Attending Guests:
-                                <b> 
-                                <span id="guestNumber">
-                                    @{{guestNb}}
-                                </span>
-                                /{{ $event->max_guests }}
-                                </b>
-                            </p>
+                        @if($event->price)
+                            <p> Ticket Price : <b> ${{ $event->price }} </b></p>
                         @endif
+                        <p> Description : <b> {{ $event->description }} </b></p>
+                        <p> Attending Guests:
+                            <b> 
+                            <span id="guestNumber">
+                                @{{guestNb}}
+                            </span>
+                            @if($event->max_guests)
+                                /{{ $event->max_guests }}
+                            @endif
+                            </b>
+                        </p>
                         @can('view', $event)
                             @if(!$event->canceled)
-                                <p>Seats Available: 
-                                    <b>1A, 4A, 3B, 6D, 1E, 4E, 3F, 6F, 1G, 4H, 3I, 6I</b>
-                                    <button class="btn btn-xs btn-default" data-toggle="modal" data-target="#show-seats-modal">
-                                        <span class="" name="event-guest-nb">+13  More...</span>
-                                    </button>
-                                </p>
+                                <p>Seats Available: <event-seats id="eventSeats" :event="event"></event-seats></p>
                                 <p>Suppliers:
                                     <span class="btn-group">
                                         <!-- <button class="btn btn-default btn-large btn-secondary" data-toggle="modal" data-target="#supplierModal">Jims Catering</button> -->
@@ -83,19 +80,6 @@
 </div>
 
 @can('view', $event)
-    <div id="show-seats-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Event Seats</h4>
-                </div>
-                <div class="modal-body">
-                    @include('seats.subviews.show')
-                </div>
-            </div>
-        </div>
-    </div>
     @can('update', $event)
         <div id="invitationModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
