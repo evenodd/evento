@@ -82158,10 +82158,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var sprintf = __webpack_require__(5).sprintf;
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['event', 'show_guests'],
+    props: ['event', 'show_guests', 'redirect'],
     methods: {
         detailsRoute: function detailsRoute(id) {
-            return '/eventos/details/' + id;
+            return this.redirect + id;
         }
     }
 });
@@ -82499,6 +82499,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -82508,11 +82509,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         url: {
             type: String
         },
+        redirect: {
+            type: String
+        },
         error_message: {
             type: String
         },
         events: {
-            default: []
+            default: function _default() {
+                return [];
+            }
         }
     },
     data: function data() {
@@ -82584,7 +82590,11 @@ var render = function() {
           _vm._l(_vm.events, function(event) {
             return _c("event-row", {
               key: event.id,
-              attrs: { event: event, show_guests: _vm.show_guests }
+              attrs: {
+                event: event,
+                show_guests: _vm.show_guests,
+                redirect: _vm.redirect
+              }
             })
           })
         )

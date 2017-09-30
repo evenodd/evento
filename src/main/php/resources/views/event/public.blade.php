@@ -15,7 +15,8 @@
                     	id="publicEventList"
                         url="/eventos/public"
                         error_message="Error could could not get data from server"
-        				:show_guests="false">
+        				:show_guests="false"
+                        redirect="/public/eventos/details/">
                 	</event-list>
                 </div>
 	        </div>

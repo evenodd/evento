@@ -15,11 +15,11 @@
                     <a href="#" data-toggle="modal" data-target="#create-venue-modal"> Create A New Venue </a>
                 </li>
             @endcan
-            <li role="presentation">
+            <!-- <li role="presentation">
                 <a href="#" data-toggle="modal" data-target="#add-guests-modal">Invite More Guests To An Event</a>
-            </li>
+            </li> -->
             <li role="presentation">
-                <a href="#"> Add A Supplier To My Event </a>
+                <a href="#" disabled> Add A Supplier To My Event (Coming soon)</a>
             </li>
         </ul>
     </div>
