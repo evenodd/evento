@@ -57,8 +57,8 @@ class VenueController extends Controller
         // Validation rules
         $this->validate($req,
         [
-            'venueName' => 'string|max:255',
-            'address-number' => 'string',
+            'venueName' => 'required|string|max:255',
+            'address-number' => 'string|nullable',
             'street-name' => 'string|nullable',
             'city' => 'string|nullable',
             'state' => 'string|nullable',
@@ -69,26 +69,18 @@ class VenueController extends Controller
         ],
         //Error messages to use
         [
-            'venueName.required' => 'A title is required',
-            'description.required'  => 'invalid description',
-            'address-number.required' => 'A address-number is required',
-            'street-name.required' => 'A street-name is required',
-            'city.required' => 'A city is required',
-            'state.required' => 'A state is required',
-            'postcode.required' => 'A postcode is required',
-            'country.required' => 'A country is required',
+            'venueName.required' => 'A venue name is required',
             'max-capacity.required'  => 'invalid max-capacity',
             'contacts.*' => 'Contact information is required'
         ]);
         
         
-        $address = $req->input('address-number') . ' '
-                   . $req->input('street-name') . ' '
-                   . $req->input('city') . ' '
-                   . $req->input('state') . ' '
-                   . $req->input('postcode') . ' '
-                   . $req->input('country');
-
+        $address =   ($req->has('address-number') ? $req->input('address-number') : '') . ' '
+                   . ($req->has('street-name')    ? $req->input('street-name') : '') . ' '
+                   . ($req->has('city')           ? $req->input('city') : '') . ' '
+                   . ($req->has('state')          ? $req->input('state') : '') . ' '
+                   . ($req->has('postcode')       ? $req->input('postcode') : '') . ' '
+                   . ($req->has('country')        ? $req->input('country') : '') . ' ';
 
         $venue = new Venue();
 
@@ -106,8 +98,6 @@ class VenueController extends Controller
             'status' => 'success', 
             'msg' => 'Venue "' . $venue->name . '" created successfully'
         ];
-        
-
     }
 
     /**
