@@ -34,13 +34,12 @@
         		type : String
         	},
         	venues : {
-        		default : []
+        		default : () => []
         	}
     	},
 
     	data() {
     		return {
-    			venues : [],
     			loading : true,
     			errors : false
     		}
@@ -67,6 +66,11 @@
 			    	that.loading = false;
 			    });
         	}
+        },
+        watch : {
+            'venues' : function() {
+                this.$emit('input', this.venues);
+            }
         }
     }
 </script>

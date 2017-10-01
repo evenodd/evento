@@ -1,5 +1,5 @@
 function Calendar() {
-	this. calendar = $('#calendar').fullCalendar({
+	this.calendar = $('#calendar').fullCalendar({
         header: {
         	right : 'prev, today, next',
         	left : 'title' 
@@ -38,10 +38,22 @@ function VenueListPanel(el) {
 	});
 }
 
+function App() {
+	this.vue = new Vue({
+		el : '#app',
+		data : {
+			contacts : ["Phone", "Email"],
+			events : [],
+			venues : []
+		}	
+	}); 
+}
+
 $(document).ready(function(){
 	loadAddGuestPopup();
-	calendar = new Calendar();
-	venueList = new VenueListPanel('#venueList')
+	// calendar = new Calendar();
+	// venueList = new VenueListPanel('#venueList')
+	this.app = new App();
 });
 
 function loadAddGuestPopup() {

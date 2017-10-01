@@ -56,7 +56,7 @@
     <div id="contactsFormGroup" class="form-group">
         <label for="hidden" class="col-md-4 control-label">Contact Details:</label>
         <contact-inputs
-            v-bind:contacts="contacts">
+            :contacts="contacts">
         </contact-inputs>
     </div>
     <div class="form-group">

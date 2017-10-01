@@ -137,6 +137,7 @@
         </div>
         @yield('content')
     <!-- Page script -->
+    </div>
     @yield('script')
     @stack('scripts')
 </body>

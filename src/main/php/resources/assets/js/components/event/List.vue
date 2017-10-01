@@ -43,7 +43,7 @@
         	},
         	events : {
         		default : function(){
-                    return [];
+                    return () => [];
                 }
         	}
     	},
@@ -72,6 +72,11 @@
 			    	that.loading = false;
 			    });
         	}
+        },
+        watch : {
+            'events' : function() {
+                this.$emit('input', this.events);
+            }
         }
     }
 </script>

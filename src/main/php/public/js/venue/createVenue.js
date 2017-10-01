@@ -124,5 +124,5 @@ SuccessAlert.prototype.constructor = SuccessAlert;
 
 
 $(document).ready(function() {
-   createVenueForm = new CreateVenueForm("#createVenueForm");
+   // createVenueForm = new CreateVenueForm("#createVenueForm");
 });
