@@ -38,7 +38,7 @@ function CreateEventForm(el) {
     var maxGuestsBind = new CheckboxToInputBind('#max-guests-checkbox', "#max-guests");
     var priceBind = new CheckboxToInputBind('#price-checkbox', "#price");
     var rsvpBind = new CheckboxToInputBind('#rsvp-datetime-checkbox', "#rsvp-datetime");
-    var seatsBind = new CheckboxToInputBind('#seats-checkbox', "#seats");
+    var seatsBind = new CheckboxToInputBind('#seats-checkbox', "#seats, #auto_pop_button");
     var hostBind = new CheckboxToInputBind('#host-checkbox', "#host-name, #host-email, #from-host-checkbox");
     var supplier = new SupplierSelect();
     var seats = new SeatSelect();
@@ -147,11 +147,27 @@ function GuestSelect() {
 
 function SeatSelect() {
     $('#seats').select2({
-        placeholder : "Enter Seats (e.g A1,A2,A3,A4,A5,B1...)",
+        placeholder : "Enter Seats (e.g 1,2,3,4,5...)",
         tags: true,
         tokenSeparators: [',', ' '],
         width : '100%',
         disabled : true
+    });
+    $("#auto_pop_button").click(function(e){
+        e.preventDefault();
+        var array = ["1","2","3","4","5","6","7","8","9"]
+        guestSelect = $('#seats').select2({
+                placeholder : "Enter guests' seats here",
+                tags: true,
+                tokenSeparators: [',', ' '],
+                disabled : false,
+                data :  array
+            });
+        $('#seats').val(array
+           //insert array of 1 to max from venue
+             //array(1,2,3,4,5,6,7,8)
+            ).trigger('change');
+        
     });
 }
 
