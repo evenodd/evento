@@ -54,7 +54,7 @@ function CreateEventForm(el) {
             success : function(res) {
                 // add new event to list if defined
                 if(window.eventList)
-                    window.eventList.vue.events.push(res.event);
+                    window.eventList.events.push(res.event);
                 new SuccessAlert(res.msg).focus();
             },
             fail : function(res) {
@@ -101,7 +101,7 @@ function ErrorAlert(errors) {
     var errorMsg = '';
     if (typeof errors != 'object')
         errorMsg += 'Woops, we encountered a problem trying to create your event, ' + 
-                    'if this error persists you can contact us at help@evento.com'
+                    'if this error persists you can contact us at evento.help@fourtytwo.com'
     else 
     {
         errorMsg += 'There were some errors in the event submitted. Please change the following:</br><ul>';
@@ -147,11 +147,26 @@ function GuestSelect() {
 
 function SeatSelect() {
     $('#seats').select2({
-        placeholder : "Enter Seats (e.g A1,A2,A3,A4,A5,B1...)",
+        placeholder : "Enter Seats (e.g 1,2,3,4,5...)",
         tags: true,
         tokenSeparators: [',', ' '],
         width : '100%',
         disabled : true
+    });
+    $("#auto_pop_button").click(function(e){
+        e.preventDefault();
+        var array = ["1","2","3","4","5","6","7","8","9"]
+        guestSelect = $('#seats').select2({
+                placeholder : "Enter guests' seats here",
+                tags: true,
+                tokenSeparators: [',', ' '],
+                disabled : false,
+                data :  array
+            });
+        $('#seats').val(array
+           //insert array of 1 to max from venue
+            ).trigger('change');
+        
     });
 }
 

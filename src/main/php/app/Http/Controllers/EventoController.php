@@ -84,6 +84,11 @@ class EventoController extends Controller
             'end-datetime.after' => 'The "To" date must be after the "From" date',
             'price.numeric' => 'The price is not a valid number',
         ]);
+        //Comparison for 709 goes here
+        /* Broken/unfinished code
+        if($evento->venue->capacity > 'max-guests')
+            'max-guests-' => $req->input('max-guests'), */
+
 
         $preferences = new \stdClass();
         
