@@ -134,9 +134,6 @@ Params:
                     <input id="seats-checkbox" type="checkbox" aria-label="Enable Seats">
                 </span>
                 <select id="seats" class="form-control seat-select2" name="seats" style="width: 100%" multiple="multiple"></select>
-                <span class="input-group-btn"> 
-                    <button class ="btn btn-secondary" id="auto_pop_button" disabled="true">Auto populate</button>
-                </span>
             </div>
         </div>
     </div>
