@@ -38,7 +38,7 @@ function CreateEventForm(el) {
     var maxGuestsBind = new CheckboxToInputBind('#max-guests-checkbox', "#max-guests");
     var priceBind = new CheckboxToInputBind('#price-checkbox', "#price");
     var rsvpBind = new CheckboxToInputBind('#rsvp-datetime-checkbox', "#rsvp-datetime");
-    var seatsBind = new CheckboxToInputBind('#seats-checkbox', "#seats #auto_pop_button");
+    var seatsBind = new CheckboxToInputBind('#seats-checkbox', "#seats, #auto_pop_button");
     var hostBind = new CheckboxToInputBind('#host-checkbox', "#host-name, #host-email, #from-host-checkbox");
     var supplier = new SupplierSelect();
     var seats = new SeatSelect();
@@ -155,8 +155,17 @@ function SeatSelect() {
     });
     $("#auto_pop_button").click(function(e){
         e.preventDefault();
-        var array; = ["1","2","3","4","5","6","7","8","9"]
-        // Need to do a for loop here for creating an array of size = max-gusts from eventocontroller
+        if($("#max-guests").val() != null){
+           var max = $("#max-guests").val();
+        } else {
+            //need to make this venue max capacity           !!!!!!!!!!!!!!!!!
+            var max = 5;
+        }
+        var array = [];
+        //var array = ["1","2","3","4","5","6","7","8","9"]
+        for (var i=1; i<=max; i++) {
+            array.push(i);
+        }
         guestSelect = $('#seats').select2({
                 placeholder : "Enter guests' seats here",
                 tags: true,
