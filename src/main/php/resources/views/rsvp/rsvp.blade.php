@@ -14,7 +14,7 @@
                     <b>RSVP</b>
                 </div>
                 <div class="panel-body">
-                  <p><b>{{ $rsvp->email }}</b> RSVP to the event <b> {{$event->title}} </b> </p>
+                  <p>The holder of <b>{{ $rsvp->email }}</b> RSVP to the event <b> {{$event->title}} </b> </p>
                   <hr>
                    
                         <p> Event Time : <b> {{$event->start_datetime}} to {{$event->end_datetime}} </b></p>
@@ -22,25 +22,27 @@
                         <p> Ticket Price : <b> ${{$event->price}} </b></p>
                         <p> Description : <b> {{$event->description}} </b></p>
                       
-                      	
+
                 </div>
+
+
+
+
+                <form id="sendRSVP" method="POST" action="/storeRsvpResponse/{{$rsvp->id}}">
+                    {{ csrf_field() }}
+                    <!-- here is where the options would go, if we had any
+
+                        <input type="text" name="in_it_is"> -->
+                   
+                        <a onclick="document.getElementById('sendRSVP').submit()" class="btn btn-π btn-success center-block">RSVP To Event</a>
+                </form>
+
+                
 
             </div>
         </div>
     </div>
 </div>
 
-<div class="container">
-    <div class="col-md-8 col-md-offset-2">
-        <a  onclick="jsfunction()" href="javascript:void(0);" data-toggle="modal" data-target="#addBookingModal" id="addBooking" class="btn btn-π btn-success center-block">
-            RSVP to Event
-        </a>
-
-    </div>
-</div>
-
-
-  </div>
-</div>
 
 @endsection
