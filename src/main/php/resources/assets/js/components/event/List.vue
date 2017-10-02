@@ -42,9 +42,7 @@
         		type : String
         	},
         	events : {
-        		default : function(){
-                    return () => [];
-                }
+        		default : () => []
         	}
     	},
     	data() {

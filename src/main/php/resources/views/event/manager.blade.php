@@ -3,10 +3,7 @@
 @section('script')
 <script src="{{ asset('js/evento/manager.js') }}"></script>
 <script src="{{ asset('js/evento/create.js') }}"></script>
-<!-- <script src="{{ asset('js/evento/list.js') }}"></script> -->
 <script src="{{ asset('js/venue/createVenue.js') }}"></script>
-<!-- <script src="{{ asset('js/calendar/calendar.js') }}"></script> -->
-
 @endsection
 
 @section('main-content')            

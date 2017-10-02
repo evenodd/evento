@@ -82551,9 +82551,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         events: {
             default: function _default() {
-                return function () {
-                    return [];
-                };
+                return [];
             }
         }
     },
