@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\User;
 use App\Evento;
+use App\Venue;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class EventoPolicy
@@ -19,7 +20,20 @@ class EventoPolicy
      */
     public function view(User $user, Evento $evento)
     {
-        return $user->id === $evento->event_planner; //So who can and cant view events again???
+        return $user->id === $evento->event_planner; // So who can and cant view events again???
+    }
+
+    /**
+     * Determines whether a user is allowed to view a summary of the event details
+     * Intended to grant venue coordinators permissions to view certain fields
+     * @param  \App\User  $user
+     * @param  \App\Evento  $evento
+     * @param  \App\Venue  $venue
+     * @return mixed
+
+     */ 
+    public function viewSummary(User $user, Evento $evento, Venue $venue) {
+        return $venue->owner === $user->id && $evento->venue === $venue->id;
     }
 
     /**

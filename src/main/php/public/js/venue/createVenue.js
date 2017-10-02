@@ -40,9 +40,6 @@ function CreateVenueForm(el) {
 }
 
 
-$(document).ready(function() {
-   createVenueForm = new CreateVenueForm("#createVenueForm");
-});
 
 /**
  * Overwrites the default submit form event
@@ -67,17 +64,65 @@ function configFormSubmitEvent(dataGenerator) {
                 $('#event-alert-' + res.id).attr("tabindex",-1).focus();
                 if(window.venueSelect)
                     window.venueSelect.selectVenueModel(res.venue);
+                if(window.app.venues)
+                    window.app.venues.push(res.venue);
             }
         }).fail(function(res){
-            id = Date.now();
-            $('#alertPanel').append(
-                '<div id="event-alert-' + id + '" class="fade in alert alert-warning">' +
-                    '<a href="#" class="close" data-dismiss="alert">&times;</a>' +
-                    'There was an error creating your venue' + 
-                '</div>'
-            );
-            $('#event-alert-' + id).attr("tabindex",-1).focus();
+            new ErrorAlert(res.responseJSON).focus();
         });
 
     });
 }
+
+function AlertMessage() {
+    this.id = Date.now();
+    this.panel = $("#alertPanel");
+    this.el = "#evento-alert-" + this.id;
+}
+
+AlertMessage.prototype.focus = function() {
+    $(this.el).attr("tabindex",-1).focus();
+};
+
+function ErrorAlert(errors) {
+    AlertMessage.call(this);
+    var errorMsg = '';
+    if (typeof errors != 'object')
+        errorMsg += 'Woops, we encountered a problem trying to create your event, ' + 
+                    'if this error persists you can contact us at help@evento.com'
+    else 
+    {
+        errorMsg += 'There were some errors in the venue submitted. Please change the following:</br><ul>';
+        $.each(errors, function(key, error) {
+            errorMsg += '<li>' + error + '</li>';
+        });
+        errorMsg += '</ul>';
+    }
+
+    this.panel.append(
+        '<div id="evento-alert-' + this.id + '" class="fade in alert alert-warning">' +
+            '<a href="#" class="close" data-dismiss="alert">&times;</a>' +
+            errorMsg + 
+        '</div>'
+    );
+    return this;
+}
+ErrorAlert.prototype = Object.create(AlertMessage.prototype);
+ErrorAlert.prototype.constructor = ErrorAlert;
+
+function SuccessAlert(msg) {
+    AlertMessage.call(this);
+    this.panel.append(
+        '<div id="evento-alert-' + this.id + '" class="fade in alert alert-success">' + 
+        '<a href="#" class="close" data-dismiss="alert">&times;</a>' +
+        msg + 
+        '</div>'
+    );
+}
+SuccessAlert.prototype = Object.create(AlertMessage.prototype);
+SuccessAlert.prototype.constructor = SuccessAlert;
+
+
+$(document).ready(function() {
+   createVenueForm = new CreateVenueForm("#createVenueForm");
+});

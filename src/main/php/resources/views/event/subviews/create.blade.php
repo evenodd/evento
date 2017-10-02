@@ -50,19 +50,22 @@ Params:
     <div class="form-group{{ $errors->has('venue') ? ' has-error' : '' }}">
         <label for="venue" class="col-md-{{$labelSize}} control-label">Venue</label>
         <div class="col-md-{{$inputSize}}">
-            <div class="input-group">
+            @if($showCreateVenue)<div class="input-group">@endif
                 <select id="venue" class="form-control" name="venue" required placeholder="Select Venue">
                     <option val=""></option>
                 </select>
-                <span data-toggle="modal" data-target="#create-venue-modal" class="input-group-addon">
-                    <a href="#" >Or Create Venue</a>
-                </span>
-            </div>
+                @if($showCreateVenue)
+                <span 
+                    data-toggle="modal" 
+                    data-target="#create-venue-modal" 
+                    class="input-group-addon">
+                        <a href="#" >Or Create Venue</a>
+                    </span>
+            </div>@endif
         </div>
     </div>
 
     @include('guests.subviews.create', ['labelSize' => $labelSize, 'inputSize' => $inputSize])
-    
     <div class="form-group{{ $errors->has('host-name') || $errors->has('host-email')? ' has-error' : '' }}">
         <label for="host-name" class="col-md-{{$labelSize}} control-label">Host</label>
         <div class="col-md-{{$inputSize}}">
@@ -164,17 +167,18 @@ Params:
 
 </form>
 </div>
-
-<div id="create-venue-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Create Venue</h4>
-            </div>
-            <div class="modal-body">
-                @include('venue.subviews.create')
+@if($showCreateVenue)
+    <div id="create-venue-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Create Venue</h4>
+                </div>
+                <div class="modal-body">
+                    @include('venue.subviews.create')
+                </div>
             </div>
         </div>
     </div>
-</div>
+@endif

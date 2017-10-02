@@ -19,7 +19,7 @@
             $.get({
                 url : '/eventos/' + this.event.id + '/nbOfGuests',
                 success :  function(res) {
-                    that.event.nbOfGuests = sprintf('%02d', res);
+                    that.event.nbOfGuests = sprintf('%d', res);
                 }
             });
         }

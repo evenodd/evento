@@ -12,13 +12,13 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+    <!-- <link href="{{ asset('css/flat-ui.css') }}" rel="stylesheet"> -->
+    <!-- <link href="{{ asset('css/bootstrap-flat/bootstrap-flat.css') }}" rel="stylesheet"> -->
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-
 </head>
 <body>
-    <div id="app">
+    <div id="app" class="" style="height:100vh;">
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
@@ -69,10 +69,8 @@
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="/venue/create">Create Venue</a></li>
-                                    <li><a href="/venue/details">My Venue</a></li>
                                 </ul>
                             </li>
-                            <li><a href="/rsvp">RSVP</a></li>
                             <li><a href="/calendar">Calendar</a></li>
                             <li class="dropdown"> 
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -109,22 +107,39 @@
                 </div>
             </div>
         </nav>
-        <div class="container">
-            <div class="row">
-                <div id="alertPanel" class="sticky-top col-md-8 col-md-offset-2">
-                    @if(isset($status) && isset($msg))
-                        <div id="alert-with-view" class="fade in alert alert-{{ $status }}">
-                            <a href="#" class="close" data-dismiss="alert">&times;</a>
-                            {{ $msg }}
+
+        @if(Auth::guest())
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div id="alertPanel" class="panel-body">
+                            @if(isset($status) && isset($msg))
+                                @component('components.alerts', ['status' => $status, 'msg' =>$msg])
+                                @endcomponent
+                            @endif
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
 
-        @yield('content')
-    </div>
+        <div id="managerPage">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        @yield('sub-content')
+                    </div>
+
+                    <div class="col-md-8">
+                        @yield('main-content')
+                    </div>
+                </div>
+            </div>
+            @yield('content')
+        </div>
+        @yield('modals')
     <!-- Page script -->
+    </div>
     @yield('script')
     @stack('scripts')
 </body>

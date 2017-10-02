@@ -1,5 +1,10 @@
-const event = $("#event-details-container").data('event');
-var invitationModal;
+function Evento(data) {
+    var id = data.id;
+
+    this.getId = function() {
+        return id;
+    }
+}
 
 function Invite(id, email) {
     this.id = id;
@@ -78,10 +83,56 @@ InvitationModal.prototype.show = function() {
     $("#invitationModal").modal("show");
 };
 
+function GuestNb(el, event) {
+    var that = this;
+    this.event = event;
+    this.guestNb = "...";
+    this.vue = new Vue({
+        el : el,
+        data : {
+            guestNb : this.guestNb
+        }
+    });
+
+    this.set = function(nb) {
+        that.vue.guestNb = nb;
+    }
+
+    this.displayError = function(errors){
+        that.guestNb = '❌';
+    }
+
+    this.get({
+        success : this.set,
+        fail : this.displayError
+    });
+} 
+
+GuestNb.prototype.get = function(callbacks) {
+    $.get({
+        url : '/eventos/' + this.event.getId() + '/nbOfGuests',
+        success : callbacks.success
+    })
+    .fail(callbacks.fail);
+};
+
+function EventSeats(el, event) {
+    this.vue = new Vue({
+        el : el,
+        data : {
+            event : event
+        }
+    });
+}
+
 $(document).ready(function() { 
+    event = new Evento($("#event-details-container").data('event'));
+    guestNb = new GuestNb("#guestNumber", event);
+    eventSeats = new EventSeats("#eventSeats", event);
+
     //request rsvps and use data to render the invitationModal
     $.get({
-        url : "/eventos/" + event.id + "/rsvps",
+        url : "/eventos/" + event.getId() + "/rsvps",
         data : {
             sent : 0
         },
@@ -95,4 +146,6 @@ $(document).ready(function() {
             invitationModal.show();
         });
     });
+
+
 });

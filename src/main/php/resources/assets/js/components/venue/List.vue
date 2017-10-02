@@ -14,13 +14,11 @@
 	    </div>
         <div style="max-height:400px; overflow-y:auto; overflow-x: hidden;">
 			<div class="nav nav-pills nav-stacked">
-			    <event-row 
-					v-for="event in vueEvents" 
-					v-bind:event="event"
-					v-bind:show_guests="show_guests"
-					v-bind:key="event.id"
-					:redirect="redirect">	
-				</event-row>
+			    <venue-row 
+					v-for="venue in vueVenues" 
+					v-bind:venue="venue"
+					v-bind:key="venue.id">	
+				</venue-row>
 			</div>
 		</div>
 	</div>
@@ -29,40 +27,38 @@
 <script>
     export default {
         props : {
-        	show_guests : {
-        		type : Boolean
-        	}, 
         	url : {
         		type : String
         	}, 
-        	redirect : {
-        		type : String
-        	},
         	error_message : {
         		type : String
         	},
-        	events : {
+        	venues : {
         		default : () => []
         	}
     	},
+
     	data() {
     		return {
     			loading : true,
     			errors : false,
-                vueEvents : () => []
+    			vueVenues : () => []
     		}
     	},
         created : function() {
-            this.vueEvents = this.events
-            this.getEvents();
+        	this.getVenues();
+        	this.vueVenues = this.venues;
         },
         methods : {
-        	getEvents : function() {
+        	getVenues : function() {
         		var that = this;
         		$.get({
 			        url : this.url,
+			        data : {
+			        	owner : 'self'
+			        },
 			        success : function(res) {
-			        	that.vueEvents = res;
+			        	that.vueVenues = res;
 			        }
 			    })
 			    .fail(function(errors) {
@@ -74,11 +70,11 @@
         	}
         },
         watch : {
-            'vueEvents' : function() {
-                this.$emit('input', this.vueEvents);
+            'vueVenues' : function() {
+                this.$emit('input', this.vueVenues);
             },
-            'events' : function() {
-                this.vueEvents = this.events;
+            'venues' : function() {
+            	this.vueVenues = this.venues;
             }
         }
     }

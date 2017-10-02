@@ -53,8 +53,8 @@ function CreateEventForm(el) {
         that.postEvent(that.getData(), {
             success : function(res) {
                 // add new event to list if defined
-                if(window.eventList)
-                    window.eventList.events.push(res.event);
+                if(window.app.events)
+                    window.app.events.push(res.event);
                 new SuccessAlert(res.msg).focus();
             },
             fail : function(res) {
@@ -101,7 +101,7 @@ function ErrorAlert(errors) {
     var errorMsg = '';
     if (typeof errors != 'object')
         errorMsg += 'Woops, we encountered a problem trying to create your event, ' + 
-                    'if this error persists you can contact us at evento.help@fourtytwo.com'
+                    'if this error persists you can contact us at help@evento.com'
     else 
     {
         errorMsg += 'There were some errors in the event submitted. Please change the following:</br><ul>';

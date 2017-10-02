@@ -4,13 +4,18 @@
             <div data-toggle="modal" v-bind:data-target=" '#event-details-modal-' + event.id" class="row">
                 <a href="#">
                     <div v-if="event.canceled" class=" col-xs-7 "><del> {{ event.title }} </del></div>
-                    <div v-else class=" col-xs-7 "> {{ event.title }} </div>
+                    <div v-else class=" col-xs-7 "> {{ event.title }}</div>
                     <div class="col-xs-5 text-right">{{ event.start_datetime | shortDate }}
                         <guest-badge
                             v-if="show_guests"
                             v-bind:event="event"
                             >    
                         </guest-badge>
+                        <br>
+                        <div>
+                            <small v-if="event.price">{{ formatPrice(event.price) }}</small>
+                            <small v-else>Free :)</small>
+                        </div>
                     </div>
                 </a> 
             </div>
@@ -48,10 +53,13 @@
     const sprintf = require("sprintf-js").sprintf;
 
     export default {
-        props: ['event','show_guests'],
+        props: ['event','show_guests','redirect'],
         methods : {
             detailsRoute: function(id) {
-                return '/eventos/details/' + id;
+                return this.redirect + id;
+            },
+            formatPrice: function(price) {
+                return sprintf("$%.2f", price);
             }
         }
     }
