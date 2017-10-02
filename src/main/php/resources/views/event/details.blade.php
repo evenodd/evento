@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+ 
 @section('script')
 <script src="{{ asset('js/evento/details.js') }}"></script>
 @endsection
