@@ -82560,11 +82560,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             loading: true,
-            errors: false
+            errors: false,
+            vueEvents: function vueEvents() {
+                return [];
+            }
         };
     },
 
     created: function created() {
+        this.vueEvents = this.events;
         this.getEvents();
     },
     methods: {
@@ -82573,7 +82577,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $.get({
                 url: this.url,
                 success: function success(res) {
-                    that.events = res;
+                    that.vueEvents = res;
                 }
             }).fail(function (errors) {
                 that.errors = true;
@@ -82583,8 +82587,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     watch: {
+        'vueEvents': function vueEvents() {
+            this.$emit('input', this.vueEvents);
+        },
         'events': function events() {
-            this.$emit('input', this.events);
+            this.vueEvents = this.events;
         }
     }
 });
@@ -82628,7 +82635,7 @@ var render = function() {
         _c(
           "div",
           { staticClass: "nav nav-pills nav-stacked" },
-          _vm._l(_vm.events, function(event) {
+          _vm._l(_vm.vueEvents, function(event) {
             return _c("event-row", {
               key: event.id,
               attrs: {
@@ -83355,12 +83362,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             loading: true,
-            errors: false
+            errors: false,
+            vueVenues: function vueVenues() {
+                return [];
+            }
         };
     },
 
     created: function created() {
         this.getVenues();
+        this.vueVenues = this.venues;
     },
     methods: {
         getVenues: function getVenues() {
@@ -83371,7 +83382,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     owner: 'self'
                 },
                 success: function success(res) {
-                    that.venues = res;
+                    that.vueVenues = res;
                 }
             }).fail(function (errors) {
                 that.errors = true;
@@ -83381,8 +83392,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     watch: {
+        'vueVenues': function vueVenues() {
+            this.$emit('input', this.vueVenues);
+        },
         'venues': function venues() {
-            this.$emit('input', this.venues);
+            this.vueVenues = this.venues;
         }
     }
 });
@@ -83426,7 +83440,7 @@ var render = function() {
         _c(
           "div",
           { staticClass: "nav nav-pills nav-stacked" },
-          _vm._l(_vm.venues, function(venue) {
+          _vm._l(_vm.vueVenues, function(venue) {
             return _c("venue-row", { key: venue.id, attrs: { venue: venue } })
           })
         )
@@ -84014,7 +84028,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         eventClick: function eventClick(event, jsEvent, pos) {
-            window.location.replace(event.url);
+            window.location.assign(event.url);
         },
         // Converts our own evento object to a full calendar
         // event object. (id & url are custom fields)

@@ -123,19 +123,21 @@
             </div>
         @endif
 
+        <div id="managerPage">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        @yield('sub-content')
+                    </div>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    @yield('sub-content')
-                </div>
-
-                <div class="col-md-8">
-                    @yield('main-content')
+                    <div class="col-md-8">
+                        @yield('main-content')
+                    </div>
                 </div>
             </div>
+            @yield('content')
         </div>
-        @yield('content')
+        @yield('modals')
     <!-- Page script -->
     </div>
     @yield('script')

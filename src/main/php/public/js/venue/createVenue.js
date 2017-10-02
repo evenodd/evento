@@ -64,8 +64,8 @@ function configFormSubmitEvent(dataGenerator) {
                 $('#event-alert-' + res.id).attr("tabindex",-1).focus();
                 if(window.venueSelect)
                     window.venueSelect.selectVenueModel(res.venue);
-                if(window.venueList)
-                    window.venueList.vue.venues.push(res.venue);
+                if(window.app.venues)
+                    window.app.venues.push(res.venue);
             }
         }).fail(function(res){
             new ErrorAlert(res.responseJSON).focus();
@@ -124,5 +124,5 @@ SuccessAlert.prototype.constructor = SuccessAlert;
 
 
 $(document).ready(function() {
-   // createVenueForm = new CreateVenueForm("#createVenueForm");
+   createVenueForm = new CreateVenueForm("#createVenueForm");
 });

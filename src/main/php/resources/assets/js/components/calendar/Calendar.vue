@@ -20,7 +20,7 @@
         },
         methods : {
             eventClick : function(event, jsEvent, pos) {
-                window.location.replace(event.url);
+                window.location.assign(event.url);
             },
             // Converts our own evento object to a full calendar
             // event object. (id & url are custom fields)
