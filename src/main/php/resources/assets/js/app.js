@@ -39,6 +39,9 @@ Vue.component('venue-list', require('./components/venue/List.vue'));
 Vue.component('pacman-loader', require('vue-spinner/src/PacmanLoader.vue'));
 Vue.component('pulse-loader', require('vue-spinner/src/PulseLoader.vue'));
 
+Vue.component('calendar', require('./components/calendar/Calendar.vue'));
+Vue.component('full-calendar', require('vue-fullcalendar'));
+
 // define some global date formats to use
 Vue.filter('shortDate',  function (date) {
 	return moment(date, "YYYY-MM-DD hh:mm:ss").format("Do MMM hh:mm a");

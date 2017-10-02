@@ -15,7 +15,7 @@
         <div style="max-height:400px; overflow-y:auto; overflow-x: hidden;">
 			<div class="nav nav-pills nav-stacked">
 			    <event-row 
-					v-for="event in events" 
+					v-for="event in vueEvents" 
 					v-bind:event="event"
 					v-bind:show_guests="show_guests"
 					v-bind:key="event.id"
@@ -42,19 +42,19 @@
         		type : String
         	},
         	events : {
-        		default : function(){
-                    return [];
-                }
+        		default : () => []
         	}
     	},
     	data() {
     		return {
     			loading : true,
-    			errors : false
+    			errors : false,
+                vueEvents : () => []
     		}
     	},
         created : function() {
-        	this.getEvents();
+            this.vueEvents = this.events
+            this.getEvents();
         },
         methods : {
         	getEvents : function() {
@@ -62,7 +62,7 @@
         		$.get({
 			        url : this.url,
 			        success : function(res) {
-			        	that.events = res;
+			        	that.vueEvents = res;
 			        }
 			    })
 			    .fail(function(errors) {
@@ -72,6 +72,14 @@
 			    	that.loading = false;
 			    });
         	}
+        },
+        watch : {
+            'vueEvents' : function() {
+                this.$emit('input', this.vueEvents);
+            },
+            'events' : function() {
+                this.vueEvents = this.events;
+            }
         }
     }
 </script>

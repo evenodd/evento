@@ -1,6 +1,5 @@
-<!-- <form id="createVenueForm" class="form-horizontal" method="POST" action="/eventos"> -->
-
-<form id="createVenueForm" class="form-horizontal" method="POST" action="/createVenue">
+<template>
+	<form id="createVenueForm" class="form-horizontal" method="POST" action="/createVenue">
     {{ csrf_field() }}
 
     <div class="form-group{{ $errors->has('venueName') ? ' has-error' : '' }}">
@@ -9,13 +8,6 @@
             <input id="venueName" type="text" class="form-control" name="venueName"  placeholder="New Venue Name" required autofocus>
         </div>
     </div>
-
-    <!-- <div class="form-group ">
-        <label for="description" class="col-md-4 control-label">Description</label>
-        <div class="col-md-6">
-            <textarea id="description" type="text" class="form-control" name="description"></textarea>
-        </div>
-    </div> -->
 
     <div class="form-group">
         <label for="address-number" class="col-md-4 control-label">Address</label>
@@ -53,12 +45,14 @@
             <input id="max-capacity" type="number" class="form-control" name="max-capacity" required>
         </div>
     </div>
+
     <div id="contactsFormGroup" class="form-group">
         <label for="hidden" class="col-md-4 control-label">Contact Details:</label>
         <contact-inputs
             :contacts="contacts">
         </contact-inputs>
     </div>
+
     <div class="form-group">
         <div class="text-right col-md-6 col-md-offset-4">
             <button type="submit" class="btn btn-primary">
@@ -67,3 +61,29 @@
         </div>
     </div>
 </form>
+
+</template>
+
+<script>
+	export default {
+        props : [],
+    	data() {
+    		return {
+    			
+    		}
+    	},
+        created : function() {
+        	this.form = $("#createVenueForm")
+		},
+		methods : {
+			getData : function() {
+		        var data = this.form.serializeArray();
+		        data.push({
+		            name : 'contacts', 
+		            value : JSON.stringify(that.contactFormGroup.getData())
+		        });
+		        return data;
+		    }
+		}
+	}
+</script>

@@ -15,7 +15,7 @@
         <div style="max-height:400px; overflow-y:auto; overflow-x: hidden;">
 			<div class="nav nav-pills nav-stacked">
 			    <venue-row 
-					v-for="venue in venues" 
+					v-for="venue in vueVenues" 
 					v-bind:venue="venue"
 					v-bind:key="venue.id">	
 				</venue-row>
@@ -34,19 +34,20 @@
         		type : String
         	},
         	venues : {
-        		default : []
+        		default : () => []
         	}
     	},
 
     	data() {
     		return {
-    			venues : [],
     			loading : true,
-    			errors : false
+    			errors : false,
+    			vueVenues : () => []
     		}
     	},
         created : function() {
         	this.getVenues();
+        	this.vueVenues = this.venues;
         },
         methods : {
         	getVenues : function() {
@@ -57,7 +58,7 @@
 			        	owner : 'self'
 			        },
 			        success : function(res) {
-			        	that.venues = res;
+			        	that.vueVenues = res;
 			        }
 			    })
 			    .fail(function(errors) {
@@ -67,6 +68,14 @@
 			    	that.loading = false;
 			    });
         	}
+        },
+        watch : {
+            'vueVenues' : function() {
+                this.$emit('input', this.vueVenues);
+            },
+            'venues' : function() {
+            	this.vueVenues = this.venues;
+            }
         }
     }
 </script>
