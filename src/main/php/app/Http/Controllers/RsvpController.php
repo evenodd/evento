@@ -115,7 +115,7 @@ class RsvpController extends Controller
             return view('rsvp.rsvp', ['rsvp' => $rsvp, 'event' => $event, 'venue' => $venue] );
         }
        
-        return  ("this invitation has already been used");
+        return  view('rsvp.rsvpused');//("this invitation has already been used");
     }
 
     public function send(Rsvp $rsvp) {
