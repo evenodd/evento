@@ -13,6 +13,10 @@
 From: {{ $event->start_datetime }} <br>
 To: {{ $event->end_datetime }}
 
+@if($event->rsvp_datetime)
+## RSVP
+Please rsvp by: {{ $event->rsvp_datetime }}
+@endif
 
 @component('mail::button', ['url' => url('/rsvp/' . $rsvp->email_token), 'color' => 'blue'])
 
