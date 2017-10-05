@@ -24,7 +24,16 @@ ContactFormGroup.prototype.getData = function() {
 function CreateVenueForm(el) {
     var that = this;
     this.el = $(el); 
-    this.contactFormGroup = new ContactFormGroup("#contactsFormGroup", ["Phone", "Email"]);
+    this.contactFormGroup = new ContactFormGroup("#contactsFormGroup", [
+        {
+            name : "Phone", 
+            value : ''
+        },
+        {
+            name : "Email",
+            value : ''
+        }
+    ]);
 
     // returns form data as a serialized array. Includes all the contacts in a json object.
     this.getData = function() {

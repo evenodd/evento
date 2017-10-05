@@ -14,9 +14,9 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
         	<p>
-	        	<button class="btn btn-primary">
+	        	<!-- <button class="btn btn-primary">
 	        		Create New Venue
-	        	</button>
+	        	</button> -->
         	</p>
             <div class="panel panel-default">
 				<div class="panel-heading">
@@ -36,7 +36,7 @@
 				    </ul>
 				</div>
 				<div class="panel-footer text-right">
-				    <button class="btn btn-success">Edit</button>
+				    <a href="/venue/edit/{{ $venue->id }}" class="btn btn-success">Edit</a>
 					<button class="btn btn-warning">Disable this Venue</button>
 				</div>
 			</div>

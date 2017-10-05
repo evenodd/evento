@@ -122,7 +122,8 @@ class VenueController extends Controller
      */
     public function edit(Venue $venue)
     {
-        //
+        $this->authorize('update', $venue);
+        return view('venue.edit', ['venue' => $venue]);
     }
 
     /**
@@ -132,9 +133,28 @@ class VenueController extends Controller
      * @param  \App\Venue  $venue
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Venue $venue)
+    public function update(Request $req, Venue $venue)
     {
-        //
+        $this->authorize('update', $venue);
+        $this->validate($req,
+        [
+            'name' => 'required|string|max:255',
+            'address' => 'string|nullable',
+            'capacity' => 'required|int|min:1',
+            'contact' => 'json|notIn:{}',
+        ],
+        //Error messages to use
+        [
+            'venueName.required' => 'A venue name is required',
+            'max-capacity.required'  => 'invalid max capacity',
+            'contacts.*' => 'Contact information is required'
+        ]);
+
+        $venue->name = $req->name;
+        $venue->address = $req->address;
+        $venue->capacity = $req->capacity;
+        $venue->contact = $req->contact;
+        $venue->save();
     }
 
     /**

@@ -51,6 +51,8 @@ Route::post('/storeRsvpResponse/{id}', 'RsvpController@storeRsvpResponse')->midd
 Route::get('/venue/create',                           'VenueController@create')->middleware('auth');
 Route::post('createVenue',                            'VenueController@store')->middleware('auth');
 Route::get('/venue/details/{venue}',                  'VenueController@show')->middleware('auth');
+Route::get('/venue/edit/{venue}',             		  'VenueController@edit')->middleware('auth');
+Route::post('/venue/update/{venue}', 				  'VenueController@update')->middleware('auth');
 Route::get('/venues/',					              'VenueController@index')->middleware('auth');
 Route::get('venue/details/{venue}/events',            'VenueController@getEvents')->middleware('auth');
 Route::get('/venues/{venue}/events/details/{evento}', 'VenueController@getEventDetails')->middleware('auth');
