@@ -49,7 +49,7 @@
 	                    id="eventList"
 	                    url="/venue/details/{{$venue->id}}/events"
 	                    error_message="Error could could not get data from server"
-	                    show_guests="true"
+	                    :show_guests="true"
 	                    redirect="/venues/{{$venue->id}}/events/details/">
 	                </event-list>
 				</div>

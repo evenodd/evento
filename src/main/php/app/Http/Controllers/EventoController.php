@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Evento;
 use App\Rsvp;
+use App\Venue;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -186,14 +187,16 @@ class EventoController extends Controller
 
     
     /**
-     * Returns the number of guests added to the event
-     * (does not care if guests accepted invitation or not)
+     * Returns the number of guests who have accepted
+     * an invitation to the event
      * @param  \App\Evento  $Evento
      * @return int
      */
     public function getNumberOfGuests(Evento $evento) {
-        $this->authorize('view', $evento);
-        return RSVP::where('event', $evento->id)->count();
+        $this->authorize('viewSummary', [$evento, Venue::findOrFail($evento->venue)]);
+        return $this->getRsvps(new Request(), $evento)->filter(function($rsvp) {
+            return json_decode($rsvp->preferences)->accepted;
+        })->count();
     }
 
     public function getRsvps(Request $req, Evento $evento) {

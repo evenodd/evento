@@ -50,14 +50,12 @@
                                 </p>                                 
                                 <a id="sendInvitationsButton" class="btn btn-lg btn-success center-block">Send Invitations</a>
                                 <br>
-                                <div id="guestList" class="list-group">
-                                    @each('guests.subviews.row', array(
-                                        (object) ['fullName' => 'Arthur Curry'],
-                                        (object) ['fullName' => 'Barry Allen' ],
-                                        (object) ['fullName' => 'Diana Prince'],
-                                        (object) ['fullName' => 'Clark Kent'  ],
-                                        (object) ['fullName' => 'Bruce Wayne' ]
-                                    ), 'guest')
+                                <div id="rsvpList" class="list-group">
+                                    <rsvp-list
+                                        v-for="rsvp in rsvps"
+                                        :key="rsvp.id"
+                                        :rsvp="rsvp">
+                                    </rsvp-list>
                                 </div>
                             @endif
                         @endcan
