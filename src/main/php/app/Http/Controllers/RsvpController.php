@@ -7,6 +7,9 @@ use App\Evento;
 use Illuminate\Http\Request;
 use App\Jobs\SendGuestEmail;
 use App\Traits\StoresRsvps;
+use stdClass;
+
+use DB;
 
 class RsvpController extends Controller
 {
@@ -86,6 +89,33 @@ class RsvpController extends Controller
     public function destroy(Rsvp $rsvp)
     {
         //
+    }
+ 
+    public function storeRsvpResponse(Request $req,  $id){
+        $preferences= new stdClass();
+        $preferences->acceppted = "true";
+        //other shtuff
+        $preferences->someVar = $req->input('in_it_is');
+
+        $rsvp = RSVP::find($id);
+        $rsvp->preferences = json_encode($preferences);
+        $rsvp->save();
+        
+        //return json_encode($rsvp);
+        return view('rsvp.rsvpsuccess');
+    }
+
+    public function receiveRsvp($token){
+        $rsvp = DB::table('rsvps')->where('email_token', (string)$token)->first();
+       if($token != 'usedUp' && $rsvp != null ){
+            DB::table('rsvps')->where('email_token', (string)$token)->update(['email_token'=>'usedUp']);
+            $event = DB::table('eventos')->where('id', $rsvp->event)->first();
+            $venue = DB::table('venues')->where('id', $event->venue)->first();
+            
+            return view('rsvp.rsvp', ['rsvp' => $rsvp, 'event' => $event, 'venue' => $venue] );
+        }
+       
+        return  view('rsvp.rsvpused');//("this invitation has already been used");
     }
 
     public function send(Rsvp $rsvp) {

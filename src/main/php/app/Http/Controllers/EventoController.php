@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+ 
 use App\Evento;
 use App\Rsvp;
 use App\Venue;
@@ -59,6 +59,7 @@ class EventoController extends Controller
     {
         //Check user can make an event
         $this->authorize('create', Evento::class);
+        $temp_cap = Venue::findOrFail($req->venue)->capacity;
         $this->validate($req, 
         // Validation rules
         [
@@ -71,7 +72,7 @@ class EventoController extends Controller
             'price' => 'nullable|numeric|min:0.01',
             'guests-list' => 'array|nullable',
             'guests-list.*' => 'email',
-            'max-guests' => 'nullable|min:1|integer'
+            'max-guests' => 'nullable|min:1|integer|max:' . $temp_cap
         ],
         //Error messages to use
         [
@@ -84,7 +85,13 @@ class EventoController extends Controller
             'end-datetime.required' => 'A "To" date is required',
             'end-datetime.after' => 'The "To" date must be after the "From" date',
             'price.numeric' => 'The price is not a valid number',
+            'max-guests.max' => 'Too many people for the venue'
         ]);
+        //Comparison for 709 goes here
+        /* // Broken/unfinished code
+        if(Venue::findOrFail($evento->venue)->capacity > 'max-guests')
+            'max-guests' => $req->input('max-guests'),*/
+
 
         $preferences = new \stdClass();
         

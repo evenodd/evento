@@ -11,6 +11,7 @@ use Mail;
 use App\Mail\GuestMail;
 use App\Evento;
 use App\User;
+use App\Venue;
 
 class SendGuestEmail implements ShouldQueue
 {
@@ -20,6 +21,8 @@ class SendGuestEmail implements ShouldQueue
     protected $event;
     protected $view;
     protected $subject;
+    protected $venue;
+    // protected $name;
     /**
      * Create a new job instance.
      *
@@ -31,6 +34,8 @@ class SendGuestEmail implements ShouldQueue
         $this->event = Evento::find($rsvp->event);
         $this->view = $view;
         $this->subject = $subject;
+        $this->venue = Venue::find($this->event->venue);  // object then attribute, this mail objecct has an event which belongs to this venue.
+        // $this->name= User::find($this->name);
     }
 
     /**
@@ -43,10 +48,12 @@ class SendGuestEmail implements ShouldQueue
         
         Mail::to($this->rsvp->email)
             ->send(new GuestMail(
+                $this->venue,
                 $this->rsvp, 
                 $this->event, 
                 $this->view,
                 $this->subject
+                // $this->name
             ));
     }
 

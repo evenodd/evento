@@ -17,18 +17,22 @@ class GuestMail extends Mailable
     protected $event;
     public $view;
     private $subjectPrefix;
+    private $venue;
+    private $name;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($rsvp, $event, $view, $subjectPrefix)
+    public function __construct($venue,$rsvp, $event, $view, $subjectPrefix)//, $name)
     {
         $this->rsvp = $rsvp;
         $this->event = $event;
         $this->view = $view;
         $this->subjectPrefix = $subjectPrefix;
+        $this->venue = $venue;
+        // $this->name = $name;
     }
 
     /**
@@ -48,7 +52,7 @@ class GuestMail extends Mailable
             $name = $event_planner->name;
         }
         return $this->markdown($this->view)
-                    ->with(['rsvp' => $this->rsvp, 'event' => $this->event])
+                    ->with(['rsvp' => $this->rsvp, 'event' => $this->event, 'venue' => $this->venue, 'name' => $name])
                     ->subject($this->subjectPrefix . $this->event->title . '(Evento)')
                     ->from($address, $name);
     }

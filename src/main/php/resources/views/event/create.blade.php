@@ -7,11 +7,12 @@
 @endsection
 
 @section('content')
-    @component('components.alerts')
-    @endcomponent
+
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
+                @component('components.alerts')
+                @endcomponent
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <b>Create (or update) Event</b>

@@ -70,6 +70,9 @@
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="/venue/create">Create Venue</a></li>
                                 </ul>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="/venue/venuelist">Venue list</a></li>
+                                </ul>
                             </li>
                             <li><a href="/calendar">Calendar</a></li>
                             <li class="dropdown"> 
