@@ -186,4 +186,16 @@ class VenueController extends Controller
             'event' => $evento           
         ]);
     }
+
+    public function cancel(Venue $venue) {
+        $this->authorize('update', $venue);
+        // returns an error if future events for this venue exists
+        if($venue->getNbOfEvents())
+            return response([
+                'hasEvents' => "You cannot cancel a venue when there are still events for it."
+            ], 422);
+
+        $venue->enabled = false;
+        $venue->save();
+    }
 }
