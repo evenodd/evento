@@ -43,7 +43,7 @@ class PublicController extends Controller
         // a json object and then added to the rsvp.
         $preferences = new \stdClass();
         // set the accepted preference
-        $preferences->accepted = $req->input('rsvp')['preferences']['accepted'];
+        $preferences->accepted = (bool) $req->input('rsvp')['preferences']['accepted'];
 
         // create a new rsvp resource. Set its values and save in db
         $rsvp = new Rsvp();
