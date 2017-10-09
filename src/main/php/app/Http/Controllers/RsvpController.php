@@ -93,11 +93,12 @@ class RsvpController extends Controller
  
     public function storeRsvpResponse(Request $req,  $id){
         $preferences= new stdClass();
-        $preferences->acceppted = "true";
+        $preferences->accepted = true;
         //other shtuff
         $preferences->someVar = $req->input('in_it_is');
 
         $rsvp = RSVP::find($id);
+        $rsvp->email_token = null;
         $rsvp->preferences = json_encode($preferences);
         $rsvp->save();
         
@@ -108,13 +109,13 @@ class RsvpController extends Controller
     public function receiveRsvp($token){
         $rsvp = DB::table('rsvps')->where('email_token', (string)$token)->first();
        if($token != 'usedUp' && $rsvp != null ){
-            DB::table('rsvps')->where('email_token', (string)$token)->update(['email_token'=>'usedUp']);
+            // DB::table('rsvps')->where('email_token', (string)$token)->update(['email_token'=>'usedUp']);
             $event = DB::table('eventos')->where('id', $rsvp->event)->first();
             $venue = DB::table('venues')->where('id', $event->venue)->first();
             
             return view('rsvp.rsvp', ['rsvp' => $rsvp, 'event' => $event, 'venue' => $venue] );
         }
-       
+        abort(404);
         return  view('rsvp.rsvpused');//("this invitation has already been used");
     }
 

@@ -17,7 +17,7 @@
 		methods : {
 			hasAccepted : function() {
 				console.log(this.rsvp);
-				// return true;
+				console.log(JSON.parse(this.rsvp.preferences));
 				return JSON.parse(this.rsvp.preferences).accepted;
 			}
 		}

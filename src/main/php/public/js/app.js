@@ -86014,7 +86014,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	methods: {
 		hasAccepted: function hasAccepted() {
 			console.log(this.rsvp);
-			// return true;
+			console.log(JSON.parse(this.rsvp.preferences));
 			return JSON.parse(this.rsvp.preferences).accepted;
 		}
 	}
