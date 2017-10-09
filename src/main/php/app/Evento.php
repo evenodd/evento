@@ -13,17 +13,21 @@ class Evento extends Model
     use HidesAttributes;
 
     public function getNumberOfGuests() {
+        // Get all the rsvps, filter out the ones where accepted is false
+        // or doesn't exist and count how many are left.
         return $this->getRsvps()->filter(function($rsvp) {
-            return json_decode($rsvp->preferences)->accepted;
+            $preferences = json_decode($rsvp->preferences);
+            return property_exists($preferences, 'accepted') && $preferences->accepted;
         })->count();
     }
 
     public function getRsvps(bool $sent = null) {
         //Get all rsvps for this event
-        $rsvps = RSVP::where('event', $this->id);
+        $rsvps = Rsvp::where('event', $this->id);
         //filter by sent if defined
-        if(!is_null($sent))
+        if(!is_null($sent)) {
             $rsvps = $rsvps->where('sent', $sent);
+        }
 
         return $rsvps->get();
     }

@@ -201,9 +201,7 @@ class EventoController extends Controller
      */
     public function getNumberOfGuests(Evento $evento) {
         $this->authorize('viewSummary', [$evento, Venue::findOrFail($evento->venue)]);
-        return $this->getRsvps(new Request(), $evento)->filter(function($rsvp) {
-            return json_decode($rsvp->preferences)->accepted;
-        })->count();
+        return $evento->getNumberOfGuests();
     }
 
     public function getRsvps(Request $req, Evento $evento) {
