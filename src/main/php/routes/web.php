@@ -57,4 +57,6 @@ Route::get('/venues/',					              'VenueController@index')->middleware('a
 Route::get('venue/details/{venue}/events',            'VenueController@getEvents')->middleware('auth');
 Route::get('/venues/{venue}/events/details/{evento}', 'VenueController@getEventDetails')->middleware('auth');
 //Public
-Route::get('/eventos/public', 			   'PublicController@index');
+Route::get('/eventos/public', 			       		  'PublicController@index');
+Route::get('public/eventos/details/{evento}', 		  'PublicController@eventDetails');
+Route::post('/public/eventos/{evento}/rsvp',		  'PublicController@postRsvp');

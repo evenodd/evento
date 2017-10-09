@@ -14,8 +14,13 @@ From: {{ $event->start_datetime }} <br>
 To: {{ $event->end_datetime }}
 
 @if($event->rsvp_datetime)
+## Ticket Price
+${{ $event->rsvp_datetime }}
+@endif
+
+@if($event->price)
 ## RSVP
-Please rsvp by: {{ $event->rsvp_datetime }}
+Please rsvp by: {{ $event->price }}
 @endif
 
 @component('mail::button', ['url' => url('/rsvp/' . $rsvp->email_token), 'color' => 'blue'])
