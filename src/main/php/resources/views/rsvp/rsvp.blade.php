@@ -19,7 +19,9 @@
                    
                         <p> Event Time : <b> {{$event->start_datetime}} to {{$event->end_datetime}} </b></p>
                         <p> Venue : <b> <a href="#">{{$venue->name}}</a></b></p>
+                        @if($event->price)
                         <p> Ticket Price : <b> ${{$event->price}} </b></p>
+                        @endif
                         <p> Description : <b> {{$event->description}} </b></p>
                       
 

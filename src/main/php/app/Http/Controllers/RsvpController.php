@@ -95,7 +95,7 @@ class RsvpController extends Controller
         $preferences= new stdClass();
         $preferences->accepted = true;
         //other shtuff
-        $preferences->someVar = $req->input('in_it_is');
+        //$preferences->someVar = $req->input('in_it_is');
 
         $rsvp = RSVP::find($id);
         $rsvp->email_token = null;
@@ -113,10 +113,14 @@ class RsvpController extends Controller
             $event = DB::table('eventos')->where('id', $rsvp->event)->first();
             $venue = DB::table('venues')->where('id', $event->venue)->first();
             
+            if($event->rsvp_datetime && $event->rsvp_datetime < time()){
+                abort(404);
+            }
+
             return view('rsvp.rsvp', ['rsvp' => $rsvp, 'event' => $event, 'venue' => $venue] );
         }
         abort(404);
-        return  view('rsvp.rsvpused');//("this invitation has already been used");
+       // return  view('rsvp.rsvpused');//("this invitation has already been used");
     }
 
     public function send(Rsvp $rsvp) {
