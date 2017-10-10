@@ -54,9 +54,11 @@ function RsvpForm(el, event) {
         		event : event.id,
                 email : "",
         		preferences : {
-        			accepted : 1
+        			accepted : 1,
+                    seats : null
         		},
-        	}
+        	},
+            event : event
         },
         created : function() {
         	this.onSubmit = this.postRsvp;
@@ -68,7 +70,7 @@ function RsvpForm(el, event) {
         			url : '/public/eventos/' + this.rsvp.event + '/rsvp',
                     data : {
                         _token : $("meta[name='csrf-token']").attr("content"),
-                        rsvp : this.rsvp
+                        rsvp : this.rsvp,
                     },
                     success : this.successCallback  
         		}).fail(this.failCallback);

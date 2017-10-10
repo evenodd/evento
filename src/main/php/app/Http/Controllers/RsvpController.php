@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Rsvp;
 use App\Evento;
+use App\Venue;
 use Illuminate\Http\Request;
 use App\Jobs\SendGuestEmail;
 use App\Traits\StoresRsvps;
@@ -91,36 +92,55 @@ class RsvpController extends Controller
         //
     }
  
-    public function storeRsvpResponse(Request $req,  $id){
-        $preferences= new stdClass();
-        $preferences->accepted = true;
-        //other shtuff
-        //$preferences->someVar = $req->input('in_it_is');
+    public function storeRsvpResponse(Request $req,  $token) {
+        $rsvp = Rsvp::where('email_token', (string)$token)->firstOrFail();
 
-        $rsvp = RSVP::find($id);
+        $event = Evento::findOrFail($rsvp->event);
+        $preferences= new stdClass();
+
+        if($event->hasSeats()) {
+            $this->validate($req, [
+                'rsvp.preferences.seats' => 'required|string'
+            ], [
+                'rsvp.preferences.seats.required' => 'You need to select an available seat'
+            ]);
+            if (!in_array($req->input('rsvp')['preferences']['seats'], $event->getSeats()))
+                return response('Invalid seat option', 422);
+            // add request seats to the rsvp's preferences object
+            $preferences->seats = $req->input('rsvp')['preferences']['seats'];
+        }
+        
+        $preferences->accepted = true;
         $rsvp->email_token = null;
         $rsvp->preferences = json_encode($preferences);
         $rsvp->save();
-        
-        //return json_encode($rsvp);
+    
+        return [
+            'id' => $rsvp->id,
+            'rsvp' => $rsvp, 
+            'status' => 'success', 
+            'msg' => 'Rsvp successfull'
+        ];
+
+    }
+
+    public function showSuccess() {
         return view('rsvp.rsvpsuccess');
     }
 
-    public function receiveRsvp($token){
-        $rsvp = DB::table('rsvps')->where('email_token', (string)$token)->first();
+    public function receiveRsvp($token) {
+        $rsvp = Rsvp::where('email_token', (string)$token)->first();
         if($token == 'usedUp' || $rsvp == null ){
             abort(404);
         }
         
-        $event = DB::table('eventos')->where('id', $rsvp->event)->first();
-        $venue = DB::table('venues')->where('id', $event->venue)->first();
+        $event = Evento::find($rsvp->event);
+        $venue = Venue::find($event->venue);
 
         if($event->rsvp_datetime && $event->rsvp_datetime < time()){
             abort(404);
         }
         // DB::table('rsvps')->where('email_token', (string)$token)->update(['email_token'=>'usedUp']);
-        
-
         return view('rsvp.rsvp', ['rsvp' => $rsvp, 'event' => $event, 'venue' => $venue] );
         
        // return  view('rsvp.rsvpused');//("this invitation has already been used");

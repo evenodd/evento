@@ -44,8 +44,9 @@ Route::get('/eventos/details/{evento}/seats', 'EventoController@getSeats')->midd
 //Rsvp endpoints
 Route::post('rsvp/send/{rsvp}',            'RsvpController@send')->middleware('auth');
 Route::get('/rsvp/{token}',                'RsvpController@receiveRsvp')->middleware('auth');
+Route::get('/rsvpSuccess',                'RsvpController@showSuccess')->middleware('auth');
 
-Route::post('/storeRsvpResponse/{id}', 'RsvpController@storeRsvpResponse')->middleware('auth');
+Route::post('/storeRsvpResponse/{token}', 'RsvpController@storeRsvpResponse')->middleware('auth');
 
 //Venue endpoints
 Route::get('/venue/create',                           'VenueController@create')->middleware('auth');
@@ -61,3 +62,4 @@ Route::get('/venues/{venue}/events/details/{evento}', 'VenueController@getEventD
 Route::get('/eventos/public', 			       		  'PublicController@index');
 Route::get('public/eventos/details/{evento}', 		  'PublicController@eventDetails');
 Route::post('/public/eventos/{evento}/rsvp',		  'PublicController@postRsvp');
+Route::get('/public/eventos/details/{evento}/seats',  'PublicController@getSeats');

@@ -9,11 +9,13 @@ use Auth;
 use DB;
 use Illuminate\Http\Request;
 use App\Traits\StoresRsvps;
+use App\Traits\GetsEventSeats;
 use App\Jobs\SendGuestEmail;
 
 class EventoController extends Controller
 {
     use StoresRsvps;
+    use GetsEventSeats;
     /**
      * Create a new controller instance.
      *
@@ -219,41 +221,4 @@ class EventoController extends Controller
         return $rsvps->get();
     }
 
-    public function getSeats(Evento $evento) {
-        $this->authorize('view', $evento);
-        
-        $preferences = json_decode($evento->preferences);
-        //check seats preference exists and is not empty
-        if( !property_exists($preferences, 'seats') ||
-            !is_array($preferences->seats) ||
-            count($preferences->seats) <= 0
-        )
-            return [
-                'available' => [],
-                'booked' => []
-            ];
-
-        // get all the rsvps and map them to the seats they booked
-        // this will create an array of booked seats
-        $booked = $this->getRsvps(new Request(), $evento)
-            ->map(function($rsvp) {
-                $rsvpPreferences =  json_decode($rsvp->preferences);
-                if (!property_exists($rsvpPreferences, 'seats'))
-                    return -1; // just hopin a seat will never equal this. 
-                return $rsvpPreferences->seats;
-            })
-            // remove all the rsvps that dont have seats
-            ->filter(function($seat) {
-                return $seat != -1;
-            })  
-            ->toArray();
-        // any seats that are not in the booked array must be available.
-        // so make 'available' the difference between the seats and booked array
-        $available = array_diff($preferences->seats, $booked);
-
-        return [
-            'available' => $available,
-            'booked' => $booked
-        ];
-    }
 }

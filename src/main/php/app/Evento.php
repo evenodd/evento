@@ -31,5 +31,14 @@ class Evento extends Model
 
         return $rsvps->get();
     }
+
+
+    public function hasSeats() {
+        return property_exists((json_decode($this->preferences)), 'seats');
+    }
+
+    public function getSeats() {
+        return json_decode($this->preferences)->seats;
+    }
     //
 }

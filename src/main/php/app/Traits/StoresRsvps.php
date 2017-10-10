@@ -24,14 +24,20 @@ trait storesRsvps{
             'event' => 'required|exists:eventos,id'
         ]);
 
-        // check user has permissions to edit the event the RSVPs are for
-        $this->authorize('update', Evento::find($req->input('event')));
+        $event = Evento::findOfFail($req->input('event'));
 
+        // check user has permissions to edit the event the RSVPs are for
+        $this->authorize('update', $event);
+
+
+        $preferences = new \stdClass();
+        $preferences->accepted = false;
+
+        if($event->hasSeats()) 
+            $preferences->seats = null;
 
         foreach ($req->input('guests-list') as $email) {
             // add rsvp to db
-            $preferences = new \stdClass();
-            $preferences->accepted = false;
             $rsvp = new Rsvp();
             $rsvp->email = $email;
             $rsvp->preferences = json_encode($preferences);

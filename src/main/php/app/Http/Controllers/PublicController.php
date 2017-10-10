@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Evento;
 use App\Rsvp;
-use App\Traits\StoresRsvps;
+use App\Traits\GetsEventSeats;
 
 class PublicController extends Controller
 {
+    use GetsEventSeats;
+
     public function index(Request $req) {
     	return Evento::where('private', false)
     		->where('canceled', false)
@@ -24,24 +26,41 @@ class PublicController extends Controller
         if($evento->private)
             abort(404);
 
-        if($evento->max_guests && $evento->getNumberOfGuests() < $evento->max_guests)
+
+        if($evento->max_guests && $evento->getNumberOfGuests() >= $evento->max_guests)
             return response('This event is full', 422);
 
-        $this->validate($req, 
-        // Validation rules
-        [
+        $validationRules = [
             'rsvp.email' => 'required|email|unique:rsvps,email',
-            'rsvp.preferences.accepted' => 'required|boolean'
-        ],
+            'rsvp.preferences.accepted' => 'required|boolean',
+        ];
+
+        $eventHasSeats = $evento->hasSeats();
+
+        // adds seats as a validation rule if required by event
+        if($eventHasSeats)
+            $validationRules['rsvp.preferences.seats'] = 'string|required';
+
+        $this->validate($req, $validationRules,
         //Error messages to use
         [
             'rsvp.email.unique' => 'This email has already been used to rsvp to this event',
-            'rsvp.email.email' => "The email address you entered is invalid"
+            'rsvp.email.email' => "The email address you entered is invalid",
         ]);
 
         // create a new object called prefernces. This will be encoded into
         // a json object and then added to the rsvp.
         $preferences = new \stdClass();
+
+        if ($eventHasSeats) {
+            // return an error if the request seat is not one of the event seats
+            if (!in_array($req->input('rsvp')['preferences']['seats'], $evento->getSeats()))
+                return response('Invalid seat option', 422);
+            // add request seats to the rsvp's preferences object
+            $preferences->seats = $req->input('rsvp')['preferences']['seats'];
+        }
+        
+
         // set the accepted preference
         $preferences->accepted = (bool) $req->input('rsvp')['preferences']['accepted'];
 
@@ -61,4 +80,6 @@ class PublicController extends Controller
             'msg' => 'Rsvp successfull'
         ];
     }
+
+
 }

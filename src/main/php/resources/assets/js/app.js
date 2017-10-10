@@ -28,7 +28,7 @@ Vue.component('event-row', require('./components/event/Row.vue'));
 Vue.component('guest-badge', require('./components/event/GuestBadge.vue'));
 Vue.component('event-list', require('./components/event/List.vue'));
 Vue.component('event-seats', require('./components/event/Seats.vue'));
-
+Vue.component('event-seats-form', require('./components/event/SeatsForm.vue'));
 // venue components
 Vue.component('venue-form', require('./components/venue/Form.vue'));
 Vue.component('contact-inputs', require('./components/venue/ContactInputs.vue'));
