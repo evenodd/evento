@@ -108,18 +108,21 @@ class RsvpController extends Controller
 
     public function receiveRsvp($token){
         $rsvp = DB::table('rsvps')->where('email_token', (string)$token)->first();
-       if($token != 'usedUp' && $rsvp != null ){
-            // DB::table('rsvps')->where('email_token', (string)$token)->update(['email_token'=>'usedUp']);
-            $event = DB::table('eventos')->where('id', $rsvp->event)->first();
-            $venue = DB::table('venues')->where('id', $event->venue)->first();
-            
-            if($event->rsvp_datetime && $event->rsvp_datetime < time()){
-                abort(404);
-            }
-
-            return view('rsvp.rsvp', ['rsvp' => $rsvp, 'event' => $event, 'venue' => $venue] );
+        if($token == 'usedUp' || $rsvp == null ){
+            abort(404);
         }
-        abort(404);
+        
+        $event = DB::table('eventos')->where('id', $rsvp->event)->first();
+        $venue = DB::table('venues')->where('id', $event->venue)->first();
+
+        if($event->rsvp_datetime && $event->rsvp_datetime < time()){
+            abort(404);
+        }
+        // DB::table('rsvps')->where('email_token', (string)$token)->update(['email_token'=>'usedUp']);
+        
+
+        return view('rsvp.rsvp', ['rsvp' => $rsvp, 'event' => $event, 'venue' => $venue] );
+        
        // return  view('rsvp.rsvpused');//("this invitation has already been used");
     }
 
