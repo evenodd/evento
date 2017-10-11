@@ -150,7 +150,7 @@ class EventoController extends Controller
      */
     public function edit(Evento $evento)
     {
-        //
+        return view('event.edit', ['event' => $evento]);
     }
 
     /**

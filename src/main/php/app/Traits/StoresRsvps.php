@@ -24,7 +24,7 @@ trait storesRsvps{
             'event' => 'required|exists:eventos,id'
         ]);
 
-        $event = Evento::findOfFail($req->input('event'));
+        $event = Evento::findOrFail($req->input('event'));
 
         // check user has permissions to edit the event the RSVPs are for
         $this->authorize('update', $event);

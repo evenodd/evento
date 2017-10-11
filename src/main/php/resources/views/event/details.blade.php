@@ -63,8 +63,8 @@
                     @can('update', $event)
                         @if(!$event->canceled)
                             <div class="text-right">
-        			            <a class="btn btn-default">Edit</a>
-                                <form style="display:inline;" action="/eventos/{{$event->id}}/cancel" method="post">
+        			            <a href="/eventos/edit/{{ $event->id }}" class="btn btn-default">Edit</a>
+                                <form style="display:inline;" action="/eventos/{{ $event->id }}/cancel" method="post">
                                     {{ csrf_field() }}
                                     <button id="cancelEventButton" type="submit" class="btn btn-danger">Cancel Event</button>
                                 </form>

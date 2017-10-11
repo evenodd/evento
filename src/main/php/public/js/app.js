@@ -27030,7 +27030,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(193)
+var listToStyles = __webpack_require__(196)
 
 /*
 type StyleObject = {
@@ -27236,7 +27236,7 @@ function applyToTag (styleElement, obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(131);
-module.exports = __webpack_require__(208);
+module.exports = __webpack_require__(211);
 
 
 /***/ }),
@@ -27274,20 +27274,22 @@ Vue.component('guest-badge', __webpack_require__(166));
 Vue.component('event-list', __webpack_require__(169));
 Vue.component('event-seats', __webpack_require__(172));
 Vue.component('event-seats-form', __webpack_require__(175));
+Vue.component('event-form', __webpack_require__(178));
+
 // venue components
-Vue.component('venue-form', __webpack_require__(178));
-Vue.component('contact-inputs', __webpack_require__(181));
-Vue.component('venue-row', __webpack_require__(184));
-Vue.component('venue-list', __webpack_require__(187));
+Vue.component('venue-form', __webpack_require__(181));
+Vue.component('contact-inputs', __webpack_require__(184));
+Vue.component('venue-row', __webpack_require__(187));
+Vue.component('venue-list', __webpack_require__(190));
 
 //open source components 
-Vue.component('pacman-loader', __webpack_require__(190));
-Vue.component('pulse-loader', __webpack_require__(196));
+Vue.component('pacman-loader', __webpack_require__(193));
+Vue.component('pulse-loader', __webpack_require__(199));
 
-Vue.component('calendar', __webpack_require__(201));
-Vue.component('full-calendar', __webpack_require__(204));
+Vue.component('calendar', __webpack_require__(204));
+Vue.component('full-calendar', __webpack_require__(207));
 
-Vue.component('rsvp-list', __webpack_require__(205));
+Vue.component('rsvp-list', __webpack_require__(208));
 
 // define some global date formats to use
 Vue.filter('shortDate', function (date) {
@@ -83202,6 +83204,1257 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
+Component.options.__file = "resources/assets/js/components/event/Form.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Form.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-ff21d28e", Component.options)
+  } else {
+    hotAPI.reload("data-v-ff21d28e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 179 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	props: {
+		event: {
+			default: function _default() {
+				return null;
+			}
+		},
+		token: {
+			default: function _default() {
+				return $("meta[name='csrf-token']").attr("content");
+			}
+		}
+	},
+	data: function data() {
+		return {
+			hostEnabled: false,
+			seatsEnabled: false
+		};
+	},
+
+	created: function created() {
+		this.event.start_datetime = moment(this.event.start_datetime, "yyyy-MM-dd hh:mm:ss").format("YYYY-MM-DDThh:mm");
+		this.event.end_datetime = moment(this.event.end_datetime, "yyyy-MM-dd hh:mm:ss").format("YYYY-MM-DDThh:mm");
+
+		// bind seats object. Will be set to [] if event preferences doesnr contain seats
+		this.$set(this.event, 'seats', typeof JSON.parse(this.event.preferences).seats != 'undefined' ? JSON.parse(this.event.preferences).seats : []);
+		// enable the seats input if the seats array is not empty
+		if (this.event.seats.length > 0) this.seatsEnabled = true;
+
+		this.$set(this.event, 'guests', []);
+	},
+	mounted: function mounted() {
+		$('#seats').select2({
+			placeholder: "Enter Seats (e.g 1,2,3,4,5...)",
+			tags: true,
+			tokenSeparators: [',', ' '],
+			width: '100%',
+			data: this.event.seats,
+			disabled: !this.seatsEnabled
+		});
+		$('#seats').val(this.event.seats).trigger('change');
+		this.$set(this.event, 'seats', this.event.seats);
+	},
+	methods: {}
+});
+
+/***/ }),
+/* 180 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "form",
+    {
+      staticClass: "form-horizontal",
+      attrs: { id: "createEventForm", method: "POST", action: "/eventos" }
+    },
+    [
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "label",
+          { staticClass: "col-md-4 control-label", attrs: { for: "title" } },
+          [_vm._v("Event Title")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.event.title,
+                expression: "event.title"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: {
+              id: "title",
+              type: "text",
+              name: "title",
+              placeholder: "My Event",
+              required: "",
+              autofocus: ""
+            },
+            domProps: { value: _vm.event.title },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.event.title = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "label",
+          {
+            staticClass: "col-md-4 control-label",
+            attrs: { for: "description" }
+          },
+          [_vm._v("Description")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.event.description,
+                expression: "event.description"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { id: "description", type: "text", name: "description" },
+            domProps: { value: _vm.event.description },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.event.description = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "label",
+          {
+            staticClass: "col-md-4 control-label",
+            attrs: { for: "start-datetime" }
+          },
+          [_vm._v("From")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.event.start_datetime,
+                expression: "event.start_datetime"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: {
+              id: "start-datetime",
+              type: "datetime-local",
+              name: "start-datetime",
+              required: "",
+              placeholder: "Starting at"
+            },
+            domProps: { value: _vm.event.start_datetime },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.event.start_datetime = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "label",
+          {
+            staticClass: "col-md-4 control-label",
+            attrs: { for: "end-datetime" }
+          },
+          [_vm._v("To")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.event.end_datetime,
+                expression: "event.end_datetime"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: {
+              id: "end-datetime",
+              type: "datetime-local",
+              name: "end-datetime",
+              required: "",
+              placeholder: "Ending at"
+            },
+            domProps: { value: _vm.event.end_datetime },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.event.end_datetime = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "label",
+          { staticClass: "col-md-4 control-label", attrs: { for: "venue" } },
+          [_vm._v("Venue")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.event.venue,
+                  expression: "event.venue"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                id: "venue",
+                name: "venue",
+                required: "",
+                placeholder: "Select Venue"
+              },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.event.venue = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
+            },
+            [_c("option", { attrs: { val: "" } })]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "label",
+          {
+            staticClass: "col-md-4 control-label",
+            attrs: { for: "max-guests-input" }
+          },
+          [_vm._v("Invite Guests")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("select", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.event.guests,
+                expression: "event.guests"
+              }
+            ],
+            staticClass: "form-control",
+            staticStyle: { width: "100%" },
+            attrs: {
+              id: "guests-list",
+              name: "guests-list",
+              multiple: "multiple"
+            },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.event.guests = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "label",
+          {
+            staticClass: "col-md-4 control-label",
+            attrs: { for: "host-name" }
+          },
+          [_vm._v("Host")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "input-group" }, [
+            _c("span", { staticClass: "input-group-addon" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.hostEnabled,
+                    expression: "hostEnabled"
+                  }
+                ],
+                attrs: {
+                  id: "host-checkbox",
+                  type: "checkbox",
+                  "aria-label": "Set the host"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.hostEnabled)
+                    ? _vm._i(_vm.hostEnabled, null) > -1
+                    : _vm.hostEnabled
+                },
+                on: {
+                  __c: function($event) {
+                    var $$a = _vm.hostEnabled,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.hostEnabled = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.hostEnabled = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.hostEnabled = $$c
+                    }
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.event.host_name,
+                  expression: "event.host_name"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                id: "host-name",
+                type: "text",
+                name: "host-name",
+                placeholder: "Host name",
+                disabled: !_vm.hostEnabled
+              },
+              domProps: { value: _vm.event.host_name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.event.host_name = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.event.host_email,
+                  expression: "event.host_email"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                id: "host-email",
+                type: "email",
+                name: "host-email",
+                placeholder: "Host email",
+                disabled: "true"
+              },
+              domProps: { value: _vm.event.host_email },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.event.host_email = $event.target.value
+                }
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6 col-md-offset-4" }, [
+          _c("div", { staticClass: "input-group" }, [
+            _c("span", { staticClass: "input-group-addon" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.event.from_host,
+                    expression: "event.from_host"
+                  }
+                ],
+                attrs: {
+                  id: "from-host-checkbox",
+                  type: "checkbox",
+                  name: "from-host-checkbox",
+                  title:
+                    "Enabling this option will send invitations addressed from the host (opposed to by you)",
+                  disabled: "true"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.event.from_host)
+                    ? _vm._i(_vm.event.from_host, null) > -1
+                    : _vm.event.from_host
+                },
+                on: {
+                  __c: function($event) {
+                    var $$a = _vm.event.from_host,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.event.from_host = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.event.from_host = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.event.from_host = $$c
+                    }
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                staticClass: "input-group-addon text-left",
+                staticStyle: { width: "100%" }
+              },
+              [
+                _vm._v(
+                  "\n\t                    Invitations sent from host\n\t                "
+                )
+              ]
+            )
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "label",
+          {
+            staticClass: "col-md-4 control-label",
+            attrs: { for: "rsvp-datetime" }
+          },
+          [_vm._v("RSVP")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "input-group" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.event.rsvp_datetime,
+                  expression: "event.rsvp_datetime"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                id: "rsvp-datetime",
+                type: "datetime-local",
+                name: "rsvp-datetime",
+                required: "",
+                placeholder: "Ending at",
+                disabled: "true"
+              },
+              domProps: { value: _vm.event.rsvp_datetime },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.event.rsvp_datetime = $event.target.value
+                }
+              }
+            })
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "label",
+          {
+            staticClass: "col-md-4 control-label",
+            attrs: { for: "max-guests" }
+          },
+          [_vm._v("Max Guests")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "input-group" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.event.max_guests,
+                  expression: "event.max_guests"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                id: "max-guests",
+                type: "number",
+                min: "1",
+                name: "max-guests",
+                required: "",
+                disabled: "true"
+              },
+              domProps: { value: _vm.event.max_guests },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.event.max_guests = $event.target.value
+                }
+              }
+            })
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "label",
+          { staticClass: "col-md-4 control-label", attrs: { for: "price" } },
+          [_vm._v("Ticket Price")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "input-group" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.event.price,
+                  expression: "event.price"
+                }
+              ],
+              staticClass: "form-control",
+              staticStyle: { outline: "none" },
+              attrs: {
+                id: "price",
+                type: "text",
+                min: "0",
+                name: "price",
+                placeholder: "00.00",
+                disabled: "true"
+              },
+              domProps: { value: _vm.event.price },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.event.price = $event.target.value
+                }
+              }
+            })
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "label",
+          { staticClass: "col-md-4 control-label", attrs: { for: "seats" } },
+          [_vm._v("Seat Numbers")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "input-group" }, [
+            _c("span", { staticClass: "input-group-addon" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.seatsEnabled,
+                    expression: "seatsEnabled"
+                  }
+                ],
+                attrs: {
+                  id: "seats-checkbox",
+                  type: "checkbox",
+                  "aria-label": "Enable Seats"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.seatsEnabled)
+                    ? _vm._i(_vm.seatsEnabled, null) > -1
+                    : _vm.seatsEnabled
+                },
+                on: {
+                  __c: function($event) {
+                    var $$a = _vm.seatsEnabled,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.seatsEnabled = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.seatsEnabled = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.seatsEnabled = $$c
+                    }
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("select", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.event.seats,
+                  expression: "event.seats"
+                }
+              ],
+              staticClass: "form-control seat-select2",
+              staticStyle: { width: "100%" },
+              attrs: {
+                id: "seats",
+                name: "seats",
+                multiple: "multiple",
+                disabled: !_vm.seatsEnabled
+              },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.event.seats = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("span", { staticClass: "input-group-btn" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { id: "auto_pop_button", disabled: !_vm.seatsEnabled }
+                },
+                [
+                  _vm._v(
+                    "\n\t                    \tAuto populate\n\t                    "
+                  )
+                ]
+              )
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._m(3),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "label",
+          {
+            staticClass: "text-right col-md-6 col-md-offset-6",
+            attrs: { for: "public-private" }
+          },
+          [
+            _vm._v("\n\t        \tPrivate\n\t\t        "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.event.private,
+                  expression: "event.private"
+                }
+              ],
+              attrs: {
+                id: "private",
+                type: "radio",
+                value: "private",
+                name: "public-private",
+                checked: "checked"
+              },
+              domProps: { checked: _vm._q(_vm.event.private, "private") },
+              on: {
+                __c: function($event) {
+                  _vm.event.private = "private"
+                }
+              }
+            })
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "label",
+          {
+            staticClass: "text-right col-md-6 col-md-offset-6",
+            attrs: { for: "public-private" }
+          },
+          [
+            _vm._v("\n\t        \tPublic\n\t        \t"),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.event.private,
+                  expression: "event.private"
+                }
+              ],
+              attrs: {
+                id: "public",
+                type: "radio",
+                value: "public",
+                name: "public-private"
+              },
+              domProps: { checked: _vm._q(_vm.event.private, "public") },
+              on: {
+                __c: function($event) {
+                  _vm.event.private = "public"
+                }
+              }
+            })
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _vm._m(4)
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "input-group-addon" }, [
+      _c("input", {
+        attrs: {
+          id: "rsvp-datetime-checkbox",
+          type: "checkbox",
+          "aria-label": "Enable RSVP"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "input-group-addon" }, [
+      _c("input", {
+        attrs: {
+          id: "max-guests-checkbox",
+          type: "checkbox",
+          "aria-label": "Enable Max Guests"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "input-group-addon" }, [
+      _c("input", {
+        attrs: {
+          id: "price-checkbox",
+          type: "checkbox",
+          "aria-label": "Enable Ticket Price"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c(
+        "label",
+        { staticClass: "col-md-4 control-label", attrs: { for: "suppliers" } },
+        [_vm._v("Suppliers")]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "input-group" }, [
+          _c("select", {
+            staticClass: "form-control seat-select2",
+            staticStyle: { width: "100%" },
+            attrs: {
+              id: "suppliers",
+              placeholder: "Select Supplier",
+              name: "suppliers",
+              multiple: "multiple"
+            }
+          }),
+          _vm._v(" "),
+          _c("span", { staticClass: "input-group-addon" }, [
+            _c("a", { attrs: { target: "_blank", href: "/supplier" } }, [
+              _vm._v("Or Submit new Supplier")
+            ])
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("div", { staticClass: "text-right col-md-6 col-md-offset-6" }, [
+        _c(
+          "button",
+          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+          [_vm._v("\n\t                Submit\n\t            ")]
+        )
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-ff21d28e", module.exports)
+  }
+}
+
+/***/ }),
+/* 181 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(182)
+/* template */
+var __vue_template__ = __webpack_require__(183)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
 Component.options.__file = "resources/assets/js/components/venue/Form.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Form.vue: functional components are not supported with templates, they should use render functions.")}
@@ -83226,7 +84479,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 179 */
+/* 182 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -83367,7 +84620,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 180 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -83550,15 +84803,15 @@ if (false) {
 }
 
 /***/ }),
-/* 181 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(182)
+var __vue_script__ = __webpack_require__(185)
 /* template */
-var __vue_template__ = __webpack_require__(183)
+var __vue_template__ = __webpack_require__(186)
 /* styles */
 var __vue_styles__ = null
 /* scopeId */
@@ -83596,7 +84849,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 182 */
+/* 185 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -83672,7 +84925,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 183 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -83761,15 +85014,15 @@ if (false) {
 }
 
 /***/ }),
-/* 184 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(185)
+var __vue_script__ = __webpack_require__(188)
 /* template */
-var __vue_template__ = __webpack_require__(186)
+var __vue_template__ = __webpack_require__(189)
 /* styles */
 var __vue_styles__ = null
 /* scopeId */
@@ -83807,7 +85060,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 185 */
+/* 188 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -83841,7 +85094,7 @@ var sprintf = __webpack_require__(3).sprintf;
 });
 
 /***/ }),
-/* 186 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -83891,15 +85144,15 @@ if (false) {
 }
 
 /***/ }),
-/* 187 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(188)
+var __vue_script__ = __webpack_require__(191)
 /* template */
-var __vue_template__ = __webpack_require__(189)
+var __vue_template__ = __webpack_require__(192)
 /* styles */
 var __vue_styles__ = null
 /* scopeId */
@@ -83937,7 +85190,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 188 */
+/* 191 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -84027,7 +85280,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 189 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -84084,19 +85337,19 @@ if (false) {
 }
 
 /***/ }),
-/* 190 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(191)
+  __webpack_require__(194)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(194)
+var __vue_script__ = __webpack_require__(197)
 /* template */
-var __vue_template__ = __webpack_require__(195)
+var __vue_template__ = __webpack_require__(198)
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
@@ -84134,13 +85387,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 191 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(192);
+var content = __webpack_require__(195);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -84160,7 +85413,7 @@ if(false) {
 }
 
 /***/ }),
-/* 192 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(128)(undefined);
@@ -84174,7 +85427,7 @@ exports.push([module.i, "\n.v-spinner\n{\n    text-align: center;\n}\n\n/*TODO c
 
 
 /***/ }),
-/* 193 */
+/* 196 */
 /***/ (function(module, exports) {
 
 /**
@@ -84207,7 +85460,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 194 */
+/* 197 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -84314,7 +85567,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 195 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -84370,19 +85623,19 @@ if (false) {
 }
 
 /***/ }),
-/* 196 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(197)
+  __webpack_require__(200)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(199)
+var __vue_script__ = __webpack_require__(202)
 /* template */
-var __vue_template__ = __webpack_require__(200)
+var __vue_template__ = __webpack_require__(203)
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
@@ -84420,13 +85673,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 197 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(198);
+var content = __webpack_require__(201);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -84446,7 +85699,7 @@ if(false) {
 }
 
 /***/ }),
-/* 198 */
+/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(128)(undefined);
@@ -84460,7 +85713,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 
 /***/ }),
-/* 199 */
+/* 202 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -84530,7 +85783,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 200 */
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -84577,15 +85830,15 @@ if (false) {
 }
 
 /***/ }),
-/* 201 */
+/* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(202)
+var __vue_script__ = __webpack_require__(205)
 /* template */
-var __vue_template__ = __webpack_require__(203)
+var __vue_template__ = __webpack_require__(206)
 /* styles */
 var __vue_styles__ = null
 /* scopeId */
@@ -84623,7 +85876,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 202 */
+/* 205 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -84675,7 +85928,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 203 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -84704,7 +85957,7 @@ if (false) {
 }
 
 /***/ }),
-/* 204 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -86159,15 +87412,15 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 
 /***/ }),
-/* 205 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(206)
+var __vue_script__ = __webpack_require__(209)
 /* template */
-var __vue_template__ = __webpack_require__(207)
+var __vue_template__ = __webpack_require__(210)
 /* styles */
 var __vue_styles__ = null
 /* scopeId */
@@ -86205,7 +87458,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 206 */
+/* 209 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -86236,7 +87489,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 207 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -86269,7 +87522,7 @@ if (false) {
 }
 
 /***/ }),
-/* 208 */
+/* 211 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

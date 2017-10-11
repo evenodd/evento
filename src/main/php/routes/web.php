@@ -40,6 +40,7 @@ Route::get('/eventos/{evento}/nbOfGuests',    'EventoController@getNumberOfGuest
 Route::get('/eventos/{evento}/rsvps',         'EventoController@getRsvps')->middleware('auth');
 Route::post('/eventos/{evento}/cancel',       'EventoController@cancel')->middleware('auth');
 Route::get('/eventos/details/{evento}/seats', 'EventoController@getSeats')->middleware('auth');
+Route::get('/eventos/edit/{evento}',             'EventoController@edit')->middleware('auth');
 
 //Rsvp endpoints
 Route::post('rsvp/send/{rsvp}',            'RsvpController@send')->middleware('auth');
