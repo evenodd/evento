@@ -28,7 +28,7 @@ class PublicController extends Controller
 
 
         if($evento->max_guests && $evento->getNumberOfGuests() >= $evento->max_guests)
-            return response('This event is full', 422);
+            return response(['maxguest' => 'Event is full... Please go away'], 422);
 
         $validationRules = [
             'rsvp.email' => 'required|email|unique:rsvps,email',

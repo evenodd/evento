@@ -97,7 +97,8 @@ class RsvpController extends Controller
 
         $event = Evento::findOrFail($rsvp->event);
         $preferences= new stdClass();
-
+        if($event->max_guests && $event->getNumberOfGuests() >= $event->max_guests)
+            return response(['maxguest' => 'Event is full... Please go away'], 422);
         if($event->hasSeats()) {
             $this->validate($req, [
                 'rsvp.preferences.seats' => 'required|string'
