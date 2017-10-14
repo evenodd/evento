@@ -24,6 +24,7 @@
 	            	v-model="event.description"
 	            	id="description" 
 	            	type="text" 
+	            	style="height : 150px;"
 	            	class="form-control" 
 	            	name="description">
             	</textarea>
@@ -62,7 +63,6 @@
 	        <label for="venue" class="col-md-4 control-label">Venue</label>
 	        <div class="col-md-6">
                 <select 
-                	v-model="event.venue"
                 	id="venue" 
                 	class="form-control" 
                 	name="venue" 
@@ -77,7 +77,6 @@
 		    <label for="max-guests-input" class="col-md-4 control-label">Invite Guests</label>
 		    <div class="col-md-6">
 		        <select 
-		        	v-model="event.guests"
 		        	id="guests-list" 
 		        	class="form-control" 
 		        	name="guests-list" 
@@ -113,7 +112,7 @@
 	                	class="form-control" 
 	                	name="host-email" 
 	                	placeholder="Host email" 
-	                	disabled="true">
+	                	:disabled="!hostEnabled">
 	            </div>
 	        </div>
 	        <div class="col-md-6 col-md-offset-4">
@@ -126,7 +125,7 @@
 	                    	class="" 
 	                    	name="from-host-checkbox" 
 	                    	title="Enabling this option will send invitations addressed from the host (opposed to by you)" 
-	                    	disabled="true">
+		                	:disabled="!hostEnabled">
 	                </span>
 	                <span class="input-group-addon text-left" style="width: 100%;">
 	                    Invitations sent from host
@@ -141,6 +140,7 @@
 	            <div class="input-group">
 	                <span class="input-group-addon">
 	                    <input 
+	                    	v-model="rsvpEnabled"
 	                    	id="rsvp-datetime-checkbox" 
 	                    	type="checkbox" 
 	                    	aria-label="Enable RSVP">
@@ -153,11 +153,10 @@
 	                	name="rsvp-datetime" 
 	                	required 
 	                	placeholder="Ending at" 
-	                	disabled="true">
+	                	:disabled="!rsvpEnabled">
 	            </div>
 	        </div>
 	    </div>
-
 
 	    <div class="form-group">
 	        <label for="max-guests" class="col-md-4 control-label">Max Guests</label>
@@ -165,6 +164,7 @@
 	            <div class="input-group">
 	                <span class="input-group-addon">
 	                    <input 
+	                    	v-model="max_guestsEnabled"
 	                    	id="max-guests-checkbox" 
 	                    	type="checkbox" 
 	                    	aria-label="Enable Max Guests">
@@ -177,7 +177,7 @@
 	                	class="form-control" 
 	                	name="max-guests" 
 	                	required 
-	                	disabled="true">
+	                	:disabled="!max_guestsEnabled">
 	            </div>
 	        </div>
 	    </div>
@@ -188,6 +188,7 @@
 	            <div class="input-group">
 	                <span class="input-group-addon">
 	                    <input 
+	                    	v-model="priceEnabled"
 	                    	id="price-checkbox" 
 	                    	type="checkbox" 
 	                    	aria-label="Enable Ticket Price">
@@ -201,7 +202,7 @@
 	                	style="outline: none;" 
 	                	name="price" 
 	                	placeholder="00.00" 
-	                	disabled="true">
+	                	:disabled="!priceEnabled">
 	            </div>
 	        </div>
 	    </div>
@@ -227,6 +228,7 @@
                 	</select>
 	                <span class="input-group-btn">  
 	                    <button 
+	                    	v-on:click.prevent="handleAutoPopulateClick"
 	                    	class ="btn btn-secondary" 
 	                    	id="auto_pop_button" 
 		                	:disabled="!seatsEnabled">
@@ -303,126 +305,205 @@
 		data() {
 			return {
 				hostEnabled : false,
-				seatsEnabled : false
+				seatsEnabled : false,
+				rsvpEnabled : false,
+				max_guestsEnabled : false,
+				priceEnabled : false,
 			}
 		},
 		created : function() {
-			this.event.start_datetime = moment(this.event.start_datetime, "yyyy-MM-dd hh:mm:ss").format("YYYY-MM-DDThh:mm")
-			this.event.end_datetime = moment(this.event.end_datetime, "yyyy-MM-dd hh:mm:ss").format("YYYY-MM-DDThh:mm")
+			this.formatDates();
 			
-			// bind seats object. Will be set to [] if event preferences doesnr contain seats
+			// bind seats object. Will be set to [] if event preferences doesnt contain seats
 			this.$set(this.event, 'seats', 
 				typeof JSON.parse(this.event.preferences).seats != 'undefined' ? JSON.parse(this.event.preferences).seats : []
 			);
+
 			// enable the seats input if the seats array is not empty
 			if (this.event.seats.length > 0)
 				this.seatsEnabled = true;
 
-			this.$set(this.event, 'guests', []);
+			// enable host data if it is all defined
+			if (this.event.host_name && this.event.host_name.length > 0 &&
+				this.event.host_email && this.event.host_email.length > 0)
+				this.hostEnabled = true;
+
+			if (this.event.rsvp_datetime)
+				this.rsvpEnabled = true;
+			
+			if (this.event.max_guests)
+				this.max_guestsEnabled = true;
+
+			if (this.event.price)
+				this.priceEnabled = true;
+
 		},
 		mounted : function() {
-			$('#seats').select2({
-		        placeholder : "Enter Seats (e.g 1,2,3,4,5...)",
-		        tags: true,
-		        tokenSeparators: [',', ' '],
-		        width : '100%',
-		        data : this.event.seats,
-		        disabled : !this.seatsEnabled
-		    });
-		    $('#seats').val(this.event.seats).trigger('change');
-			this.$set(this.event, 'seats', this.event.seats);
+			this.venueSelect = this.VenueSelect(this.event.venue).render(); 
+			
+			this.guestSelect = this.GuestSelect(
+				$('#guests-list'), 
+				this.event
+			).render();
+			
+			this.seatsSelect = this.SeatSelect(
+				$('#seats'), 
+				this.event.seats, 
+				!this.seatsEnabled
+			).render();
+
+			this.supplierSelect = this.SupplierSelect($('#suppliers'))
+				.render();
 		},
 		methods : {
-			GuestSelect : function(el) {
-				el.select2({
-			        placeholder : "Enter guests email here",
-			        tags: true,
-			        disabled: false,
-			        tokenSeparators: [',', ' '],
-			        width : '100%',
-			        data : [],
-			    });
+			formatDates : function() {
+				this.event.start_datetime = moment(
+					this.event.start_datetime, 
+					"yyyy-MM-dd hh:mm:ss"
+				).format("YYYY-MM-DDThh:mm");
+
+				this.event.end_datetime = moment(
+					this.event.end_datetime,
+					"yyyy-MM-dd hh:mm:ss"
+				).format("YYYY-MM-DDThh:mm");
+
+				if(this.event.rsvp_datetime)
+					this.event.rsvp_datetime = moment(
+						this.event.rsvp_datetime,
+						"yyyy-MM-dd hh:mm:ss"
+					).format("YYYY-MM-DDThh:mm");
 			},
+
+			handleAutoPopulateClick : function(e) {
+				var max = this.event.max_guests ? this.event.max_guests : 5;
+				var seats = [];
+				var i = 0;
+				while(i < max)
+					seats.push(++i);
+				this.seatsSelect.render(seats);
+			},
+
+			VenueSelect : function(initValue) {
+			    return {
+			    	el : $("#venue"),
+			    	initValue : initValue,
+			    	venueDataTransform : function(venue) {
+					    return {id : venue.id , text : venue.name};
+					},
+					setVenues : function(venues) {
+				        this.el.select2({
+				            placeholder : "Select a venue..",
+				            width : '100%',
+				            data : venues.map(this.venueDataTransform)
+				        });
+				        this.el.val(this.initValue).trigger('change');
+				    },
+					getVenues : function(callbacks) {
+					    $.get({
+					        url : '/venues', 
+					        success : callbacks.success
+					    });   
+					},
+					render : function() {
+						this.el.select2({
+					        placeholder : "Loading venues..",
+					    	width : '100%',
+					        data : []
+					    });
+					    this.setVenues = this.setVenues.bind(this);
+					    this.getVenues({
+					        success : this.setVenues
+					    });
+					    return this;
+					}
+			    }
+			},
+
+			GuestSelect : function(el, event) {
+				return {
+					el : el,
+					event : event,
+					getGuests : function(callbacks) {
+						$.get({
+							url : '/eventos/' + this.event.id + '/rsvps',
+							success : callbacks.success
+						}).fail(callbacks.fail);
+					},
+					setGuests : function(guests) {
+						var guests = guests.map(guest => guest.email);
+						this.el.select2({
+					        placeholder : "Enter guests email here",
+					        tags: true,
+					        disabled: false,
+					        tokenSeparators: [',', ' '],
+					        width : '100%',
+					        data : guests,
+					    });
+	    			    el.val(guests).trigger('change');
+					},
+					displayError : function(errors) {
+						this.el.select2({
+					        placeholder : "Error loading Guests",
+					        disabled: true,
+					        width : '100%',
+					        data : []
+					    });
+					},
+					render : function() {
+						this.el.select2({
+					        placeholder : "Loading Guests..",
+					        disabled: true,
+					        width : '100%',
+					        data : [],
+						});
+
+					    this.setGuests = this.setGuests.bind(this);
+					    this.displayError = this.displayError.bind(this);
+						
+						this.getGuests({
+							success : this.setGuests,
+							fail : this.displayError
+						});
+						return this;
+					}					
+				}
+			},
+
 			SeatSelect : function(el, seats = [], disabled = false) {
-				this.el = el;
-				this.el.select2({
-		        placeholder : "Enter Seats (e.g 1,2,3,4,5...)",
-		        tags: true,
-		        tokenSeparators: [',', ' '],
-		        width : '100%',
-		        data : seats,
-		        disabled : disabled
-			    });
-			    this.el.val(seats).trigger('change');
+			    return {
+			    	el : el,
+			    	seats : seats,
+			    	disabled : disabled,
+				    render : function(seats) {
+						if (typeof seats != 'undefined')
+							this.seats = seats;
 
-			    var that = this;
-
-			    var autoPopHandler = function(e) {
-			    	e.preventDefault();
-			        
-			        var max = that.el.val() != null ? that.el.val() : 5;
-
-			        var array = [];
-			        
-			        for (var i=1; i<=max; i++)
-			            array.push(i);
-
-			        $('#seats').select2({
-			                placeholder : "Enter guests' seats here",
-			                tags: true,
-			                tokenSeparators: [',', ' '],
-			                disabled : false,
-			                data :  array
-			            });
-
-			        $('#seats').val(array).trigger('change');
-			    }		
+						this.el.select2({
+					        placeholder : "Enter Seats (e.g 1,2,3,4,5...)",
+					        tags: true,
+					        tokenSeparators: [',', ' '],
+					        width : '100%',
+					        data : this.seats,
+					        disabled : this.disabled
+					    });
+					    this.el.val(this.seats).trigger('change');
+					    return this;
+				    }		
+			    }
 			},
 			SupplierSelect : function(el) {
-				el.select2({
-			        placeholder : "Add supplier...",
-			        data: [],
-			        width : '100%',
-			    });
-			},
-			VenueSelect : function() {
-			     var that = this;
-			     this.el = $("#venue")
-			     this.el.select2({
-			        placeholder : "Loading venues..",
-			        width : '100%',
-			        data : []
-			    });
-
-			    this.venueDataTransform = function(venue) {
-				    return {id : venue.id , text : venue.name};
-				};
-
-			    this.setVenues = function(venues) {
-			        that.el.select2({
-			            placeholder : "Select a venue..",
-			            width : '100%',
-			            data : venues.map(that.venueDataTransform)
-			        });
-			    }
-
-			    this.getVenues = function(callbacks) {
-				    $.get({
-				        url : '/venues', 
-				        success : callbacks.success
-				    });   
-				};
-
-			    this.getVenues({
-			        success : this.setVenues
-			    });
-			    
-			    this.selectVenueModel = function(venue) {
-				    var option = new Option(venue.name, venue.id);
-				    option.selected = true;
-				    this.el.append(option);
-				    this.el.trigger('change');
-				};
+				return {
+					el : el,
+					render : function() {
+						this.el.select2({
+					        placeholder : "Add supplier...",
+					        data: [],
+					        width : '100%',
+					        disabled : true
+					    });
+					    return this;
+					}
+				}
 			}
 		}        
     }

@@ -83525,6 +83525,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: {
@@ -83542,125 +83544,182 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	data: function data() {
 		return {
 			hostEnabled: false,
-			seatsEnabled: false
+			seatsEnabled: false,
+			rsvpEnabled: false,
+			max_guestsEnabled: false,
+			priceEnabled: false
 		};
 	},
 
 	created: function created() {
-		this.event.start_datetime = moment(this.event.start_datetime, "yyyy-MM-dd hh:mm:ss").format("YYYY-MM-DDThh:mm");
-		this.event.end_datetime = moment(this.event.end_datetime, "yyyy-MM-dd hh:mm:ss").format("YYYY-MM-DDThh:mm");
+		this.formatDates();
 
-		// bind seats object. Will be set to [] if event preferences doesnr contain seats
+		// bind seats object. Will be set to [] if event preferences doesnt contain seats
 		this.$set(this.event, 'seats', typeof JSON.parse(this.event.preferences).seats != 'undefined' ? JSON.parse(this.event.preferences).seats : []);
+
 		// enable the seats input if the seats array is not empty
 		if (this.event.seats.length > 0) this.seatsEnabled = true;
 
-		this.$set(this.event, 'guests', []);
+		// enable host data if it is all defined
+		if (this.event.host_name && this.event.host_name.length > 0 && this.event.host_email && this.event.host_email.length > 0) this.hostEnabled = true;
+
+		if (this.event.rsvp_datetime) this.rsvpEnabled = true;
+
+		if (this.event.max_guests) this.max_guestsEnabled = true;
+
+		if (this.event.price) this.priceEnabled = true;
 	},
 	mounted: function mounted() {
-		$('#seats').select2({
-			placeholder: "Enter Seats (e.g 1,2,3,4,5...)",
-			tags: true,
-			tokenSeparators: [',', ' '],
-			width: '100%',
-			data: this.event.seats,
-			disabled: !this.seatsEnabled
-		});
-		$('#seats').val(this.event.seats).trigger('change');
-		this.$set(this.event, 'seats', this.event.seats);
+		this.venueSelect = this.VenueSelect(this.event.venue).render();
+
+		this.guestSelect = this.GuestSelect($('#guests-list'), this.event).render();
+
+		this.seatsSelect = this.SeatSelect($('#seats'), this.event.seats, !this.seatsEnabled).render();
+
+		this.supplierSelect = this.SupplierSelect($('#suppliers')).render();
 	},
 	methods: {
-		GuestSelect: function GuestSelect(el) {
-			el.select2({
-				placeholder: "Enter guests email here",
-				tags: true,
-				disabled: false,
-				tokenSeparators: [',', ' '],
-				width: '100%',
-				data: []
-			});
+		formatDates: function formatDates() {
+			this.event.start_datetime = moment(this.event.start_datetime, "yyyy-MM-dd hh:mm:ss").format("YYYY-MM-DDThh:mm");
+
+			this.event.end_datetime = moment(this.event.end_datetime, "yyyy-MM-dd hh:mm:ss").format("YYYY-MM-DDThh:mm");
+
+			if (this.event.rsvp_datetime) this.event.rsvp_datetime = moment(this.event.rsvp_datetime, "yyyy-MM-dd hh:mm:ss").format("YYYY-MM-DDThh:mm");
 		},
+
+		handleAutoPopulateClick: function handleAutoPopulateClick(e) {
+			var max = this.event.max_guests ? this.event.max_guests : 5;
+			var seats = [];
+			var i = 0;
+			while (i < max) {
+				seats.push(++i);
+			}this.seatsSelect.render(seats);
+		},
+
+		VenueSelect: function VenueSelect(initValue) {
+			return {
+				el: $("#venue"),
+				initValue: initValue,
+				venueDataTransform: function venueDataTransform(venue) {
+					return { id: venue.id, text: venue.name };
+				},
+				setVenues: function setVenues(venues) {
+					this.el.select2({
+						placeholder: "Select a venue..",
+						width: '100%',
+						data: venues.map(this.venueDataTransform)
+					});
+					this.el.val(this.initValue).trigger('change');
+				},
+				getVenues: function getVenues(callbacks) {
+					$.get({
+						url: '/venues',
+						success: callbacks.success
+					});
+				},
+				render: function render() {
+					this.el.select2({
+						placeholder: "Loading venues..",
+						width: '100%',
+						data: []
+					});
+					this.setVenues = this.setVenues.bind(this);
+					this.getVenues({
+						success: this.setVenues
+					});
+					return this;
+				}
+			};
+		},
+
+		GuestSelect: function GuestSelect(el, event) {
+			return {
+				el: el,
+				event: event,
+				getGuests: function getGuests(callbacks) {
+					$.get({
+						url: '/eventos/' + this.event.id + '/rsvps',
+						success: callbacks.success
+					}).fail(callbacks.fail);
+				},
+				setGuests: function setGuests(guests) {
+					var guests = guests.map(function (guest) {
+						return guest.email;
+					});
+					this.el.select2({
+						placeholder: "Enter guests email here",
+						tags: true,
+						disabled: false,
+						tokenSeparators: [',', ' '],
+						width: '100%',
+						data: guests
+					});
+					el.val(guests).trigger('change');
+				},
+				displayError: function displayError(errors) {
+					this.el.select2({
+						placeholder: "Error loading Guests",
+						disabled: true,
+						width: '100%',
+						data: []
+					});
+				},
+				render: function render() {
+					this.el.select2({
+						placeholder: "Loading Guests..",
+						disabled: true,
+						width: '100%',
+						data: []
+					});
+
+					this.setGuests = this.setGuests.bind(this);
+					this.displayError = this.displayError.bind(this);
+
+					this.getGuests({
+						success: this.setGuests,
+						fail: this.displayError
+					});
+					return this;
+				}
+			};
+		},
+
 		SeatSelect: function SeatSelect(el) {
 			var seats = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 			var disabled = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-			this.el = el;
-			this.el.select2({
-				placeholder: "Enter Seats (e.g 1,2,3,4,5...)",
-				tags: true,
-				tokenSeparators: [',', ' '],
-				width: '100%',
-				data: seats,
-				disabled: disabled
-			});
-			this.el.val(seats).trigger('change');
+			return {
+				el: el,
+				seats: seats,
+				disabled: disabled,
+				render: function render(seats) {
+					if (typeof seats != 'undefined') this.seats = seats;
 
-			var that = this;
-
-			var autoPopHandler = function autoPopHandler(e) {
-				e.preventDefault();
-
-				var max = that.el.val() != null ? that.el.val() : 5;
-
-				var array = [];
-
-				for (var i = 1; i <= max; i++) {
-					array.push(i);
-				}$('#seats').select2({
-					placeholder: "Enter guests' seats here",
-					tags: true,
-					tokenSeparators: [',', ' '],
-					disabled: false,
-					data: array
-				});
-
-				$('#seats').val(array).trigger('change');
+					this.el.select2({
+						placeholder: "Enter Seats (e.g 1,2,3,4,5...)",
+						tags: true,
+						tokenSeparators: [',', ' '],
+						width: '100%',
+						data: this.seats,
+						disabled: this.disabled
+					});
+					this.el.val(this.seats).trigger('change');
+					return this;
+				}
 			};
 		},
 		SupplierSelect: function SupplierSelect(el) {
-			el.select2({
-				placeholder: "Add supplier...",
-				data: [],
-				width: '100%'
-			});
-		},
-		VenueSelect: function VenueSelect() {
-			var that = this;
-			this.el = $("#venue");
-			this.el.select2({
-				placeholder: "Loading venues..",
-				width: '100%',
-				data: []
-			});
-
-			this.venueDataTransform = function (venue) {
-				return { id: venue.id, text: venue.name };
-			};
-
-			this.setVenues = function (venues) {
-				that.el.select2({
-					placeholder: "Select a venue..",
-					width: '100%',
-					data: venues.map(that.venueDataTransform)
-				});
-			};
-
-			this.getVenues = function (callbacks) {
-				$.get({
-					url: '/venues',
-					success: callbacks.success
-				});
-			};
-
-			this.getVenues({
-				success: this.setVenues
-			});
-
-			this.selectVenueModel = function (venue) {
-				var option = new Option(venue.name, venue.id);
-				option.selected = true;
-				this.el.append(option);
-				this.el.trigger('change');
+			return {
+				el: el,
+				render: function render() {
+					this.el.select2({
+						placeholder: "Add supplier...",
+						data: [],
+						width: '100%',
+						disabled: true
+					});
+					return this;
+				}
 			};
 		}
 	}
@@ -83741,6 +83800,7 @@ var render = function() {
               }
             ],
             staticClass: "form-control",
+            staticStyle: { height: "150px" },
             attrs: { id: "description", type: "text", name: "description" },
             domProps: { value: _vm.event.description },
             on: {
@@ -83837,98 +83897,9 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "form-group" }, [
-        _c(
-          "label",
-          { staticClass: "col-md-4 control-label", attrs: { for: "venue" } },
-          [_vm._v("Venue")]
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.event.venue,
-                  expression: "event.venue"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: {
-                id: "venue",
-                name: "venue",
-                required: "",
-                placeholder: "Select Venue"
-              },
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.event.venue = $event.target.multiple
-                    ? $$selectedVal
-                    : $$selectedVal[0]
-                }
-              }
-            },
-            [_c("option", { attrs: { val: "" } })]
-          )
-        ])
-      ]),
+      _vm._m(0),
       _vm._v(" "),
-      _c("div", { staticClass: "form-group" }, [
-        _c(
-          "label",
-          {
-            staticClass: "col-md-4 control-label",
-            attrs: { for: "max-guests-input" }
-          },
-          [_vm._v("Invite Guests")]
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
-          _c("select", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.event.guests,
-                expression: "event.guests"
-              }
-            ],
-            staticClass: "form-control",
-            staticStyle: { width: "100%" },
-            attrs: {
-              id: "guests-list",
-              name: "guests-list",
-              multiple: "multiple"
-            },
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.event.guests = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
-            }
-          })
-        ])
-      ]),
+      _vm._m(1),
       _vm._v(" "),
       _c("div", { staticClass: "form-group" }, [
         _c(
@@ -84029,7 +84000,7 @@ var render = function() {
                 type: "email",
                 name: "host-email",
                 placeholder: "Host email",
-                disabled: "true"
+                disabled: !_vm.hostEnabled
               },
               domProps: { value: _vm.event.host_email },
               on: {
@@ -84062,7 +84033,7 @@ var render = function() {
                   name: "from-host-checkbox",
                   title:
                     "Enabling this option will send invitations addressed from the host (opposed to by you)",
-                  disabled: "true"
+                  disabled: !_vm.hostEnabled
                 },
                 domProps: {
                   checked: Array.isArray(_vm.event.from_host)
@@ -84121,7 +84092,49 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "col-md-6" }, [
           _c("div", { staticClass: "input-group" }, [
-            _vm._m(0),
+            _c("span", { staticClass: "input-group-addon" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.rsvpEnabled,
+                    expression: "rsvpEnabled"
+                  }
+                ],
+                attrs: {
+                  id: "rsvp-datetime-checkbox",
+                  type: "checkbox",
+                  "aria-label": "Enable RSVP"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.rsvpEnabled)
+                    ? _vm._i(_vm.rsvpEnabled, null) > -1
+                    : _vm.rsvpEnabled
+                },
+                on: {
+                  __c: function($event) {
+                    var $$a = _vm.rsvpEnabled,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.rsvpEnabled = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.rsvpEnabled = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.rsvpEnabled = $$c
+                    }
+                  }
+                }
+              })
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -84139,7 +84152,7 @@ var render = function() {
                 name: "rsvp-datetime",
                 required: "",
                 placeholder: "Ending at",
-                disabled: "true"
+                disabled: !_vm.rsvpEnabled
               },
               domProps: { value: _vm.event.rsvp_datetime },
               on: {
@@ -84167,7 +84180,49 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "col-md-6" }, [
           _c("div", { staticClass: "input-group" }, [
-            _vm._m(1),
+            _c("span", { staticClass: "input-group-addon" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.max_guestsEnabled,
+                    expression: "max_guestsEnabled"
+                  }
+                ],
+                attrs: {
+                  id: "max-guests-checkbox",
+                  type: "checkbox",
+                  "aria-label": "Enable Max Guests"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.max_guestsEnabled)
+                    ? _vm._i(_vm.max_guestsEnabled, null) > -1
+                    : _vm.max_guestsEnabled
+                },
+                on: {
+                  __c: function($event) {
+                    var $$a = _vm.max_guestsEnabled,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.max_guestsEnabled = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.max_guestsEnabled = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.max_guestsEnabled = $$c
+                    }
+                  }
+                }
+              })
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -84185,7 +84240,7 @@ var render = function() {
                 min: "1",
                 name: "max-guests",
                 required: "",
-                disabled: "true"
+                disabled: !_vm.max_guestsEnabled
               },
               domProps: { value: _vm.event.max_guests },
               on: {
@@ -84210,7 +84265,49 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "col-md-6" }, [
           _c("div", { staticClass: "input-group" }, [
-            _vm._m(2),
+            _c("span", { staticClass: "input-group-addon" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.priceEnabled,
+                    expression: "priceEnabled"
+                  }
+                ],
+                attrs: {
+                  id: "price-checkbox",
+                  type: "checkbox",
+                  "aria-label": "Enable Ticket Price"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.priceEnabled)
+                    ? _vm._i(_vm.priceEnabled, null) > -1
+                    : _vm.priceEnabled
+                },
+                on: {
+                  __c: function($event) {
+                    var $$a = _vm.priceEnabled,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.priceEnabled = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.priceEnabled = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.priceEnabled = $$c
+                    }
+                  }
+                }
+              })
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -84229,7 +84326,7 @@ var render = function() {
                 min: "0",
                 name: "price",
                 placeholder: "00.00",
-                disabled: "true"
+                disabled: !_vm.priceEnabled
               },
               domProps: { value: _vm.event.price },
               on: {
@@ -84314,7 +84411,13 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-secondary",
-                  attrs: { id: "auto_pop_button", disabled: !_vm.seatsEnabled }
+                  attrs: { id: "auto_pop_button", disabled: !_vm.seatsEnabled },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.handleAutoPopulateClick($event)
+                    }
+                  }
                 },
                 [
                   _vm._v(
@@ -84327,7 +84430,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(3),
+      _vm._m(2),
       _vm._v(" "),
       _c("div", { staticClass: "form-group" }, [
         _c(
@@ -84398,7 +84501,7 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(4)
+      _vm._m(3)
     ]
   )
 }
@@ -84407,42 +84510,55 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "input-group-addon" }, [
-      _c("input", {
-        attrs: {
-          id: "rsvp-datetime-checkbox",
-          type: "checkbox",
-          "aria-label": "Enable RSVP"
-        }
-      })
+    return _c("div", { staticClass: "form-group" }, [
+      _c(
+        "label",
+        { staticClass: "col-md-4 control-label", attrs: { for: "venue" } },
+        [_vm._v("Venue")]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-6" }, [
+        _c(
+          "select",
+          {
+            staticClass: "form-control",
+            attrs: {
+              id: "venue",
+              name: "venue",
+              required: "",
+              placeholder: "Select Venue"
+            }
+          },
+          [_c("option", { attrs: { val: "" } })]
+        )
+      ])
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "input-group-addon" }, [
-      _c("input", {
-        attrs: {
-          id: "max-guests-checkbox",
-          type: "checkbox",
-          "aria-label": "Enable Max Guests"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "input-group-addon" }, [
-      _c("input", {
-        attrs: {
-          id: "price-checkbox",
-          type: "checkbox",
-          "aria-label": "Enable Ticket Price"
-        }
-      })
+    return _c("div", { staticClass: "form-group" }, [
+      _c(
+        "label",
+        {
+          staticClass: "col-md-4 control-label",
+          attrs: { for: "max-guests-input" }
+        },
+        [_vm._v("Invite Guests")]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("select", {
+          staticClass: "form-control",
+          staticStyle: { width: "100%" },
+          attrs: {
+            id: "guests-list",
+            name: "guests-list",
+            multiple: "multiple"
+          }
+        })
+      ])
     ])
   },
   function() {
