@@ -218,7 +218,6 @@
 	                    	aria-label="Enable Seats">
 	                </span>
 	                <select 
-	                	v-model="event.seats"
 	                	id="seats" 
 	                	class="form-control seat-select2" 
 	                	name="seats" 
@@ -334,6 +333,106 @@
 			this.$set(this.event, 'seats', this.event.seats);
 		},
 		methods : {
-		}
+			GuestSelect : function(el) {
+				el.select2({
+			        placeholder : "Enter guests email here",
+			        tags: true,
+			        disabled: false,
+			        tokenSeparators: [',', ' '],
+			        width : '100%',
+			        data : [],
+			    });
+			},
+			SeatSelect : function(el, seats = [], disabled = false) {
+				this.el = el;
+				this.el.select2({
+		        placeholder : "Enter Seats (e.g 1,2,3,4,5...)",
+		        tags: true,
+		        tokenSeparators: [',', ' '],
+		        width : '100%',
+		        data : seats,
+		        disabled : disabled
+			    });
+			    this.el.val(seats).trigger('change');
+
+			    var that = this;
+
+			    var autoPopHandler = function(e) {
+			    	e.preventDefault();
+			        
+			        var max = that.el.val() != null ? that.el.val() : 5;
+
+			        var array = [];
+			        
+			        for (var i=1; i<=max; i++)
+			            array.push(i);
+
+			        $('#seats').select2({
+			                placeholder : "Enter guests' seats here",
+			                tags: true,
+			                tokenSeparators: [',', ' '],
+			                disabled : false,
+			                data :  array
+			            });
+
+			        $('#seats').val(array).trigger('change');
+			    }		
+			},
+			SupplierSelect : function(el) {
+				el.select2({
+			        placeholder : "Add supplier...",
+			        data: [],
+			        width : '100%',
+			    });
+			},
+			VenueSelect : function() {
+			     var that = this;
+			     this.el = $("#venue")
+			     this.el.select2({
+			        placeholder : "Loading venues..",
+			        width : '100%',
+			        data : []
+			    });
+
+			    this.venueDataTransform = function(venue) {
+				    return {id : venue.id , text : venue.name};
+				};
+
+			    this.setVenues = function(venues) {
+			        that.el.select2({
+			            placeholder : "Select a venue..",
+			            width : '100%',
+			            data : venues.map(that.venueDataTransform)
+			        });
+			    }
+
+			    this.getVenues = function(callbacks) {
+				    $.get({
+				        url : '/venues', 
+				        success : callbacks.success
+				    });   
+				};
+
+			    this.getVenues({
+			        success : this.setVenues
+			    });
+			    
+			}
+
+			VenueSelect.prototype.getVenues = function(callbacks) {
+			    $.get({
+			        url : '/venues', 
+			        success : callbacks.success
+			    });   
+			};
+
+			VenueSelect.prototype.selectVenueModel = function(venue) {
+			    var option = new Option(venue.name, venue.id);
+			    option.selected = true;
+			    this.el.append(option);
+			    this.el.trigger('change');
+			};
+
+		}        
     }
 </script>

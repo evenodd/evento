@@ -7,6 +7,7 @@ use App\Evento;
 use App\Venue;
 use Illuminate\Http\Request;
 use App\Jobs\SendGuestEmail;
+use App\Jobs\GetsEventSeats;
 use App\Traits\StoresRsvps;
 use stdClass;
 
@@ -15,7 +16,7 @@ use DB;
 class RsvpController extends Controller
 {
     use StoresRsvps;
-
+    use GetsEventSeats;
     /**
      * Display a listing of the resource.
      *
@@ -104,9 +105,10 @@ class RsvpController extends Controller
             ], [
                 'rsvp.preferences.seats.required' => 'You need to select an available seat'
             ]);
-            if (!in_array($req->input('rsvp')['preferences']['seats'], $event->getSeats()))
+            if (!in_array($req->input('rsvp')['preferences']['seats'], $this->getSeats($event)['available']))
                 return response('Invalid seat option', 422);
             // add request seats to the rsvp's preferences object
+            if()
             $preferences->seats = $req->input('rsvp')['preferences']['seats'];
         }
         

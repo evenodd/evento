@@ -54,7 +54,7 @@ class PublicController extends Controller
 
         if ($eventHasSeats) {
             // return an error if the request seat is not one of the event seats
-            if (!in_array($req->input('rsvp')['preferences']['seats'], $evento->getSeats()))
+            if (!in_array($req->input('rsvp')['preferences']['seats'], $this->getSeats($evento)))
                 return response('Invalid seat option', 422);
             // add request seats to the rsvp's preferences object
             $preferences->seats = $req->input('rsvp')['preferences']['seats'];

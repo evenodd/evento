@@ -30,7 +30,7 @@ trait getsEventSeats{
             })
             // remove all the rsvps that dont have seats
             ->filter(function($seat) {
-                return $seat != -1;
+                return $seat != -1 && $seat != '';
             })  
             ->toArray();
         // any seats that are not in the booked array must be available.

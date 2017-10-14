@@ -83525,7 +83525,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: {
@@ -84206,14 +84205,6 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("select", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.event.seats,
-                  expression: "event.seats"
-                }
-              ],
               staticClass: "form-control seat-select2",
               staticStyle: { width: "100%" },
               attrs: {
@@ -84221,21 +84212,6 @@ var render = function() {
                 name: "seats",
                 multiple: "multiple",
                 disabled: !_vm.seatsEnabled
-              },
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.event.seats = $event.target.multiple
-                    ? $$selectedVal
-                    : $$selectedVal[0]
-                }
               }
             }),
             _vm._v(" "),
