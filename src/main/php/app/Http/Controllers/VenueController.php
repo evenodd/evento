@@ -180,7 +180,10 @@ class VenueController extends Controller
         $this->authorize('view', $venue);
         $this->authorize('viewSummary', [$evento, $venue]);
 
-        $evento->setVisible(['id', 'title', 'description', 'start_datetime', 'end_datetime', 'rsvp_datetime', 'venue']);
+        $evento->setVisible(
+            ['id', 'title', 'description', 'start_datetime', 'end_datetime', 
+            'rsvp_datetime', 'venue']
+        );
 
         return view('event.details', [
             'event' => $evento           

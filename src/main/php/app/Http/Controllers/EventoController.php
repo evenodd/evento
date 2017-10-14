@@ -186,7 +186,8 @@ class EventoController extends Controller
         $this->authorize('update', $evento);
         $evento->canceled = true;
         //get all the rsvps that have already been sent
-        $rsvps = $this->getRsvps(new Request(['sent' => true]), $evento);
+        $rsvps = $evento->getRsvps();
+
         foreach ($rsvps as $rsvp) {
             dispatch(new SendGuestEmail($rsvp, 'emails.canceled', "Canceled: "));
         }
