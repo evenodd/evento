@@ -82539,6 +82539,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -82587,6 +82588,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).always(function (res) {
                 that.loading = false;
             });
+        },
+        inFuture: function inFuture(event) {
+            return moment(event.start_datetime, 'yyyy-MM-dd HH:mm:ss').diff(moment()) >= 0;
         }
     },
     watch: {
@@ -82639,14 +82643,16 @@ var render = function() {
           "div",
           { staticClass: "nav nav-pills nav-stacked" },
           _vm._l(_vm.vueEvents, function(event) {
-            return _c("event-row", {
-              key: event.id,
-              attrs: {
-                event: event,
-                show_guests: _vm.show_guests,
-                redirect: _vm.redirect
-              }
-            })
+            return _vm.inFuture(event)
+              ? _c("event-row", {
+                  key: event.id,
+                  attrs: {
+                    event: event,
+                    show_guests: _vm.show_guests,
+                    redirect: _vm.redirect
+                  }
+                })
+              : _vm._e()
           })
         )
       ]
