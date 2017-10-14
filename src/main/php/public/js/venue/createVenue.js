@@ -7,16 +7,17 @@ function ContactFormGroup(el, contacts) {
     }); 
 }
 
+/* 
+    Returns the contact data as a json_encoded object
+*/
 ContactFormGroup.prototype.getData = function() {
     var data = new Object();
     this.vue.contacts
-        //filter out contact fields with empty values
-        .filter(function (contact){
-            return $.inArray($("#contactsFormGroup #" + stringHash(contact)).val(), ['', null, 'undefined']) == -1;
-        })
-        // add each contact field and value into the data Object
+        // filter out contact fields with empty values
+        .filter(contact => $.inArray(contact.value, ['', null]) == -1)
+        // Store contacts into a json object
         .forEach(function(contact) {
-            data[contact] = $("#contactsFormGroup #" + stringHash(contact)).val();
+            data[contact.name] = contact.value;
         });
     return data;
 }
@@ -35,7 +36,10 @@ function CreateVenueForm(el) {
         }
     ]);
 
-    // returns form data as a serialized array. Includes all the contacts in a json object.
+    /* 
+     Returns form data as a serialized array. Includes all the contacts in a 
+     json object. 
+    */
     this.getData = function() {
         var data = that.el.serializeArray();
         data.push({
@@ -65,8 +69,10 @@ function configFormSubmitEvent(dataGenerator) {
             data : dataGenerator(),
             success : function(res){
                 $('#alertPanel').append(
-                        '<div id="event-alert-' + res.id + '" class="fade in alert alert-' + res.status + '">' + 
-                        '<a href="#" class="close" data-dismiss="alert">&times;</a>' +
+                        '<div id="event-alert-' + res.id + 
+                        '" class="fade in alert alert-' + res.status + '">' + 
+                        '<a href="#" class="close" ' + 
+                        'data-dismiss="alert">&times;</a>' +
                         res.msg + 
                         '</div>'
                     );
