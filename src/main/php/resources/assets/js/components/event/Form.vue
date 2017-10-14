@@ -417,22 +417,13 @@
 			        success : this.setVenues
 			    });
 			    
+			    this.selectVenueModel = function(venue) {
+				    var option = new Option(venue.name, venue.id);
+				    option.selected = true;
+				    this.el.append(option);
+				    this.el.trigger('change');
+				};
 			}
-
-			VenueSelect.prototype.getVenues = function(callbacks) {
-			    $.get({
-			        url : '/venues', 
-			        success : callbacks.success
-			    });   
-			};
-
-			VenueSelect.prototype.selectVenueModel = function(venue) {
-			    var option = new Option(venue.name, venue.id);
-			    option.selected = true;
-			    this.el.append(option);
-			    this.el.trigger('change');
-			};
-
 		}        
     }
 </script>
