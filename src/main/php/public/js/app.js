@@ -83527,6 +83527,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: {
@@ -83554,6 +83558,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	created: function created() {
 		this.formatDates();
 
+		this.event.private = this.event.private ? 'private' : 'public';
+
 		// bind seats object. Will be set to [] if event preferences doesnt contain seats
 		this.$set(this.event, 'seats', typeof JSON.parse(this.event.preferences).seats != 'undefined' ? JSON.parse(this.event.preferences).seats : []);
 
@@ -83579,12 +83585,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		this.supplierSelect = this.SupplierSelect($('#suppliers')).render();
 	},
 	methods: {
+		submitEvent: function submitEvent(e) {
+			var that = this;
+			$.post({
+				url: '/eventos/update/' + this.event.id,
+				data: this.getData(),
+				success: function success(res) {
+					window.location.assign('/eventos/details/' + that.event.id);
+				}
+			}).fail(function (res) {
+				that.$emit('failed', res);
+			});
+		},
+
+		getData: function getData() {
+			return this.SerializedArray($('#eventForm').serializeArray()).indexDuplicateNames(['guests-list', 'seats']).serializedArray;
+		},
+
 		formatDates: function formatDates() {
-			this.event.start_datetime = moment(this.event.start_datetime, "yyyy-MM-dd hh:mm:ss").format("YYYY-MM-DDThh:mm");
+			this.event.start_datetime = moment(this.event.start_datetime, "yyyy-MM-dd HH:mm:ss").format("YYYY-MM-DDTHH:mm");
 
-			this.event.end_datetime = moment(this.event.end_datetime, "yyyy-MM-dd hh:mm:ss").format("YYYY-MM-DDThh:mm");
+			this.event.end_datetime = moment(this.event.end_datetime, "yyyy-MM-dd HH:mm:ss").format("YYYY-MM-DDTHH:mm");
 
-			if (this.event.rsvp_datetime) this.event.rsvp_datetime = moment(this.event.rsvp_datetime, "yyyy-MM-dd hh:mm:ss").format("YYYY-MM-DDThh:mm");
+			if (this.event.rsvp_datetime) this.event.rsvp_datetime = moment(this.event.rsvp_datetime, "yyyy-MM-dd HH:mm:ss").format("YYYY-MM-DDTHH:mm");
 		},
 
 		handleAutoPopulateClick: function handleAutoPopulateClick(e) {
@@ -83721,6 +83744,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					return this;
 				}
 			};
+		},
+		SerializedArray: function SerializedArray(serializedArray) {
+			return {
+				serializedArray: serializedArray,
+				/**
+     * Returns the serialized array with an index appended to the specified names.
+     * 
+     * E.g [{name : 'a', value : 1},{name : 'a', value : bar2}] ;
+     *     becomes 
+     *     [{name : 'a[0]', value : bar},{name : 'a[1]', value : bar2}] 
+     *     when ['a'] is passed as a name
+     *
+     * @param arr   the serialized array 
+     * @param names the names to index
+     * @return an array of values
+     */
+				indexDuplicateNames: function indexDuplicateNames(names) {
+					var indexes = [];
+					names.forEach(function (name) {
+						indexes[name] = 0;
+					});
+					this.serializedArray.forEach(function (e) {
+						// If the element's name is one of the names append 
+						// an index an increment that name's index
+						if (names.indexOf(e.name) != -1) e.name += '[' + indexes[e.name]++ + ']';
+					});
+					return this;
+				}
+			};
 		}
 	}
 });
@@ -83737,17 +83789,28 @@ var render = function() {
     "form",
     {
       staticClass: "form-horizontal",
-      attrs: { id: "createEventForm", method: "POST", action: "/eventos" }
+      attrs: { id: "createEventForm", method: "POST", action: "/eventos" },
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          _vm.submitEvent($event)
+        }
+      }
     },
     [
+      _c("input", {
+        attrs: { type: "hidden", name: "_token" },
+        domProps: { value: _vm.token }
+      }),
+      _vm._v(" "),
       _c("div", { staticClass: "form-group" }, [
         _c(
           "label",
-          { staticClass: "col-md-4 control-label", attrs: { for: "title" } },
+          { staticClass: "col-md-3 control-label", attrs: { for: "title" } },
           [_vm._v("Event Title")]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "col-md-9" }, [
           _c("input", {
             directives: [
               {
@@ -83783,13 +83846,13 @@ var render = function() {
         _c(
           "label",
           {
-            staticClass: "col-md-4 control-label",
+            staticClass: "col-md-3 control-label",
             attrs: { for: "description" }
           },
           [_vm._v("Description")]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "col-md-9" }, [
           _c("textarea", {
             directives: [
               {
@@ -83819,13 +83882,13 @@ var render = function() {
         _c(
           "label",
           {
-            staticClass: "col-md-4 control-label",
+            staticClass: "col-md-3 control-label",
             attrs: { for: "start-datetime" }
           },
           [_vm._v("From")]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "col-md-9" }, [
           _c("input", {
             directives: [
               {
@@ -83860,13 +83923,13 @@ var render = function() {
         _c(
           "label",
           {
-            staticClass: "col-md-4 control-label",
+            staticClass: "col-md-3 control-label",
             attrs: { for: "end-datetime" }
           },
           [_vm._v("To")]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "col-md-9" }, [
           _c("input", {
             directives: [
               {
@@ -83905,13 +83968,13 @@ var render = function() {
         _c(
           "label",
           {
-            staticClass: "col-md-4 control-label",
+            staticClass: "col-md-3 control-label",
             attrs: { for: "host-name" }
           },
           [_vm._v("Host")]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "col-md-9" }, [
           _c("div", { staticClass: "input-group" }, [
             _c("span", { staticClass: "input-group-addon" }, [
               _c("input", {
@@ -84015,7 +84078,7 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-6 col-md-offset-4" }, [
+        _c("div", { staticClass: "col-md-9 col-md-offset-3" }, [
           _c("div", { staticClass: "input-group" }, [
             _c("span", { staticClass: "input-group-addon" }, [
               _c("input", {
@@ -84084,13 +84147,13 @@ var render = function() {
         _c(
           "label",
           {
-            staticClass: "col-md-4 control-label",
+            staticClass: "col-md-3 control-label",
             attrs: { for: "rsvp-datetime" }
           },
           [_vm._v("RSVP")]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "col-md-9" }, [
           _c("div", { staticClass: "input-group" }, [
             _c("span", { staticClass: "input-group-addon" }, [
               _c("input", {
@@ -84172,13 +84235,13 @@ var render = function() {
         _c(
           "label",
           {
-            staticClass: "col-md-4 control-label",
+            staticClass: "col-md-3 control-label",
             attrs: { for: "max-guests" }
           },
           [_vm._v("Max Guests")]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "col-md-9" }, [
           _c("div", { staticClass: "input-group" }, [
             _c("span", { staticClass: "input-group-addon" }, [
               _c("input", {
@@ -84259,11 +84322,11 @@ var render = function() {
       _c("div", { staticClass: "form-group" }, [
         _c(
           "label",
-          { staticClass: "col-md-4 control-label", attrs: { for: "price" } },
+          { staticClass: "col-md-3 control-label", attrs: { for: "price" } },
           [_vm._v("Ticket Price")]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "col-md-9" }, [
           _c("div", { staticClass: "input-group" }, [
             _c("span", { staticClass: "input-group-addon" }, [
               _c("input", {
@@ -84345,11 +84408,11 @@ var render = function() {
       _c("div", { staticClass: "form-group" }, [
         _c(
           "label",
-          { staticClass: "col-md-4 control-label", attrs: { for: "seats" } },
+          { staticClass: "col-md-3 control-label", attrs: { for: "seats" } },
           [_vm._v("Seat Numbers")]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "col-md-9" }, [
           _c("div", { staticClass: "input-group" }, [
             _c("span", { staticClass: "input-group-addon" }, [
               _c("input", {
@@ -84436,7 +84499,7 @@ var render = function() {
         _c(
           "label",
           {
-            staticClass: "text-right col-md-6 col-md-offset-6",
+            staticClass: "text-right col-md-9 col-md-offset-3",
             attrs: { for: "public-private" }
           },
           [
@@ -84470,7 +84533,7 @@ var render = function() {
         _c(
           "label",
           {
-            staticClass: "text-right col-md-6 col-md-offset-6",
+            staticClass: "text-right col-md-9 col-md-offset-3",
             attrs: { for: "public-private" }
           },
           [
@@ -84513,11 +84576,11 @@ var staticRenderFns = [
     return _c("div", { staticClass: "form-group" }, [
       _c(
         "label",
-        { staticClass: "col-md-4 control-label", attrs: { for: "venue" } },
+        { staticClass: "col-md-3 control-label", attrs: { for: "venue" } },
         [_vm._v("Venue")]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-6" }, [
+      _c("div", { staticClass: "col-md-9" }, [
         _c(
           "select",
           {
@@ -84542,13 +84605,13 @@ var staticRenderFns = [
       _c(
         "label",
         {
-          staticClass: "col-md-4 control-label",
+          staticClass: "col-md-3 control-label",
           attrs: { for: "max-guests-input" }
         },
         [_vm._v("Invite Guests")]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-6" }, [
+      _c("div", { staticClass: "col-md-9" }, [
         _c("select", {
           staticClass: "form-control",
           staticStyle: { width: "100%" },
@@ -84568,11 +84631,11 @@ var staticRenderFns = [
     return _c("div", { staticClass: "form-group" }, [
       _c(
         "label",
-        { staticClass: "col-md-4 control-label", attrs: { for: "suppliers" } },
+        { staticClass: "col-md-3 control-label", attrs: { for: "suppliers" } },
         [_vm._v("Suppliers")]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-6" }, [
+      _c("div", { staticClass: "col-md-9" }, [
         _c("div", { staticClass: "input-group" }, [
           _c("select", {
             staticClass: "form-control seat-select2",
@@ -84583,13 +84646,7 @@ var staticRenderFns = [
               name: "suppliers",
               multiple: "multiple"
             }
-          }),
-          _vm._v(" "),
-          _c("span", { staticClass: "input-group-addon" }, [
-            _c("a", { attrs: { target: "_blank", href: "/supplier" } }, [
-              _vm._v("Or Submit new Supplier")
-            ])
-          ])
+          })
         ])
       ])
     ])
@@ -84599,7 +84656,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-group" }, [
-      _c("div", { staticClass: "text-right col-md-6 col-md-offset-6" }, [
+      _c("div", { staticClass: "text-right col-md-9 col-md-offset-3" }, [
         _c(
           "button",
           { staticClass: "btn btn-primary", attrs: { type: "submit" } },

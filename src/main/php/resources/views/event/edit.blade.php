@@ -20,7 +20,8 @@
     					
     					<event-form
                             id="eventForm"
-                            :event="event">
+                            :event="event"
+                            v-on:failed="showError">
                         </event-form>
 
     				</div>

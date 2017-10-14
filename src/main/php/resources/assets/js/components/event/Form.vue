@@ -1,9 +1,16 @@
 <template>
-	<form id="createEventForm" class="form-horizontal" method="POST" action="/eventos">
+	<form 
+		v-on:submit.prevent="submitEvent"
+		id="createEventForm" 
+		class="form-horizontal" 
+		method="POST" 
+		action="/eventos">
+
+		<input type="hidden" name="_token" :value="token">
 
 	    <div class="form-group">
-	        <label for="title" class="col-md-4 control-label">Event Title</label>
-	        <div class="col-md-6">
+	        <label for="title" class="col-md-3 control-label">Event Title</label>
+	        <div class="col-md-9">
 	            <input 
 	            	v-model="event.title"
 	            	id="title" 
@@ -18,8 +25,8 @@
 
 
 	    <div class="form-group">
-	        <label for="description" class="col-md-4 control-label">Description</label>
-	        <div class="col-md-6">
+	        <label for="description" class="col-md-3 control-label">Description</label>
+	        <div class="col-md-9">
 	            <textarea 
 	            	v-model="event.description"
 	            	id="description" 
@@ -32,8 +39,8 @@
 	    </div>
 
 	    <div class="form-group">
-	        <label for="start-datetime" class="col-md-4 control-label">From</label>
-	        <div class="col-md-6">
+	        <label for="start-datetime" class="col-md-3 control-label">From</label>
+	        <div class="col-md-9">
 	            <input 
 	            	v-model="event.start_datetime"
 	            	id="start-datetime" 
@@ -46,8 +53,8 @@
 	    </div>
 
 	    <div class="form-group">
-	        <label for="end-datetime" class="col-md-4 control-label">To</label>
-	        <div class="col-md-6">
+	        <label for="end-datetime" class="col-md-3 control-label">To</label>
+	        <div class="col-md-9">
 	            <input 
 		            v-model="event.end_datetime"
 	            	id="end-datetime" 
@@ -60,8 +67,8 @@
 	    </div>
 
 	    <div class="form-group">
-	        <label for="venue" class="col-md-4 control-label">Venue</label>
-	        <div class="col-md-6">
+	        <label for="venue" class="col-md-3 control-label">Venue</label>
+	        <div class="col-md-9">
                 <select 
                 	id="venue" 
                 	class="form-control" 
@@ -74,8 +81,8 @@
 	    </div>
 
 	    <div class="form-group">
-		    <label for="max-guests-input" class="col-md-4 control-label">Invite Guests</label>
-		    <div class="col-md-6">
+		    <label for="max-guests-input" class="col-md-3 control-label">Invite Guests</label>
+		    <div class="col-md-9">
 		        <select 
 		        	id="guests-list" 
 		        	class="form-control" 
@@ -87,8 +94,8 @@
 		</div>
 
 	    <div class="form-group">
-	        <label for="host-name" class="col-md-4 control-label">Host</label>
-	        <div class="col-md-6">
+	        <label for="host-name" class="col-md-3 control-label">Host</label>
+	        <div class="col-md-9">
 	            <div class="input-group">
 	                <span class="input-group-addon">
 	                    <input 
@@ -115,7 +122,7 @@
 	                	:disabled="!hostEnabled">
 	            </div>
 	        </div>
-	        <div class="col-md-6 col-md-offset-4">
+	        <div class="col-md-9 col-md-offset-3">
 	            <div class="input-group">
 	                <span class="input-group-addon">
 	                    <input 
@@ -135,8 +142,8 @@
 	    </div>
 
 	    <div class="form-group">
-	        <label for="rsvp-datetime" class="col-md-4 control-label">RSVP</label>
-	        <div class="col-md-6">
+	        <label for="rsvp-datetime" class="col-md-3 control-label">RSVP</label>
+	        <div class="col-md-9">
 	            <div class="input-group">
 	                <span class="input-group-addon">
 	                    <input 
@@ -159,8 +166,8 @@
 	    </div>
 
 	    <div class="form-group">
-	        <label for="max-guests" class="col-md-4 control-label">Max Guests</label>
-	        <div class="col-md-6">
+	        <label for="max-guests" class="col-md-3 control-label">Max Guests</label>
+	        <div class="col-md-9">
 	            <div class="input-group">
 	                <span class="input-group-addon">
 	                    <input 
@@ -183,8 +190,8 @@
 	    </div>
 
 	    <div class="form-group">
-	        <label for="price" class="col-md-4 control-label">Ticket Price</label>
-	        <div class="col-md-6">
+	        <label for="price" class="col-md-3 control-label">Ticket Price</label>
+	        <div class="col-md-9">
 	            <div class="input-group">
 	                <span class="input-group-addon">
 	                    <input 
@@ -208,8 +215,8 @@
 	    </div>
 
 	    <div class="form-group">
-	        <label for="seats" class="col-md-4 control-label">Seat Numbers</label>
-	        <div class="col-md-6">
+	        <label for="seats" class="col-md-3 control-label">Seat Numbers</label>
+	        <div class="col-md-9">
 	            <div class="input-group">
 	                <span class="input-group-addon">
 	                    <input 
@@ -240,8 +247,8 @@
 	    </div>
 
 	    <div class="form-group">
-	        <label for="suppliers" class="col-md-4 control-label">Suppliers</label>
-	        <div class="col-md-6">
+	        <label for="suppliers" class="col-md-3 control-label">Suppliers</label>
+	        <div class="col-md-9">
 	            <div class="input-group">
 	                <select 
 	                	id="suppliers" 
@@ -251,15 +258,12 @@
 	                	style="width: 100%" 
 	                	multiple="multiple">
                 	</select>
-	                <span class="input-group-addon"> 
-	                    <a target="_blank" href="/supplier">Or Submit new Supplier</a>
-	                </span>
 	            </div>
 	        </div>
 	    </div>
 
 	    <div class="form-group">
-	        <label class="text-right col-md-6 col-md-offset-6" for="public-private">
+	        <label class="text-right col-md-9 col-md-offset-3" for="public-private">
 	        	Private
 		        <input 
 		        	v-model="event.private"
@@ -269,7 +273,7 @@
 		        	name="public-private" 
 		        	checked="checked">
 	        </label>
-	        <label class="text-right col-md-6 col-md-offset-6" for="public-private">
+	        <label class="text-right col-md-9 col-md-offset-3" for="public-private">
 	        	Public
 	        	<input 
 	        		v-model="event.private"
@@ -281,7 +285,7 @@
 	    </div>
 
 	    <div class="form-group">
-	        <div class="text-right col-md-6 col-md-offset-6">
+	        <div class="text-right col-md-9 col-md-offset-3">
 	            <button 
 	            	type="submit" 
 	            	class="btn btn-primary">
@@ -313,7 +317,9 @@
 		},
 		created : function() {
 			this.formatDates();
-			
+
+			this.event.private = this.event.private ? 'private' : 'public';
+
 			// bind seats object. Will be set to [] if event preferences doesnt contain seats
 			this.$set(this.event, 'seats', 
 				typeof JSON.parse(this.event.preferences).seats != 'undefined' ? JSON.parse(this.event.preferences).seats : []
@@ -356,22 +362,43 @@
 				.render();
 		},
 		methods : {
+			submitEvent : function(e) {
+				var that = this;	
+				$.post({
+					url : '/eventos/update/' + this.event.id,
+					data : this.getData(),
+					success : function(res) {
+						window.location.assign('/eventos/details/' + 
+							that.event.id);
+					}
+				}).fail(function(res) {
+					that.$emit('failed', res);
+				});
+			},
+
+			getData : function() {
+				return this
+					.SerializedArray($('#eventForm').serializeArray())
+					.indexDuplicateNames(['guests-list', 'seats'])
+					.serializedArray;
+			},
+
 			formatDates : function() {
 				this.event.start_datetime = moment(
 					this.event.start_datetime, 
-					"yyyy-MM-dd hh:mm:ss"
-				).format("YYYY-MM-DDThh:mm");
+					"yyyy-MM-dd HH:mm:ss"
+				).format("YYYY-MM-DDTHH:mm");
 
 				this.event.end_datetime = moment(
 					this.event.end_datetime,
-					"yyyy-MM-dd hh:mm:ss"
-				).format("YYYY-MM-DDThh:mm");
+					"yyyy-MM-dd HH:mm:ss"
+				).format("YYYY-MM-DDTHH:mm");
 
 				if(this.event.rsvp_datetime)
 					this.event.rsvp_datetime = moment(
 						this.event.rsvp_datetime,
-						"yyyy-MM-dd hh:mm:ss"
-					).format("YYYY-MM-DDThh:mm");
+						"yyyy-MM-dd HH:mm:ss"
+				).format("YYYY-MM-DDTHH:mm");
 			},
 
 			handleAutoPopulateClick : function(e) {
@@ -504,6 +531,36 @@
 					    return this;
 					}
 				}
+			},
+			SerializedArray : function(serializedArray) {
+			    return {
+			    	serializedArray : serializedArray,
+					/**
+					 * Returns the serialized array with an index appended to the specified names.
+					 * 
+					 * E.g [{name : 'a', value : 1},{name : 'a', value : bar2}] ;
+					 *     becomes 
+					 *     [{name : 'a[0]', value : bar},{name : 'a[1]', value : bar2}] 
+					 *     when ['a'] is passed as a name
+					 *
+					 * @param arr   the serialized array 
+					 * @param names the names to index
+					 * @return an array of values
+					 */
+					indexDuplicateNames : function(names) {
+					    var indexes = [];
+					    names.forEach(function(name) {
+					        indexes[name] = 0;
+					    });
+					    this.serializedArray.forEach(function(e) {
+					        // If the element's name is one of the names append 
+					        // an index an increment that name's index
+					        if (names.indexOf(e.name) != -1)
+					            e.name += '[' + (indexes[e.name]++) + ']';
+					    });
+					    return this;
+					}
+			    }
 			}
 		}        
     }

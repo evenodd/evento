@@ -25,13 +25,15 @@ function ErrorAlert(errors) {
     }
 
     this.panel.append(
-        '<div id="evento-alert-' + this.id + '" class="fade in alert alert-warning">' +
+        '<div id="event-alert-' + this.id + '" class="fade in alert alert-warning">' +
             '<a href="#" class="close" data-dismiss="alert">&times;</a>' +
             errorMsg + 
         '</div>'
     );
     return this;
 }
+ErrorAlert.prototype = Object.create(AlertMessage.prototype);
+ErrorAlert.prototype.constructor = ErrorAlert;
 
 function UpdateEventForm(el, event) {
     this.vue = new Vue({
@@ -41,14 +43,12 @@ function UpdateEventForm(el, event) {
             token : $("meta[name='csrf-token']").attr("content")
         },
         methods : {
-        	showError : function(errors) {
-        		new ErrorAlert(errors.responseJSON).focus();
-        	}
+            showError : function(errors) {
+                new ErrorAlert(errors.responseJSON).focus();
+            }
         }
     });
 }
-ErrorAlert.prototype = Object.create(AlertMessage.prototype);
-ErrorAlert.prototype.constructor = ErrorAlert;
 
 $(document).ready(function() {
     event = $("#eventData").data("event");
