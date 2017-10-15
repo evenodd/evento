@@ -153,25 +153,24 @@ function SeatSelect() {
         width : '100%',
         disabled : true
     });
-    $("#auto_pop_button").click(function(e){
+    $("#auto_pop_button").click(function(e) {
         e.preventDefault();
-        if($("#max-guests").val() != null){
-           var max = $("#max-guests").val();
-        } else {
-            //need to make this venue max capacity           !!!!!!!!!!!!!!!!!
+        if ($("#max-guests").val() != null)
+            var max = $("#max-guests").val();
+        else 
             var max = 5;
-        }
+
         var array = [];
-        //var array = ["1","2","3","4","5","6","7","8","9"]
+
         for (var i=1; i<=max; i++) {
             array.push(i);
         }
-        guestSelect = $('#seats').select2({
+        $('#seats').select2({
                 placeholder : "Enter guests' seats here",
                 tags: true,
                 tokenSeparators: [',', ' '],
                 disabled : false,
-                data :  array
+                data : array
             });
         $('#seats').val(array
            //insert array of 1 to max from venue

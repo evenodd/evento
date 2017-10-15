@@ -8,7 +8,6 @@
 			</b>
 		</b>
 	    <button 
-	    	v-if="available.length > 10 || booked.lenth > 0" 
 	    	class="btn btn-xs btn-default" 
 	    	data-toggle="modal" 
 	    	data-target="#show-seats-modal">

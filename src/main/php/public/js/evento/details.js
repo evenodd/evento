@@ -39,11 +39,16 @@ Invite.prototype.send = function(callbacks) {
     .done(callbacks.done);
 }
 
-function InvitationModal(rsvps){
+function InvitationModal(showButton){
+    var that = this;
     this.errors = 0;
     this.sending =  false;
-    this.invites = rsvps.map(function(rsvp) {
-        return new Invite(rsvp.id, rsvp.email);
+    this.invites = [];
+
+    // set showButton onClick event
+    $(showButton).click(function(e) {
+        e.preventDefault();
+        that.show();
     });
 
     this.sendInvitations = function() {
@@ -82,6 +87,14 @@ function InvitationModal(rsvps){
 InvitationModal.prototype.show = function() {
     $("#invitationModal").modal("show");
 };
+
+InvitationModal.prototype.setInvitesFromRsvps = function(rsvps) {
+    this.vue.invites = rsvps.map(function(rsvp) {
+        return new Invite(rsvp.id, rsvp.email);
+    });
+
+    this.vue.counter = this.vue.invites.length;
+}
 
 function GuestNb(el, event) {
     var that = this;
@@ -125,27 +138,37 @@ function EventSeats(el, event) {
     });
 }
 
+function RsvpsList(el) {
+    this.rsvps = [];
+    this.vue = new Vue({
+        el : el,
+        data : {
+            rsvps : this.rsvps
+        }
+    });
+}
+RsvpsList.prototype.setRsvps = function(rsvps) {
+    var that = this
+    rsvps.forEach((rsvp) => {
+        that.vue.rsvps.push(rsvp);
+    });
+    // this.vue.$set(this, 'rsvps', rsvps);
+}
+
 $(document).ready(function() { 
     event = new Evento($("#event-details-container").data('event'));
+    rsvpsList = new RsvpsList("#rsvpList");
     guestNb = new GuestNb("#guestNumber", event);
     eventSeats = new EventSeats("#eventSeats", event);
-
+    invitationModal = new InvitationModal("#sendInvitationsButton");
+    
     //request rsvps and use data to render the invitationModal
     $.get({
         url : "/eventos/" + event.getId() + "/rsvps",
-        data : {
-            sent : 0
-        },
-    })
-    .done(function(rsvps) {
-        // init the invitationModal
-        invitationModal = new InvitationModal(rsvps);
-        // set the send invitation button to display the invitation modal
-        $("#sendInvitationsButton").click(function(e) {
-            e.preventDefault();
-            invitationModal.show();
-        });
+        
+    }).done(function(rsvps) {
+        rsvpsList.setRsvps(rsvps);
+        invitationModal.setInvitesFromRsvps(rsvps.filter((rsvp) => !rsvp.sent));
     });
-
 
 });

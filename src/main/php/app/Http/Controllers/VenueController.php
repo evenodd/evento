@@ -122,7 +122,8 @@ class VenueController extends Controller
      */
     public function edit(Venue $venue)
     {
-        //
+        $this->authorize('update', $venue);
+        return view('venue.edit', ['venue' => $venue]);
     }
 
     /**
@@ -132,9 +133,28 @@ class VenueController extends Controller
      * @param  \App\Venue  $venue
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Venue $venue)
+    public function update(Request $req, Venue $venue)
     {
-        //
+        $this->authorize('update', $venue);
+        $this->validate($req,
+        [
+            'name' => 'required|string|max:255',
+            'address' => 'string|nullable',
+            'capacity' => 'required|int|min:1',
+            'contact' => 'json|notIn:{}',
+        ],
+        //Error messages to use
+        [
+            'venueName.required' => 'A venue name is required',
+            'max-capacity.required'  => 'invalid max capacity',
+            'contacts.*' => 'Contact information is required'
+        ]);
+
+        $venue->name = $req->name;
+        $venue->address = $req->address;
+        $venue->capacity = $req->capacity;
+        $venue->contact = $req->contact;
+        $venue->save();
     }
 
     /**
@@ -160,10 +180,25 @@ class VenueController extends Controller
         $this->authorize('view', $venue);
         $this->authorize('viewSummary', [$evento, $venue]);
 
-        $evento->setVisible(['id', 'title', 'description', 'start_datetime', 'end_datetime', 'rsvp_datetime', 'venue']);
+        $evento->setVisible(
+            ['id', 'title', 'description', 'start_datetime', 'end_datetime', 
+            'rsvp_datetime', 'venue']
+        );
 
         return view('event.details', [
             'event' => $evento           
         ]);
+    }
+
+    public function cancel(Venue $venue) {
+        $this->authorize('update', $venue);
+        // returns an error if future events for this venue exists
+        if($venue->getNbOfEvents())
+            return response([
+                'hasEvents' => "You cannot cancel a venue when there are still events for it."
+            ], 422);
+
+        $venue->enabled = false;
+        $venue->save();
     }
 }

@@ -16,7 +16,8 @@
 			<div class="nav nav-pills nav-stacked">
 			    <event-row 
 					v-for="event in vueEvents" 
-					v-bind:event="event"
+					v-if="inFuture(event)"
+                    v-bind:event="event"
 					v-bind:show_guests="show_guests"
 					v-bind:key="event.id"
 					:redirect="redirect">	
@@ -71,7 +72,11 @@
 			    .always(function(res){
 			    	that.loading = false;
 			    });
-        	}
+        	},
+            inFuture(event){
+                return moment(event.start_datetime, 'yyyy-MM-dd HH:mm:ss')
+                    .diff(moment()) >= 0;
+            }
         },
         watch : {
             'vueEvents' : function() {

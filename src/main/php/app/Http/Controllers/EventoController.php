@@ -9,11 +9,13 @@ use Auth;
 use DB;
 use Illuminate\Http\Request;
 use App\Traits\StoresRsvps;
+use App\Traits\GetsEventSeats;
 use App\Jobs\SendGuestEmail;
 
 class EventoController extends Controller
 {
     use StoresRsvps;
+    use GetsEventSeats;
     /**
      * Create a new controller instance.
      *
@@ -116,10 +118,7 @@ class EventoController extends Controller
         $evento->save();
 
         if ($req->has('guests-list'))
-            $this->storeRsvp(new Request([
-            'guests-list' => $req->input('guests-list'),
-            'event' => $evento->id
-        ]));
+            $this->storeRsvp($req->input('guests-list'), $evento);
 
         return [
             'id' => $evento->id,
@@ -148,7 +147,7 @@ class EventoController extends Controller
      */
     public function edit(Evento $evento)
     {
-        //
+        return view('event.edit', ['event' => $evento]);
     }
 
     /**
@@ -158,9 +157,169 @@ class EventoController extends Controller
      * @param  \App\Evento  $Evento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Evento $evento)
+    public function update(Request $req, Evento $evento)
     {
-        //
+        $this->authorize('update', $evento);
+        $temp_cap = Venue::findOrFail($req->venue)->capacity;
+        $this->validate($req, 
+        // Validation rules
+        [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'start-datetime' => 'required|after:now',
+            'end-datetime'=> 'required|after:start-datetime',
+            'rsvp-datetime'=> 'nullable|before:start-datetime|after:now',
+            'public-private' =>  array('required', 'regex:/public|private/'),
+            'price' => 'nullable|numeric|min:0.01',
+            'guests-list' => 'array|nullable',
+            'guests-list.*' => 'email',
+            'max-guests' => 'nullable|min:1|integer|max:' . $temp_cap
+        ],
+        //Error messages to use
+        [
+            'title.required' => 'A title is required',
+            'description.required'  => 'A message is required',
+            'start-datetime.required' => 'A start datetime is required',
+            'start-datetime.after' => 'The event start date/time must be in the future',
+            'rsvp-datetime.before' => 'The "rsvp" date/time must be in the future',
+            'rsvp-datetime.after' => 'The "rsvp" date/time must be before the start of the event',
+            'end-datetime.required' => 'A "To" date is required',
+            'end-datetime.after' => 'The "To" date must be after the "From" date',
+            'price.numeric' => 'The price is not a valid number',
+            'max-guests.max' => 'Too many people for the venue'
+        ]);
+
+        // validate change in guests (accepted guests cannot be removed)
+        $guestValidator = $this->_validateGuestChange(
+            $req->input('guests-list'),
+            $evento
+        );
+
+        if(!$guestValidator['validated'])
+            return response([
+                'guests' => 
+                    'You cannot remove these guests from the list as they ' .
+                    'have already accepted your invitation: 
+                    ' .
+                    implode(', ', $guestValidator['missing'])
+            ], 422);
+
+        // validate seats (reserved seats cannot be removed)
+        $seatsValidator = $this->_validateSeatsChange(
+            $req->input('seats'),
+            $evento
+        );
+
+        if(!$seatsValidator['validated'])
+            return response([
+                'seats' => 
+                    'You cannot remove these seats  as guests have already ' . 
+                    'reserved them: 
+                    ' .
+                    implode(', ', $seatsValidator['missing'])
+            ], 422);
+
+        // validate max guests (max guests cannot be under current attending guests)
+        $numAttending = $evento->getNumberOfGuests();
+        if(
+            $req->has('max-guests') && 
+            $req->input('max-guests') && 
+            $numAttending > $req->input('max-guests')
+        )
+            return response([
+                'max-guests' => 'Your max guests value is too low. As ' . 
+                $numAttending . ' guest(s) have already accepted invitations ' .
+                'to this event.'
+            ], 422); 
+
+        $preferences = new \stdClass();
+        
+        if ($req->has('seats'))
+            $preferences->seats = $req->input('seats');
+
+        //save new details
+        $evento->title = $req->input('title');
+        $evento->description = $req->input('description');
+        $evento->start_datetime = $req->input('start-datetime');
+        $evento->end_datetime = $req->input('end-datetime');
+        $evento->rsvp_datetime = $req->has('rsvp-datetime') ? $req->input('rsvp-datetime') : null;
+        $evento->max_guests = $req->has('max-guests') ? $req->input('max-guests') : null;
+        $evento->venue = $req->input('venue');
+        $evento->host_name = $req->has('host-name') ? $req->input('host-name') : null;
+        $evento->host_email = $req->has('host-email') ? $req->input('host-email') : null;
+        $evento->from_host = $req->has('from-host-checkbox') ? $req->input('from-host-checkbox') : false;
+        $evento->preferences = json_encode($preferences);
+        $evento->price = $req->has('price') ?  $req->input('price') : null;
+        $evento->private = ($req->input('public-private') === 'private');
+        $evento->save();
+
+        $rsvps = $evento->getRsvps();
+
+        $this->storeRsvp(
+            array_diff(
+                $req->input('guests-list'),
+                $rsvps->map(function($rsvp) {
+                    return $rsvp->email;
+                })->toArray()
+            ),
+            $evento
+        );
+
+        $sentRsvps = $rsvps->filter(function($rsvp) {
+            return $rsvp->sent;
+        });
+        
+        //send update emails to guests
+        foreach ($sentRsvps as $rsvp) {
+            dispatch(
+                new SendGuestEmail($rsvp, 'emails.updated', "Updated: ")
+            );
+        }
+    }
+
+    // Validates that all the required rsvps are still in the guests list.
+    // returns an object with a boolean property 'validated'.
+    // If the reguest isn't validated the function will return an array of 
+    // missing emails within the returned object's 'missing' property.
+    private function _validateGuestChange($rsvps, $evento) {
+        if(!$evento->hasSeats())
+            return['verified' => true, 'missing' => array()];
+
+        $requiredRsvps = $evento->getRsvps()
+            ->filter(function($rsvp) {
+                $preferences = json_decode($rsvp->preferences);
+                return property_exists($preferences, 'accepted') && 
+                       $preferences->accepted;
+            })
+            ->map(function($rsvp){
+                return $rsvp->email;
+            });
+
+        $missing = [];
+
+        foreach ($requiredRsvps as $requiredRsvp) {
+            if(!in_array($requiredRsvp, $rsvps))
+                array_push($missing, $requiredRsvp);
+        }
+        return [
+            'validated' => (count($missing) == 0),
+            'missing' => $missing
+        ];
+
+    }
+
+    private function _validateSeatsChange($seats, $evento) {
+        $currSeats = $this->getSeats($evento);
+        $missing = [];
+
+        foreach ($currSeats['booked'] as $seat) {
+            if(!in_array($seat, $seats))
+                array_push($missing, $seat);
+        }
+        return [
+            'validated' => (count($missing) == 0),
+            'missing' => $missing
+        ];
     }
 
     /**
@@ -184,9 +343,12 @@ class EventoController extends Controller
         $this->authorize('update', $evento);
         $evento->canceled = true;
         //get all the rsvps that have already been sent
-        $rsvps = $this->getRsvps(new Request(['sent' => true]), $evento);
+        $rsvps = $evento->getRsvps();
+
         foreach ($rsvps as $rsvp) {
-            dispatch(new SendGuestEmail($rsvp, 'emails.canceled', "Canceled: "));
+            dispatch(
+                new SendGuestEmail($rsvp, 'emails.canceled', "Canceled: ")
+            );
         }
         $evento->save();
         return redirect('/eventos/details/' . $evento->id);
@@ -194,14 +356,17 @@ class EventoController extends Controller
 
     
     /**
-     * Returns the number of guests added to the event
-     * (does not care if guests accepted invitation or not)
+     * Returns the number of guests who have accepted
+     * an invitation to the event
      * @param  \App\Evento  $Evento
      * @return int
      */
     public function getNumberOfGuests(Evento $evento) {
-        $this->authorize('view', $evento);
-        return RSVP::where('event', $evento->id)->count();
+        $this->authorize('viewSummary', [
+            $evento, 
+            Venue::findOrFail($evento->venue)
+        ]);
+        return $evento->getNumberOfGuests();
     }
 
     public function getRsvps(Request $req, Evento $evento) {
@@ -219,41 +384,4 @@ class EventoController extends Controller
         return $rsvps->get();
     }
 
-    public function getSeats(Evento $evento) {
-        $this->authorize('view', $evento);
-        
-        $preferences = json_decode($evento->preferences);
-        //check seats preference exists and is not empty
-        if( !property_exists($preferences, 'seats') ||
-            !is_array($preferences->seats) ||
-            count($preferences->seats) <= 0
-        )
-            return [
-                'available' => [],
-                'booked' => []
-            ];
-
-        // get all the rsvps and map them to the seats they booked
-        // this will create an array of booked seats
-        $booked = $this->getRsvps(new Request(), $evento)
-            ->map(function($rsvp) {
-                $rsvpPreferences =  json_decode($rsvp->preferences);
-                if (!property_exists($rsvpPreferences, 'seats'))
-                    return -1; // just hopin a seat will never equal this. 
-                return $rsvpPreferences->seats;
-            })
-            // remove all the rsvps that dont have seats
-            ->filter(function($seat) {
-                return $seat != -1;
-            })  
-            ->toArray();
-        // any seats that are not in the booked array must be available.
-        // so make 'available' the difference between the seats and booked array
-        $available = array_diff($preferences->seats, $booked);
-
-        return [
-            'available' => $available,
-            'booked' => $booked
-        ];
-    }
 }

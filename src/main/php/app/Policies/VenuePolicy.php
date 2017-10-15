@@ -42,7 +42,7 @@ class VenuePolicy
      */
     public function update(User $user, Venue $venue)
     {
-        //
+        return $venue->owner === $user->id;
     }
 
     /**

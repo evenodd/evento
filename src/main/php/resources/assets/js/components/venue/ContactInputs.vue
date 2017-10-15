@@ -5,7 +5,13 @@
 		</div>
         <div v-for="(contact, i) in contacts">
 	        <div :class="setGridColumn(i)">
-		        <input :id="hashContact(contact)" class="form-control" type="text" :placeholder="contact">
+		        <input 
+                    :id="hashContact(contact.name)" 
+                    :value="contact.value" 
+                    :placeholder="contact.name"
+                    v-model="contact.value"
+                    class="form-control" 
+                    type="text">
 			</div>
 		</div>
         <div class="col-md-6 col-md-offset-4">
@@ -28,9 +34,12 @@
             	// get new contact field
                 var newContact = $("#moreContactInput").val();
                 // Check field isnt empty, already an contact field or that the contacts are over the 10 field limit
-                if(newContact != "" && $.inArray(newContact, this.contacts) == -1 && this.contacts.length < 10)
+                if(newContact != "" && $.inArray(newContact, this.getContactNames()) == -1 && this.contacts.length < 10)
                 	//add new contact to array
-                	this.contacts.push(newContact);
+                	this.contacts.push({
+                        name : newContact,
+                        value : ''
+                    });
                 //empty the more contact field
                 var newContact = $("#moreContactInput").val("");
             },
@@ -42,6 +51,17 @@
             // from user entered ids is a nightmare for css selectors :( rip
             hashContact : function(contact) {   //method
             	return stringHash(contact);
+            },
+            getContactNames : function() {
+                return this.contacts.map(c => c.name);
+            }
+        },
+        watch : {
+            contacts : {
+                deep : true,
+                handler : function() {
+                    this.$emit('contacts_changed', this.contacts);
+                }
             }
         }
     }

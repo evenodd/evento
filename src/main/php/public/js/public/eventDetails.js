@@ -16,7 +16,7 @@ function ErrorAlert(errors) {
                     'if this error persists you can contact us at evento.help@fourtytwo.com'
     else 
     {
-        errorMsg += 'There were some errors registering to this event:</br><ul>';
+        errorMsg += 'There were some errors redgistering to this event:</br><ul>';
         $.each(errors, function(key, error) {
             errorMsg += '<li>' + error + '</li>';
         });
@@ -46,15 +46,13 @@ function SuccessAlert(msg) {
 SuccessAlert.prototype = Object.create(AlertMessage.prototype);
 SuccessAlert.prototype.constructor = SuccessAlert;
 
-function RsvpForm(el, event, rsvp) {
+function RsvpForm(el, event) {
     this.vue = new Vue({
         el : el,
         data : {
         	rsvp : {
         		event : event.id,
-                id : rsvp.id,
-                email : rsvp.email,
-                email_token : rsvp.email_token,
+                email : "",
         		preferences : {
         			accepted : 1,
                     seats : null
@@ -69,7 +67,7 @@ function RsvpForm(el, event, rsvp) {
         	postRsvp : function(e) {
         		// var that = this;
                 $.post({
-        			url : '/storeRsvpResponse/' + this.rsvp.email_token,
+        			url : '/public/eventos/' + this.rsvp.event + '/rsvp',
                     data : {
                         _token : $("meta[name='csrf-token']").attr("content"),
                         rsvp : this.rsvp,
@@ -78,7 +76,7 @@ function RsvpForm(el, event, rsvp) {
         		}).fail(this.failCallback);
         	},
             successCallback : function(res) {
-                window.location.assign('/rsvpSuccess')
+                new SuccessAlert(res.msg).focus();
             },
             failCallback : function(errors) {
                 new ErrorAlert(errors.responseJSON).focus(); 
@@ -90,6 +88,5 @@ function RsvpForm(el, event, rsvp) {
 
 $(document).ready(function() {
     event = $("#eventData").data("event");
-    rsvp = $("#rsvpData").data("rsvp");
-    rsvpForm = new RsvpForm("#sendRSVP", event, rsvp);
+    rsvpForm = new RsvpForm("#rsvpForm", event);
 });

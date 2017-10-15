@@ -36,7 +36,9 @@
         },
         watch : {
             'events' : function() {
-                this.calEvents = this.events.map(this.eventoToFCEvent);
+                this.calEvents = this.events
+                    .filter(event => !event.canceled)
+                    .map(this.eventoToFCEvent);
             }
         }
     }

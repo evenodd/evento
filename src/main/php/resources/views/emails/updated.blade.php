@@ -1,6 +1,6 @@
 @component('mail::message')
 
-#{{$name}} has invited you have to an event!
+#{{$name}} has updated this event!
 ##Event name 
 {{$event->title}}
 ## Event description <br> 

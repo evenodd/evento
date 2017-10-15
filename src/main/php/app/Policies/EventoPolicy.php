@@ -33,7 +33,9 @@ class EventoPolicy
 
      */ 
     public function viewSummary(User $user, Evento $evento, Venue $venue) {
-        return $venue->owner === $user->id && $evento->venue === $venue->id;
+        return 
+            $this->view($user, $evento) ||
+            $venue->owner === $user->id && $evento->venue === $venue->id;
     }
 
     /**

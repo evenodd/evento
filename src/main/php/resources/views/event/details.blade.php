@@ -50,14 +50,12 @@
                                 </p>                                 
                                 <a id="sendInvitationsButton" class="btn btn-lg btn-success center-block">Send Invitations</a>
                                 <br>
-                                <div id="guestList" class="list-group">
-                                    @each('guests.subviews.row', array(
-                                        (object) ['fullName' => 'Arthur Curry'],
-                                        (object) ['fullName' => 'Barry Allen' ],
-                                        (object) ['fullName' => 'Diana Prince'],
-                                        (object) ['fullName' => 'Clark Kent'  ],
-                                        (object) ['fullName' => 'Bruce Wayne' ]
-                                    ), 'guest')
+                                <div id="rsvpList" class="list-group">
+                                    <rsvp-list
+                                        v-for="rsvp in rsvps"
+                                        :key="rsvp.id"
+                                        :rsvp="rsvp">
+                                    </rsvp-list>
                                 </div>
                             @endif
                         @endcan
@@ -65,8 +63,8 @@
                     @can('update', $event)
                         @if(!$event->canceled)
                             <div class="text-right">
-        			            <a class="btn btn-default">Edit</a>
-                                <form style="display:inline;" action="/eventos/{{$event->id}}/cancel" method="post">
+        			            <a href="/eventos/edit/{{ $event->id }}" class="btn btn-default">Edit</a>
+                                <form style="display:inline;" action="/eventos/{{ $event->id }}/cancel" method="post">
                                     {{ csrf_field() }}
                                     <button id="cancelEventButton" type="submit" class="btn btn-danger">Cancel Event</button>
                                 </form>
