@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\User;
+use App\Evento;
 use App\Rsvp;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -42,7 +43,7 @@ class RsvpPolicy
      */
     public function update(User $user, Rsvp $rsvp)
     {
-        return $user->id === App/Evento::find($rsvp->event)->eventplanner;
+        return $user->can('update', Evento::find($rsvp->event));
     }
 
     /**

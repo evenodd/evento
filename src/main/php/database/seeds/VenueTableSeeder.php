@@ -11,11 +11,14 @@ class VenueTableSeeder extends Seeder
      */
     public function run()
     {
+        $preferences = new \stdClass();
+        $preferences->phone = "(02) 9003 3820";
         DB::table('venues')->insert([
-        	'id' => 1,
+        	// 'id' => 1,
         	'name' => 'HOYTS Broadway',
+            'owner' => 4,
         	'address' => 'Broadway Shopping Centre, Level 2, Cnr Greek & Bay St, Broadway NSW 2007',
-        	'contact' => json_encode('{"phone" : "(02) 9003 3820"}'),
+        	'contact' => json_encode($preferences),
         	'capacity' => 1000
     	]);
     }

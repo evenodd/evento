@@ -1,56 +1,140 @@
+function SerializedArray(serializedArray) {
+    var that = this
+    this.serializedArray = serializedArray;
 
-/**
- * Returns the value of any items with the specified name.
- * 
- * @param arr  the serialized array 
- * @param name the name to find
- * @return an array of values
- */
-function serializedArray_getDuplicates(arr, name) {
-    return arr
-            .filter(function(e) {
-                return e.name == name;
-            })
-            .map(function(e) {
-                return e.value;
-            });
+    this.getArray = function () {
+        return that.serializedArray;
+    }
 }
 
 /**
- * Sets the specified checkbox element to toggle the disabled attribute of the specified input element.
+ * Returns the serialized array with an index appended to the specified names.
  * 
- * @param checkbox a css selector for the checkbox element 
- * @param input    a css selector for the input element
+ * E.g [{name : 'a', value : 1},{name : 'a', value : bar2}] ;
+ *     becomes 
+ *     [{name : 'a[0]', value : bar},{name : 'a[1]', value : bar2}] 
+ *     when ['a'] is passed as a name
+ *
+ * @param arr   the serialized array 
+ * @param names the names to index
+ * @return an array of values
  */
-function initCheckboxEvent(checkbox, input) {
+SerializedArray.prototype.indexDuplicateNames = function(names) {
+    var indexes = [];
+    names.forEach(function(name) {
+        indexes[name] = 0;
+    });
+    this.serializedArray.forEach(function(e) {
+        // if the element's name is one of the names append an index an increment that name's index
+        if (names.indexOf(e.name) != -1)
+            e.name += '[' + (indexes[e.name]++) + ']';
+    });
+
+    return this;
+}
+
+function CreateEventForm(el) {
+    var that = this;
+    var maxGuestsBind = new CheckboxToInputBind('#max-guests-checkbox', "#max-guests"); //has its own box
+    var priceBind = new CheckboxToInputBind('#price-checkbox', "#price");
+    var rsvpBind = new CheckboxToInputBind('#rsvp-datetime-checkbox', "#rsvp-datetime");
+    var seatsBind = new CheckboxToInputBind('#seats-checkbox', "#seats, #auto_pop_button");
+    var hostBind = new CheckboxToInputBind('#host-checkbox', "#host-name, #host-email, #from-host-checkbox");
+    var supplier = new SupplierSelect();
+    var seats = new SeatSelect();
+    var guests = new GuestSelect();
+
+    this.onSubmit = function(e) {
+        e.preventDefault();
+        // Close any create event modals on the page
+        if ($('#create-event-modal').length)
+            $('#create-event-modal').modal('hide');
+
+        that.postEvent(that.getData(), {
+            success : function(res) {
+                // add new event to list if defined
+                if(window.app.events)
+                    window.app.events.push(res.event);
+                new SuccessAlert(res.msg).focus();
+            },
+            fail : function(res) {
+                new ErrorAlert(res.responseJSON).focus();
+            }
+        });
+    };
+
+    this.el = $(el);
+    this.el.submit(this.onSubmit);
+}
+
+CreateEventForm.prototype.getData = function() {
+    return new SerializedArray(this.el.serializeArray()).indexDuplicateNames(['seats', 'guests-list']).getArray();
+}
+
+
+CreateEventForm.prototype.postEvent = function(data, callbacks) {
+    $.post({
+        url : '/eventos',
+        data : data,
+        success : callbacks.success,
+    }).fail(callbacks.fail);
+};
+
+function CheckboxToInputBind(checkbox, input) {
     $(checkbox).change(function () {
         $(input).prop('disabled', !$(this).is(':checked'));
     });
 }
 
-function initVenueSelect() {
-    $("#createEventForm #venue").select2({
-        placeholder : "Select a venue..",
-        width : '100%',
-        data : [{"id" : 1, "text" : "Jim's Venue"}],
-        /*
-        
-        ****Uncomment after venue endpoint is done****
-
-        data : $.get('/venues', function (res) {
-            return res.venues.map(function (venue) {
-                return {id : venue.id , text : venue.name};
-            });
-        }),
-        
-        */
-    });
+function AlertMessage() {
+    this.id = Date.now();
+    this.panel = $("#alertPanel");
+    this.el = "#evento-alert-" + this.id; //field
 }
 
-/**
- * Prepopulates the guest selection options with emails 'known' by the current user
- */
-function initGuestSelect() {
+AlertMessage.prototype.focus = function() { //methods function
+    $(this.el).attr("tabindex",-1).focus();
+};
+
+function ErrorAlert(errors) {
+    AlertMessage.call(this);
+    var errorMsg = '';
+    if (typeof errors != 'object')
+        errorMsg += 'Woops, we encountered a problem trying to create your event, ' + 
+                    'if this error persists you can contact us at evento.help@fourtytwo.com'
+    else 
+    {
+        errorMsg += 'There were some errors in the event submitted. Please change the following:</br><ul>';
+        $.each(errors, function(key, error) {
+            errorMsg += '<li>' + error + '</li>';
+        });
+        errorMsg += '</ul>';
+    }
+
+    this.panel.append(
+        '<div id="evento-alert-' + this.id + '" class="fade in alert alert-warning">' +
+            '<a href="#" class="close" data-dismiss="alert">&times;</a>' +
+            errorMsg + 
+        '</div>'
+    );
+    return this;
+}
+ErrorAlert.prototype = Object.create(AlertMessage.prototype);
+ErrorAlert.prototype.constructor = ErrorAlert;
+
+function SuccessAlert(msg) {
+    AlertMessage.call(this);
+    this.panel.append(
+        '<div id="evento-alert-' + this.id + '" class="fade in alert alert-success">' + 
+        '<a href="#" class="close" data-dismiss="alert">&times;</a>' +
+        msg + 
+        '</div>'
+    );
+}
+SuccessAlert.prototype = Object.create(AlertMessage.prototype);
+SuccessAlert.prototype.constructor = SuccessAlert;
+
+function GuestSelect() {
     $('#createEventForm #guests-list').select2({
         placeholder : "Enter guests email here",
         tags: true,
@@ -58,19 +142,45 @@ function initGuestSelect() {
         tokenSeparators: [',', ' '],
         width : '100%',
         data : [],
-        /*
-        Un-comment when user emails endpoint is done
-
-        data : $.get('user/emails', function (res) {
-            console.log(res);
-            return res;
-        }),
-        */
     });
-
 }
 
-function initSupplierSelect() {
+function SeatSelect() {
+    $('#seats').select2({
+        placeholder : "Enter Seats (e.g 1,2,3,4,5...)",
+        tags: true,
+        tokenSeparators: [',', ' '],
+        width : '100%',
+        disabled : true
+    });
+    $("#auto_pop_button").click(function(e) {
+        e.preventDefault();
+        if ($("#max-guests").val() != null)
+            var max = $("#max-guests").val();
+        else 
+            var max = 5;
+
+        var array = [];
+
+        for (var i=1; i<=max; i++) {
+            array.push(i);
+        }
+        $('#seats').select2({
+                placeholder : "Enter guests' seats here",
+                tags: true,
+                tokenSeparators: [',', ' '],
+                disabled : false,
+                data : array
+            });
+        $('#seats').val(array
+           //insert array of 1 to max from venue
+            ).trigger('change');
+        
+    });
+}
+
+
+function SupplierSelect() {
     $('#suppliers').select2({
         placeholder : "Add supplier...",
         data: [],
@@ -89,105 +199,48 @@ function initSupplierSelect() {
     });
 }
 
-function initSeatsSelect() {
-    $('#seats').select2({
-        placeholder : "Enter Seats (e.g A1,A2,A3,A4,A5,B1...)",
-        tags: true,
-        tokenSeparators: [',', ' '],
+function VenueSelect() {
+     var that = this;
+     this.el = $("#createEventForm #venue")
+     this.el.select2({
+        placeholder : "Loading venues..",
         width : '100%',
-        disabled : true
-    });
-}
-
-function getCreateEventFormData() {
-    //get all inputs from the form
-    inputs = $('#createEventForm').serializeArray();
-    
-    // get arrays of all the seats and guests
-    seats = serializedArray_getDuplicates(inputs, 'seats');
-    guests = serializedArray_getDuplicates(inputs, 'guests-list');
-    
-    //filter out the seats and guests from the original inputs array
-    inputs = inputs.filter(function(input) {
-        return !['seats', 'guests-list'].includes(input.name)
+        data : []
     });
 
-    //add the new seats & guests arrays back in the inputs array
-    inputs.push(
-        {'name' : 'seats', 'value' : seats},
-        {'name' : 'guests-list', 'value' : guests}
-    );
-
-    return inputs;
-}
-
-function displayErrorAlert(errors) {
-    id = Date.now();
-    errorMsg = '';
-    if (typeof errors != 'object')
-        errorMsg += 'Woops, we encountered a problem trying to create your event, ' + 
-                    'if this error persists you can contact us at evento.help@fourtytwo.com'
-    else 
-    {
-    errorMsg += 'There were some errors in the event submitted. Please change the following:</br><ul>';
-        if ('end-datetime' in errors)
-            errorMsg += '<li>' + errors['end-datetime'] + '</li>';
-        errorMsg += '</ul>';
+    this.setVenues = function(venues) {
+        that.el.select2({
+            placeholder : "Select a venue..",
+            width : '100%',
+            data : venues.map(that.venueDataTransform)
+        });
     }
 
-    $('#alertPanel').append(
-        '<div id="event-alert-' + id + '" class="fade in alert alert-warning">' +
-            '<a href="#" class="close" data-dismiss="alert">&times;</a>' +
-            errorMsg + 
-        '</div>'
-    );
-    $('#event-alert-' + id).attr("tabindex",-1).focus();
-}
-
-/**
- * Overwrites the default submit form event
- */
-function initFormSubmitEvent() {
-    $('#createEventForm').submit(function(e){
-        e.preventDefault();
-
-        // Close any create event modals on the page
-        if ($('#create-event-modal').length)
-            $('#create-event-modal').modal('hide');
-
-        $.post({
-            url : '/eventos',
-            data : getCreateEventFormData(),
-            //if successful, display an alert and focus on it
-            success : function(res){
-                if (res.status && res.msg) {
-                    $('#alertPanel').append(
-                        '<div id="event-alert-' + res.id + '" class="fade in alert alert-' + res.status + '">' + 
-                        '<a href="#" class="close" data-dismiss="alert">&times;</a>' +
-                        res.msg + 
-                        '</div>'
-                    );
-                    $('#event-alert-' + res.id).attr("tabindex",-1).focus();
-                }
-            },
-        }).fail(function(res) {
-            displayErrorAlert(res.responseJSON);
-        });
+    this.getVenues({
+        success : this.setVenues
     });
 }
 
+// Converts our venue model into a data object useable by select2
+VenueSelect.prototype.venueDataTransform = function(venue) {
+    return {id : venue.id , text : venue.name};
+};
+
+VenueSelect.prototype.getVenues = function(callbacks) {
+    $.get({
+        url : '/venues', 
+        success : callbacks.success
+    });   
+};
+
+VenueSelect.prototype.selectVenueModel = function(venue) {
+    var option = new Option(venue.name, venue.id);
+    option.selected = true;
+    this.el.append(option);
+    this.el.trigger('change');
+};
+
 $(document).ready(function() {
-    initGuestSelect();
-    initSupplierSelect();
-    initSeatsSelect();
-    initVenueSelect();
-
-    initFormSubmitEvent();
-
-    //init checkbox events
-    initCheckboxEvent('#max-guests-checkbox',    "#max-guests");
-    initCheckboxEvent('#price-checkbox',         "#price");
-    initCheckboxEvent('#rsvp-datetime-checkbox', "#rsvp-datetime");
-    initCheckboxEvent('#seats-checkbox',         "#seats");
-    initCheckboxEvent('#host-checkbox',          "#host-name, #host-email, #from-host-checkbox");
+    createEventForm = new CreateEventForm("#createEventForm");
+    venueSelect = new VenueSelect();
 });
