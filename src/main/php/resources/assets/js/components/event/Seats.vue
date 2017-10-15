@@ -54,7 +54,7 @@
     		return {
     			available : [],
     			booked : [],
-    			loading : true,
+    			loading : true,  //atributes
     			errors : false
     		}
     	},
@@ -62,7 +62,7 @@
         	this.getSeats();
         },
         methods : {
-        	getSeats : function() {
+        	getSeats : function() {   // methods
         		var that = this;
         		$.get({
 			        url : '/eventos/details/' + this.event.getId() + '/seats',

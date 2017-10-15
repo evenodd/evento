@@ -117,7 +117,7 @@ GuestNb.prototype.get = function(callbacks) {
 };
 
 function EventSeats(el, event) {
-    this.vue = new Vue({
+    this.vue = new Vue({    //vue attribute
         el : el,
         data : {
             event : event

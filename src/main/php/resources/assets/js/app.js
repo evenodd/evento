@@ -24,7 +24,7 @@ window.sprintf= require('sprintf-js').sprintf;
 Vue.component('example', require('./components/Example.vue'));
 
 //event components
-Vue.component('event-row', require('./components/event/Row.vue'));
+Vue.component('event-row', require('./components/event/Row.vue')); //use them as class names, the row is 
 Vue.component('guest-badge', require('./components/event/GuestBadge.vue'));
 Vue.component('event-list', require('./components/event/List.vue'));
 Vue.component('event-seats', require('./components/event/Seats.vue'));

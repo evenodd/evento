@@ -35,7 +35,7 @@ SerializedArray.prototype.indexDuplicateNames = function(names) {
 
 function CreateEventForm(el) {
     var that = this;
-    var maxGuestsBind = new CheckboxToInputBind('#max-guests-checkbox', "#max-guests");
+    var maxGuestsBind = new CheckboxToInputBind('#max-guests-checkbox', "#max-guests"); //has its own box
     var priceBind = new CheckboxToInputBind('#price-checkbox', "#price");
     var rsvpBind = new CheckboxToInputBind('#rsvp-datetime-checkbox', "#rsvp-datetime");
     var seatsBind = new CheckboxToInputBind('#seats-checkbox', "#seats, #auto_pop_button");
@@ -89,10 +89,10 @@ function CheckboxToInputBind(checkbox, input) {
 function AlertMessage() {
     this.id = Date.now();
     this.panel = $("#alertPanel");
-    this.el = "#evento-alert-" + this.id;
+    this.el = "#evento-alert-" + this.id; //field
 }
 
-AlertMessage.prototype.focus = function() {
+AlertMessage.prototype.focus = function() { //methods function
     $(this.el).attr("tabindex",-1).focus();
 };
 

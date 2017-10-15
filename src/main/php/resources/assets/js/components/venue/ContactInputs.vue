@@ -22,7 +22,7 @@
         props: ['contacts'],
         methods : {
             // adds a new contact field in the contacts array
-            addContact : function(e) {
+            addContact : function(e) { //method
             	// prevent the form submit
             	e.preventDefault();
             	// get new contact field
@@ -35,12 +35,12 @@
                 var newContact = $("#moreContactInput").val("");
             },
             // The first field doen't need an offset
-            setGridColumn : function(i) {
+            setGridColumn : function(i) {   //method
             	return i == 0 ?  "col-md-6" : "col-md-6 col-md-offset-4";
             },
             // Gonna use hashes for contact ids as dealing with spaces and punctuation
             // from user entered ids is a nightmare for css selectors :( rip
-            hashContact : function(contact) {
+            hashContact : function(contact) {   //method
             	return stringHash(contact);
             }
         }
