@@ -22,18 +22,4 @@ ${{ $event->price }}
 ## RSVP
 Please rsvp by: {{ $event->rsvp_datetime }}
 @endif
-
-@component('mail::button', ['url' => url('/rsvp/' . $rsvp->email_token), 'color' => 'blue'])
-
-Accept Invitation
-
 @endcomponent
-
-@component('mail::subcopy')
-If you’re having trouble clicking the "Accept Invitation" button, copy and paste the URL below
-into your web browser: [{{ url('/rsvp/' . $rsvp->email_token) }}]({{ url('/rsvp/' . $rsvp->email_token) }})
-@endcomponent
-
-@endcomponent
- 
- {{-- --}}
