@@ -82590,7 +82590,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         inFuture: function inFuture(event) {
-            return moment(event.start_datetime, 'yyyy-MM-dd HH:mm:ss').diff(moment()) >= 0;
+            return moment(event.start_datetime, 'YYYY-MM-DD HH:mm:ss').diff(moment()) >= 0;
         }
     },
     watch: {
@@ -83609,11 +83609,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 
 		formatDates: function formatDates() {
-			this.event.start_datetime = moment(this.event.start_datetime, "yyyy-MM-dd HH:mm:ss").format("YYYY-MM-DDTHH:mm");
+			this.event.start_datetime = moment(this.event.start_datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DDTHH:mm");
 
-			this.event.end_datetime = moment(this.event.end_datetime, "yyyy-MM-dd HH:mm:ss").format("YYYY-MM-DDTHH:mm");
+			this.event.end_datetime = moment(this.event.end_datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DDTHH:mm");
 
-			if (this.event.rsvp_datetime) this.event.rsvp_datetime = moment(this.event.rsvp_datetime, "yyyy-MM-dd HH:mm:ss").format("YYYY-MM-DDTHH:mm");
+			if (this.event.rsvp_datetime) this.event.rsvp_datetime = moment(this.event.rsvp_datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DDTHH:mm");
 		},
 
 		handleAutoPopulateClick: function handleAutoPopulateClick(e) {

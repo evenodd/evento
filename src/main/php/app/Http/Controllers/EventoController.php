@@ -195,7 +195,7 @@ class EventoController extends Controller
             $evento
         );
 
-        if(!$guestValidator['validated'])
+        if(!$guestValidator['verified'])
             return response([
                 'guests' => 
                     'You cannot remove these guests from the list as they ' .
@@ -210,7 +210,7 @@ class EventoController extends Controller
             $evento
         );
 
-        if(!$seatsValidator['validated'])
+        if(!$seatsValidator['verified'])
             return response([
                 'seats' => 
                     'You cannot remove these seats  as guests have already ' . 
@@ -255,15 +255,16 @@ class EventoController extends Controller
 
         $rsvps = $evento->getRsvps();
 
-        $this->storeRsvp(
-            array_diff(
-                $req->input('guests-list'),
-                $rsvps->map(function($rsvp) {
-                    return $rsvp->email;
-                })->toArray()
-            ),
-            $evento
-        );
+        if ($req->has('guests-list'))
+            $this->storeRsvp(
+                array_diff(
+                    $req->input('guests-list'),
+                    $rsvps->map(function($rsvp) {
+                        return $rsvp->email;
+                    })->toArray()
+                ),
+                $evento
+            );
 
         $sentRsvps = $rsvps->filter(function($rsvp) {
             return $rsvp->sent;
@@ -278,8 +279,8 @@ class EventoController extends Controller
     }
 
     // Validates that all the required rsvps are still in the guests list.
-    // returns an object with a boolean property 'validated'.
-    // If the reguest isn't validated the function will return an array of 
+    // returns an object with a boolean property 'verified'.
+    // If the reguest isn't verified the function will return an array of 
     // missing emails within the returned object's 'missing' property.
     private function _validateGuestChange($rsvps, $evento) {
         if(!$evento->hasSeats())
@@ -302,7 +303,7 @@ class EventoController extends Controller
                 array_push($missing, $requiredRsvp);
         }
         return [
-            'validated' => (count($missing) == 0),
+            'verified' => (count($missing) == 0),
             'missing' => $missing
         ];
 
@@ -317,7 +318,7 @@ class EventoController extends Controller
                 array_push($missing, $seat);
         }
         return [
-            'validated' => (count($missing) == 0),
+            'verified' => (count($missing) == 0),
             'missing' => $missing
         ];
     }

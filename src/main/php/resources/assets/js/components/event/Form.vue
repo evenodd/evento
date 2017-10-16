@@ -386,18 +386,18 @@
 			formatDates : function() {
 				this.event.start_datetime = moment(
 					this.event.start_datetime, 
-					"yyyy-MM-dd HH:mm:ss"
+					"YYYY-MM-DD HH:mm:ss"
 				).format("YYYY-MM-DDTHH:mm");
 
 				this.event.end_datetime = moment(
 					this.event.end_datetime,
-					"yyyy-MM-dd HH:mm:ss"
+					"YYYY-MM-DD HH:mm:ss"
 				).format("YYYY-MM-DDTHH:mm");
 
 				if(this.event.rsvp_datetime)
 					this.event.rsvp_datetime = moment(
 						this.event.rsvp_datetime,
-						"yyyy-MM-dd HH:mm:ss"
+						"YYYY-MM-DD HH:mm:ss"
 				).format("YYYY-MM-DDTHH:mm");
 			},
 

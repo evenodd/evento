@@ -74,7 +74,7 @@
 			    });
         	},
             inFuture(event){
-                return moment(event.start_datetime, 'yyyy-MM-dd HH:mm:ss')
+                return moment(event.start_datetime, 'YYYY-MM-DD HH:mm:ss')
                     .diff(moment()) >= 0;
             }
         },
