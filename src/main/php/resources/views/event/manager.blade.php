@@ -73,7 +73,7 @@
             <div id='calendar'>
                 <calendar
                     :events="events"
-                    url="eventos/details/"
+                    url="/eventos/details/"
                     lang="en">
                 </calendar>
             </div>
