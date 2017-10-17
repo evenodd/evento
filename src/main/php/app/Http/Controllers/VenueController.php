@@ -14,10 +14,10 @@ class VenueController extends Controller
      *
      * @return void
      */
-    // public function __construct()
-    // {
+    public function __construct()
+    {
     //     $this->middleware('auth');
-    // }
+    }
 
     // THIS is the best code in the whole project
     public function getVenue(Venue $venue)
