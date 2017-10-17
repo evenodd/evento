@@ -157,6 +157,14 @@ RsvpsList.prototype.setRsvps = function(rsvps) {
 
 $(document).ready(function() { 
     event = new Evento($("#event-details-container").data('event'));
+    
+    venue = new Vue({
+        el : '#venue',
+        data : {
+            id : $("#event-details-container").data('event').venue
+        }
+    });
+
     rsvpsList = new RsvpsList("#rsvpList");
     guestNb = new GuestNb("#guestNumber", event);
     eventSeats = new EventSeats("#eventSeats", event);

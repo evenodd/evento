@@ -21,7 +21,7 @@
                     <h5>{{$event->description}}</h5>
                     @endif
                     <h4>Venue</h4> 
-                    <h5><a href="#">{{$event->venue}}</a></h5>
+                    <h5 id="venue"><venue-display id="{{$event->venue}}"></venue-display></h5>
                     <h4> Event Time</h4> 
                     <h5>{{$event->start_datetime}} to {{$event->end_datetime}}</h5>
                     @if($event->price)

@@ -23,7 +23,7 @@
                         
                         <!-- Todo -->
                         <!-- Create a generic venue element -->
-                        <p> Venue : <b> <a href="#"> {{ $event->venue }}</a></b></p>
+                        <p id="venue"><span>Venue : </span><venue-display :id="id"></venue-display></p>
                         <!--  -->
                         @if($event->price)
                             <p> Ticket Price : <b> ${{ $event->price }} </b></p>

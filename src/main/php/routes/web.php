@@ -50,9 +50,10 @@ Route::get('/rsvpSuccess',                			 'RsvpController@showSuccess')->mid
 Route::post('/storeRsvpResponse/{token}', 			 'RsvpController@storeRsvpResponse')->middleware('auth');
 
 //Venue endpoints
+Route::get('/venue/{venue}',						  'VenueController@getVenue');
 Route::get('/venue/create',                           'VenueController@create')->middleware('auth');
 Route::post('createVenue',                            'VenueController@store')->middleware('auth');
-Route::get('/venue/details/{venue}',                  'VenueController@show')->middleware('auth');
+Route::get('/venue/details/{venue}',                  'VenueController@show');//->middleware('auth');
 Route::get('/venue/edit/{venue}',             		  'VenueController@edit')->middleware('auth');
 Route::post('/venue/update/{venue}', 				  'VenueController@update')->middleware('auth');
 Route::post('/venue/cancel/{venue}', 				  'VenueController@cancel')->middleware('auth');

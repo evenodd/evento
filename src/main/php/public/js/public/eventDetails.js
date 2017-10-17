@@ -16,7 +16,7 @@ function ErrorAlert(errors) {
                     'if this error persists you can contact us at evento.help@fourtytwo.com'
     else 
     {
-        errorMsg += 'There were some errors redgistering to this event:</br><ul>';
+        errorMsg += 'There were some errors registering to this event:</br><ul>';
         $.each(errors, function(key, error) {
             errorMsg += '<li>' + error + '</li>';
         });
@@ -87,6 +87,7 @@ function RsvpForm(el, event) {
 }
 
 $(document).ready(function() {
+    venue = new Vue({el : "#venue"});
     event = $("#eventData").data("event");
     rsvpForm = new RsvpForm("#rsvpForm", event);
 });
