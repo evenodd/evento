@@ -16,9 +16,14 @@ class VenueController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+    //     $this->middleware('auth');
     }
 
+    // THIS is the best code in the whole project
+    public function getVenue(Venue $venue)
+    {
+        return $venue;
+    }
 
     /**
      * Display a listing of the resource.

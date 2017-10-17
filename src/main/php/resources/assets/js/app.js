@@ -36,11 +36,13 @@ Vue.component('venue-form', require('./components/venue/Form.vue'));
 Vue.component('contact-inputs', require('./components/venue/ContactInputs.vue'));
 Vue.component('venue-row', require('./components/venue/Row.vue'));
 Vue.component('venue-list', require('./components/venue/List.vue'));
+Vue.component('venue-display', require('./components/venue/Display.vue'));
 
 
 //open source components 
 Vue.component('pacman-loader', require('vue-spinner/src/PacmanLoader.vue'));
 Vue.component('pulse-loader', require('vue-spinner/src/PulseLoader.vue'));
+Vue.component('full-loader', require('vue-full-loading'));
 
 Vue.component('calendar', require('./components/calendar/Calendar.vue'));
 Vue.component('full-calendar', require('vue-fullcalendar'));

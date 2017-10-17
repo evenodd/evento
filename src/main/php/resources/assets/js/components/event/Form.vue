@@ -5,7 +5,7 @@
 		class="form-horizontal" 
 		method="POST" 
 		action="/eventos">
-
+		<full-loader :show="loading"></full-loader>
 		<input type="hidden" name="_token" :value="token">
 
 	    <div class="form-group">
@@ -313,6 +313,7 @@
 				rsvpEnabled : false,
 				max_guestsEnabled : false,
 				priceEnabled : false,
+				loading : false
 			}
 		},
 		created : function() {
@@ -363,7 +364,8 @@
 		},
 		methods : {
 			submitEvent : function(e) {
-				var that = this;	
+				var that = this;
+				this.loading = true;	
 				$.post({
 					url : '/eventos/update/' + this.event.id,
 					data : this.getData(),
@@ -373,6 +375,7 @@
 					}
 				}).fail(function(res) {
 					that.$emit('failed', res);
+					that.loading = false;
 				});
 			},
 

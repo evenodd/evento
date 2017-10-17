@@ -29,9 +29,7 @@
                         </div>
                         <div class="modal-body">
                             <p> Event Time : <b> {{ event.start_datetime | longDate }} to {{ event.end_datetime | longDate }} </b></p>
-                            <!-- TODO Replace this with a global venue row component -->
-                            <p> Venue : <b> <a href="#">{{ event.venue }}</a></b></p>
-                            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+                            <p> Venue : <venue-display :id="event.venue"></venue-display></p>
                             <div v-if="event.price" ><p> Ticket Price : <b> ${{ event.price }} </b></p></div>
                             <div v-if="event.description" ><p> Description : <b> {{ event.description}} </b></p></div>
                             <div class="row">
