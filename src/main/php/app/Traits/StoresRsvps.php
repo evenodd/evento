@@ -12,35 +12,20 @@ trait storesRsvps{
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-     public function storeRsvp(Request $req)
+     private function storeRsvp($rsvps, $evento)
     {
-        // check user has permissions to create a RSVP
-        $this->authorize('create', Rsvp::class);
+        $preferences = new \stdClass();
+        $preferences->accepted = false;
 
-        // check request is valid
-        $this->validate($req, [
-            'guests-list' => 'required|array|min:1',
-            'guests-list.*' => 'email',
-            'event' => 'required|exists:eventos,id'
-        ]);
-
-        // check user has permissions to edit the event the RSVPs are for
-        $this->authorize('update', Evento::find($req->input('event')));
-
-
-        foreach ($req->input('guests-list') as $email) {
+        foreach ($rsvps as $email) {
             // add rsvp to db
-            $preferences = new \stdClass();
-            $preferences->accepted = false;
             $rsvp = new Rsvp();
             $rsvp->email = $email;
             $rsvp->preferences = json_encode($preferences);
-            $rsvp->event = $req->input('event');
+            $rsvp->event = $evento->id;
             $rsvp->email_token = null;
             $rsvp->sent = false;
             $rsvp->save();
         }
-
     }
-
 } 

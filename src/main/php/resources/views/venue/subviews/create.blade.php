@@ -43,12 +43,12 @@
             <input id="postcode" type="text" class="form-control" name="postcode" placeholder="Postcode">
         </div>
         <div class="col-md-4">
-            <input id="country" type="text" class="form-control" name="country" required placeholder="Country">
+            <input id="country" type="text" class="form-control" name="country" placeholder="Country">
         </div>
     </div>
 
     <div class="form-group">
-        <label for="max-capacity" class="col-md-4 control-label">Max Capacity</label>
+        <label for="max-capacity" min="1" class="col-md-4 control-label">Max Capacity</label>
         <div class="col-md-6">
             <input id="max-capacity" type="number" class="form-control" name="max-capacity" required>
         </div>
@@ -56,7 +56,8 @@
     <div id="contactsFormGroup" class="form-group">
         <label for="hidden" class="col-md-4 control-label">Contact Details:</label>
         <contact-inputs
-            v-bind:contacts="contacts">
+            v-model="contacts"
+            :contacts="contacts">
         </contact-inputs>
     </div>
     <div class="form-group">

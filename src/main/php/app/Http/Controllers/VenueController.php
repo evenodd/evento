@@ -5,6 +5,7 @@ use DB;
 use App\Venue;
 use Auth;
 use Illuminate\Http\Request;
+use App\Evento;
 
 class VenueController extends Controller
 {
@@ -24,9 +25,14 @@ class VenueController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $req)
     {
-        return Venue::where('enabled', true)->get();
+        $query = Venue::where('enabled', true);
+        // filter venues to only include the user's venues if requested
+        if($req->has('owner') && $req->input('owner') === 'self')
+            $query = $query->where('owner', Auth::user()->id);
+
+        return $query->orderBy('name', 'asc')->get();
     }
 
     /**
@@ -37,7 +43,7 @@ class VenueController extends Controller
     public function create()
     {
         // return create venue view
-       // $this->authorize('create', Venue::class);
+       $this->authorize('create', Venue::class);
         return view('venue.create');
     }
 
@@ -49,13 +55,13 @@ class VenueController extends Controller
      */
     public function store(Request $req)
     {
-        //check user can creat VenuePolicy
-
+        //check user can create from VenuePolicy
+       $this->authorize('create', Venue::class);
         // Validation rules
         $this->validate($req,
         [
-            'venueName' => 'string|max:255',
-            'address-number' => 'string',
+            'venueName' => 'required|string|max:255',
+            'address-number' => 'string|nullable',
             'street-name' => 'string|nullable',
             'city' => 'string|nullable',
             'state' => 'string|nullable',
@@ -66,26 +72,18 @@ class VenueController extends Controller
         ],
         //Error messages to use
         [
-            'venueName.required' => 'A title is required',
-            'description.required'  => 'invalid description',
-            'address-number.required' => 'A address-number is required',
-            'street-name.required' => 'A street-name is required',
-            'city.required' => 'A city is required',
-            'state.required' => 'A state is required',
-            'postcode.required' => 'A postcode is required',
-            'country.required' => 'A country is required',
+            'venueName.required' => 'A venue name is required',
             'max-capacity.required'  => 'invalid max-capacity',
             'contacts.*' => 'Contact information is required'
         ]);
         
         
-        $address = $req->input('address-number') . ' '
-                   . $req->input('street-name') . ' '
-                   . $req->input('city') . ' '
-                   . $req->input('state') . ' '
-                   . $req->input('postcode') . ' '
-                   . $req->input('country');
-
+        $address =   ($req->has('address-number') ? $req->input('address-number') : '') . ' '
+                   . ($req->has('street-name')    ? $req->input('street-name') : '') . ' '
+                   . ($req->has('city')           ? $req->input('city') : '') . ' '
+                   . ($req->has('state')          ? $req->input('state') : '') . ' '
+                   . ($req->has('postcode')       ? $req->input('postcode') : '') . ' '
+                   . ($req->has('country')        ? $req->input('country') : '') . ' ';
 
         $venue = new Venue();
 
@@ -103,8 +101,6 @@ class VenueController extends Controller
             'status' => 'success', 
             'msg' => 'Venue "' . $venue->name . '" created successfully'
         ];
-        
-
     }
 
     /**
@@ -126,7 +122,8 @@ class VenueController extends Controller
      */
     public function edit(Venue $venue)
     {
-        //
+        $this->authorize('update', $venue);
+        return view('venue.edit', ['venue' => $venue]);
     }
 
     /**
@@ -136,9 +133,28 @@ class VenueController extends Controller
      * @param  \App\Venue  $venue
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Venue $venue)
+    public function update(Request $req, Venue $venue)
     {
-        //
+        $this->authorize('update', $venue);
+        $this->validate($req,
+        [
+            'name' => 'required|string|max:255',
+            'address' => 'string|nullable',
+            'capacity' => 'required|int|min:1',
+            'contact' => 'json|notIn:{}',
+        ],
+        //Error messages to use
+        [
+            'venueName.required' => 'A venue name is required',
+            'max-capacity.required'  => 'invalid max capacity',
+            'contacts.*' => 'Contact information is required'
+        ]);
+
+        $venue->name = $req->name;
+        $venue->address = $req->address;
+        $venue->capacity = $req->capacity;
+        $venue->contact = $req->contact;
+        $venue->save();
     }
 
     /**
@@ -150,5 +166,39 @@ class VenueController extends Controller
     public function destroy(Venue $venue)
     {
         //
+    } 
+
+    public function getEvents(Venue $venue) {
+        $this->authorize('view', $venue);
+
+        return Evento::where('venue', $venue->id)
+            ->orderBy('start_datetime', 'asc')
+            ->get();
+    }
+
+    public function getEventDetails(Venue $venue, Evento $evento) {
+        $this->authorize('view', $venue);
+        $this->authorize('viewSummary', [$evento, $venue]);
+
+        $evento->setVisible(
+            ['id', 'title', 'description', 'start_datetime', 'end_datetime', 
+            'rsvp_datetime', 'venue']
+        );
+
+        return view('event.details', [
+            'event' => $evento           
+        ]);
+    }
+
+    public function cancel(Venue $venue) {
+        $this->authorize('update', $venue);
+        // returns an error if future events for this venue exists
+        if($venue->getNbOfEvents())
+            return response([
+                'hasEvents' => "You cannot cancel a venue when there are still events for it."
+            ], 422);
+
+        $venue->enabled = false;
+        $venue->save();
     }
 }

@@ -1,15 +1,27 @@
 @component('mail::message')
 
-# Invitation to {{$event->title}}
-{{ $event->description }}
+#{{$name}} has invited you have to an event!
+##Event name 
+{{$event->title}}
+## Event description <br> 
+{{ $event->description }} 
 ## Venue
-{{-- Venue::find($event->venue)->name --}} 
-{{-- Venue::find($event->venue)->address --}}
+{{ $venue->name  }} <br>
+{{ $venue->address }}
 
 ## Time
-From: {{ $event->start_datetime }}
+From: {{ $event->start_datetime }} <br>
 To: {{ $event->end_datetime }}
 
+@if($event->price)
+## Ticket Price
+${{ $event->price }}
+@endif
+
+@if($event->rsvp_datetime)
+## RSVP
+Please rsvp by: {{ $event->rsvp_datetime }}
+@endif
 
 @component('mail::button', ['url' => url('/rsvp/' . $rsvp->email_token), 'color' => 'blue'])
 
@@ -23,3 +35,5 @@ into your web browser: [{{ url('/rsvp/' . $rsvp->email_token) }}]({{ url('/rsvp/
 @endcomponent
 
 @endcomponent
+ 
+ {{-- --}}

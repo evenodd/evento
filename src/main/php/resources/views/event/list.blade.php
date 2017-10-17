@@ -11,15 +11,12 @@
             <div class="panel panel-default">        
                 <div class="panel-heading"><b>My Events</b></div>
 				<div class="panel-body">
-				    <div class="row">
-                        <div class="col-xs-2 col-xs-offset-5">
-                            <pacman-loader id="list-loader" :loading="loading" :color="color" :size="size"></pacman-loader>
-                        </div>
-                    </div>
-                    <event-list 
-                        id="event-list"
-                        v-bind:events="events" 
-                        v-bind:show_guests="show_guests">
+				    <event-list 
+                        id="eventList"
+                        url="/eventos"
+                        error_message="Error could could not get data from server"
+                        :show_guests="true"
+                        redirect="/eventos/details/">
                     </event-list>
 				</div>
             </div>
